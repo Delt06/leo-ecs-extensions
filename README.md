@@ -4,7 +4,7 @@
 - [LeoECS](https://github.com/Leopotam/ecs)
 - [LeoECS Unity Integration](https://github.com/Leopotam/ecs-unityintegration)
 - [DI Framework](https://github.com/Delt06/di-framework)
-- [Odin Inspector](https://odininspector.com/) (recommended, but not required)
+- [Odin Inspector](https://odininspector.com)
 - Custom NUnit (built into Unity)
 
 ## Installation
