@@ -7,116 +7,116 @@ using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Views
 {
-    [DisallowMultipleComponent]
-    public class EntityView : MonoBehaviour, IEntityView
-    {
-        [SerializeField] private bool _createOnAwake = true;
-        [Tooltip("Optional blueprint for created entity.")]
-        [SerializeField] private EntityBlueprint _blueprint;
+	[DisallowMultipleComponent]
+	public class EntityView : MonoBehaviour, IEntityView
+	{
+		[SerializeField] private bool _createOnAwake = true;
+		[Tooltip("Optional blueprint for created entity."), SerializeField]
+         private EntityBlueprint _blueprint;
 
-        private readonly List<IEntityInitializer> _initializers = new List<IEntityInitializer>();
-        private bool _searchedForInitializers;
-        private IActiveEcsWorld _activeWorld;
-        private EcsEntity _entity = EcsEntity.Null;
+		private readonly List<IEntityInitializer> _initializers = new List<IEntityInitializer>();
+		private bool _searchedForInitializers;
+		private IActiveEcsWorld _activeWorld;
+		private EcsEntity _entity = EcsEntity.Null;
 
-        public void Construct(IActiveEcsWorld activeWorld)
-        {
-            _activeWorld = activeWorld;
-        }
+		public void Construct(IActiveEcsWorld activeWorld)
+		{
+			_activeWorld = activeWorld;
+		}
 
-        public EcsEntity Entity
-        {
-            get
-            {
-                if (TryGetEntity(out var entity))
-                    return entity;
+		public EcsEntity Entity
+		{
+			get
+			{
+				if (TryGetEntity(out var entity))
+					return entity;
 
-                CreateEntity();
-                return _entity;
-            }
-        }
+				CreateEntity();
+				return _entity;
+			}
+		}
 
-        public bool TryGetEntity(out EcsEntity entity)
-        {
-            if (!_entity.IsNull() && _entity.IsAlive())
-            {
-                entity = _entity;
-                return true;
-            }
+		public bool TryGetEntity(out EcsEntity entity)
+		{
+			if (!_entity.IsNull() && _entity.IsAlive())
+			{
+				entity = _entity;
+				return true;
+			}
 
-            entity = EcsEntity.Null;
-            return false;
-        }
+			entity = EcsEntity.Null;
+			return false;
+		}
 
 
-        public virtual void Destroy() => Destroy(gameObject);
+		public virtual void Destroy() => Destroy(gameObject);
 
-        public void CreateEntity()
-        {
-            if (!World.IsAlive())
-            {
-                Debug.LogError("Can't create entity: world is destroyed.", this);
-                return;
-            }
+		public void CreateEntity()
+		{
+			if (!World.IsAlive())
+			{
+				Debug.LogError("Can't create entity: world is destroyed.", this);
+				return;
+			}
 
-            DestroyEntity();
-            _entity = World.NewEntity();
-            _entity.SetUnityObjectData(transform);
+			DestroyEntity();
+			_entity = World.NewEntity();
+			_entity.SetUnityObjectData(transform);
 
-            if (_blueprint)
-                _blueprint.InitializeEntity(_entity);
+			if (_blueprint)
+				_blueprint.InitializeEntity(_entity);
 
-            for (var index = 0; index < Initializers.Count; index++)
-            {
-                var initializer = Initializers[index];
-                initializer.InitializeEntity(_entity);
-            }
+			for (var index = 0; index < Initializers.Count; index++)
+			{
+				var initializer = Initializers[index];
+				initializer.InitializeEntity(_entity);
+			}
 
-            AddComponents(_entity);
-        }
+			AddComponents(_entity);
+		}
 
-        private List<IEntityInitializer> Initializers
-        {
-            get
-            {
-                if (!_searchedForInitializers)
-                {
-                    EntityViewUtils.FindAllEntityInitializers(transform, _initializers);
-                    _searchedForInitializers = true;
-                }
+		private List<IEntityInitializer> Initializers
+		{
+			get
+			{
+				if (!_searchedForInitializers)
+				{
+					EntityViewUtils.FindAllEntityInitializers(transform, _initializers);
+					_searchedForInitializers = true;
+				}
 
-                return _initializers;
-            }
-        }
+				return _initializers;
+			}
+		}
 
-        protected virtual void AddComponents(EcsEntity entity) { }
+		protected virtual void AddComponents(EcsEntity entity) { }
 
-        public void DestroyEntity()
-        {
-            if (!IsValid(_entity)) return;
-            _entity.Destroy();
-            _entity = EcsEntity.Null;
-        }
+		public void DestroyEntity()
+		{
+			if (!IsValid(_entity)) return;
+			_entity.Destroy();
+			_entity = EcsEntity.Null;
+		}
 
-        private static bool IsValid(in EcsEntity entity) => !entity.IsNull() && entity.IsAlive();
+		private static bool IsValid(in EcsEntity entity) => !entity.IsNull() && entity.IsAlive();
 
-        protected void Awake()
-        {
-            OnAwake();
-            if (_createOnAwake)
-                CreateEntity();
-        }
+		protected void Awake()
+		{
+			OnAwake();
+			if (_createOnAwake)
+				CreateEntity();
+		}
 
-        public EcsWorld World => _activeWorld.World;
+		public EcsWorld World => _activeWorld.World;
 
-        protected virtual void OnAwake() { }
+		protected virtual void OnAwake() { }
 
-        protected void OnDestroy()
-        {
-            DestroyEntity();
-            OnDestroyed();
-        }
+		protected void OnDestroy()
+		{
+			DestroyEntity();
+			OnDestroyed();
+		}
 
-        protected virtual void OnDestroyed() { }
-    }
+		protected virtual void OnDestroyed() { }
+	}
 }

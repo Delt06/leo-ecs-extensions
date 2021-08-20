@@ -4,91 +4,91 @@ using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Composition
 {
-    public class EcsEntryPoint : MonoBehaviour, IActiveEcsWorld
-    {
-        public EcsWorld World
-        {
-            get
-            {
-                EnsureInitialized();
-                return _world;
-            }
-        }
+	public class EcsEntryPoint : MonoBehaviour, IActiveEcsWorld
+	{
+		public EcsWorld World
+		{
+			get
+			{
+				EnsureInitialized();
+				return _world;
+			}
+		}
 
-        private void EnsureInitialized()
-        {
-            if (_initialized) return;
+		private void EnsureInitialized()
+		{
+			if (_initialized) return;
 
-            _initialized = true;
-            _world = new EcsWorld();
-
-#if UNITY_EDITOR
-            Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(_world);
-#endif
-
-            _systems = new EcsSystems(_world, "Systems");
-            _physicsSystems = new EcsSystems(_world, "Physics Systems");
-
-            AddFeatures(_systems, _physicsSystems);
-            Inject(_systems, _physicsSystems);
-
-            _systems.ProcessInjects();
-            _physicsSystems.ProcessInjects();
+			_initialized = true;
+			_world = new EcsWorld();
 
 #if UNITY_EDITOR
-            Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(_systems);
-            Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(_physicsSystems);
+			Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(_world);
 #endif
-        }
 
-        private void AddFeatures(EcsSystems systems, EcsSystems physicsSystems)
-        {
-            var factories = GetComponentsInChildren<IEcsFeatureFactory>();
+			_systems = new EcsSystems(_world, "Systems");
+			_physicsSystems = new EcsSystems(_world, "Physics Systems");
 
-            foreach (var factory in factories)
-            {
-                factory.AddFeatures(systems, physicsSystems);
-            }
-        }
+			AddFeatures(_systems, _physicsSystems);
+			Inject(_systems, _physicsSystems);
 
-        private void Inject(EcsSystems systems, EcsSystems physicsSystems)
-        {
-            var providers = GetComponentsInChildren<IEcsInjectionProvider>();
+			_systems.ProcessInjects();
+			_physicsSystems.ProcessInjects();
 
-            foreach (var provider in providers)
-            {
-                provider.Inject(systems, physicsSystems);
-            }
-        }
+#if UNITY_EDITOR
+			Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(_systems);
+			Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create(_physicsSystems);
+#endif
+		}
 
-        private void Start()
-        {
-            EnsureInitialized();
+		private void AddFeatures(EcsSystems systems, EcsSystems physicsSystems)
+		{
+			var factories = GetComponentsInChildren<IEcsFeatureFactory>();
 
-            _systems.Init();
-            _physicsSystems.Init();
-        }
+			foreach (var factory in factories)
+			{
+				factory.AddFeatures(systems, physicsSystems);
+			}
+		}
 
-        private void Update()
-        {
-            _systems.Run();
-        }
+		private void Inject(EcsSystems systems, EcsSystems physicsSystems)
+		{
+			var providers = GetComponentsInChildren<IEcsInjectionProvider>();
 
-        private void FixedUpdate()
-        {
-            _physicsSystems.Run();
-        }
+			foreach (var provider in providers)
+			{
+				provider.Inject(systems, physicsSystems);
+			}
+		}
 
-        private void OnDestroy()
-        {
-            _systems?.Destroy();
-            _physicsSystems?.Destroy();
-            _world?.Destroy();
-        }
+		private void Start()
+		{
+			EnsureInitialized();
 
-        private bool _initialized;
-        private EcsSystems _systems;
-        private EcsSystems _physicsSystems;
-        private EcsWorld _world;
-    }
+			_systems.Init();
+			_physicsSystems.Init();
+		}
+
+		private void Update()
+		{
+			_systems.Run();
+		}
+
+		private void FixedUpdate()
+		{
+			_physicsSystems.Run();
+		}
+
+		private void OnDestroy()
+		{
+			_systems?.Destroy();
+			_physicsSystems?.Destroy();
+			_world?.Destroy();
+		}
+
+		private bool _initialized;
+		private EcsSystems _systems;
+		private EcsSystems _physicsSystems;
+		private EcsWorld _world;
+	}
 }

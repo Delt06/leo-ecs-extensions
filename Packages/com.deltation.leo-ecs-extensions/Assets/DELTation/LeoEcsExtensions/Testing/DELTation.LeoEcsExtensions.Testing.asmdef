@@ -1,20 +1,20 @@
 {
-    "name": "DELTation.LeoEcsExtensions.Testing",
-    "rootNamespace": "",
-    "references": [
-        "GUID:656c2c43d3cfe4855bd40e058874b0be"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": true,
-    "precompiledReferences": [
-        "nunit.framework.dll"
-    ],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "DELTation.LeoEcsExtensions.Testing",
+  "rootNamespace": "",
+  "references": [
+    "GUID:656c2c43d3cfe4855bd40e058874b0be"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": true,
+  "precompiledReferences": [
+    "nunit.framework.dll"
+  ],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

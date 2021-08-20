@@ -2,8 +2,8 @@
 
 namespace DELTation.LeoEcsExtensions.Services
 {
-    public interface IActiveEcsWorld
-    {
-        EcsWorld World { get; }
-    }
+	public interface IActiveEcsWorld
+	{
+		EcsWorld World { get; }
+	}
 }

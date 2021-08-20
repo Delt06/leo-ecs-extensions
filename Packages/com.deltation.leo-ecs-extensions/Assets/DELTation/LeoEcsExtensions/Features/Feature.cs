@@ -2,8 +2,8 @@
 
 namespace DELTation.LeoEcsExtensions.Features
 {
-    public abstract class Feature
-    {
-        public abstract void Register(EcsSystems systems, EcsSystems physicsSystems);
-    }
+	public abstract class Feature
+	{
+		public abstract void Register(EcsSystems systems, EcsSystems physicsSystems);
+	}
 }

@@ -2,12 +2,12 @@
 
 namespace DELTation.LeoEcsExtensions.Views.Components
 {
-    public class AutoResetComponentView<T> : ComponentView<T> where T : struct, IEcsAutoReset<T>
-    {
-        protected override void PreInitializeEntity(EcsEntity entity)
-        {
-            base.PreInitializeEntity(entity);
-            Component.AutoReset(ref Component);
-        }
-    }
+	public class AutoResetComponentView<T> : ComponentView<T> where T : struct, IEcsAutoReset<T>
+	{
+		protected override void PreInitializeEntity(EcsEntity entity)
+		{
+			base.PreInitializeEntity(entity);
+			Component.AutoReset(ref Component);
+		}
+	}
 }
