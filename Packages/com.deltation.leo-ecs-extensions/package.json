@@ -1,6 +1,6 @@
 ﻿{
   "name": "com.deltation.leo-ecs-extensions",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "displayName": "LeoECS Extensions",
   "description": "A toolset for advanced LeoECS integration into Unity.",
   "unity": "2020.3",
