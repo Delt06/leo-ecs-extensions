@@ -8,7 +8,7 @@ using UnityEngine;
 namespace DELTation.LeoEcsExtensions.Views
 {
     [DisallowMultipleComponent]
-    public abstract class EntityView : MonoBehaviour, IEntityView
+    public class EntityView : MonoBehaviour, IEntityView
     {
         [SerializeField] private bool _createOnAwake = true;
         [Tooltip("Optional blueprint for created entity.")]
