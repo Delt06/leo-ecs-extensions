@@ -1,6 +1,6 @@
 ﻿using Leopotam.Ecs;
 
-namespace Cube
+namespace Cube.Components
 {
 	public struct CubeTag : IEcsIgnoreInFilter { }
 }

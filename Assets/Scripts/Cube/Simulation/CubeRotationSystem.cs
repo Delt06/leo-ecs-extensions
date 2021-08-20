@@ -1,9 +1,10 @@
-﻿using DELTation.LeoEcsExtensions.Components;
+﻿using Cube.Components;
+using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.Ecs;
 using UnityEngine;
 
-namespace Cube
+namespace Cube.Simulation
 {
 	public class CubeRotationSystem : IEcsRunSystem
 	{

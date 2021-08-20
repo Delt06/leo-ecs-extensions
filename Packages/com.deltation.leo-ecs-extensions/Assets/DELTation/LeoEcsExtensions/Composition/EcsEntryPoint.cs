@@ -30,8 +30,8 @@ namespace DELTation.LeoEcsExtensions.Composition
 			_systems = new EcsSystems(_world, "Systems (Update)");
 			_physicsSystems = new EcsSystems(_world, "Physics Systems (Fixed Update)");
 
-			PopulateSystems(_systems);
-			PopulatePhysicsSystems(_physicsSystems);
+			PopulateSystems(_systems, _world);
+			PopulatePhysicsSystems(_physicsSystems, _world);
 			Inject(_systems, _physicsSystems);
 
 			_systems.ProcessInjects();
@@ -43,8 +43,8 @@ namespace DELTation.LeoEcsExtensions.Composition
 #endif
 		}
 
-		protected abstract void PopulateSystems([NotNull] EcsSystems systems);
-		protected virtual void PopulatePhysicsSystems([NotNull] EcsSystems physicsSystems) { }
+		protected abstract void PopulateSystems([NotNull] EcsSystems systems, [NotNull] EcsWorld world);
+		protected virtual void PopulatePhysicsSystems([NotNull] EcsSystems physicsSystems, [NotNull] EcsWorld world) { }
 
 		private void Inject(EcsSystems systems, EcsSystems physicsSystems)
 		{

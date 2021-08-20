@@ -1,8 +1,9 @@
-﻿using DELTation.LeoEcsExtensions.Views;
+﻿using Cube.Components;
+using DELTation.LeoEcsExtensions.Views;
 using Leopotam.Ecs;
 using UnityEngine;
 
-namespace Cube
+namespace Cube.Simulation
 {
 	public class CubeSpawnSystem : IEcsInitSystem
 	{

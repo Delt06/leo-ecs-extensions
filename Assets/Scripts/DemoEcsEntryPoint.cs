@@ -1,10 +1,11 @@
 ﻿using Cube;
+using Cube.Presentation;
 using DELTation.LeoEcsExtensions.Composition;
 using Leopotam.Ecs;
 
 public class DemoEcsEntryPoint : EcsEntryPoint
 {
-	protected override void PopulateSystems(EcsSystems systems)
+	protected override void PopulateSystems(EcsSystems systems, EcsWorld world)
 	{
 		// Construct a feature
 		systems.StartBuildingFeature("Demo Feature")
@@ -14,6 +15,7 @@ public class DemoEcsEntryPoint : EcsEntryPoint
 			;
 
 		// Or use a prebuilt one
-		systems.AddFeature(new AnimatedCubeFeature());
+		var colorPresenter = new CubeColorPresenter(world);
+		systems.AddFeature(new AnimatedCubeFeature(colorPresenter));
 	}
 }
