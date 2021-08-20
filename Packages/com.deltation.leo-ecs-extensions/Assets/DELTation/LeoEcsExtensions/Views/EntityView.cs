@@ -12,7 +12,7 @@ namespace DELTation.LeoEcsExtensions.Views
 	{
 		[SerializeField] private bool _createOnAwake = true;
 		[Tooltip("Optional blueprint for created entity."), SerializeField]
-         private EntityBlueprint _blueprint;
+		private EntityBlueprint _blueprint;
 
 		private readonly List<IEntityInitializer> _initializers = new List<IEntityInitializer>();
 		private bool _searchedForInitializers;

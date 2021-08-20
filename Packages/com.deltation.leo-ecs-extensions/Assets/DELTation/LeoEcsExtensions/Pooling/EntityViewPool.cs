@@ -15,11 +15,11 @@ namespace DELTation.LeoEcsExtensions.Pooling
 #if UNITY_EDITOR && ODIN_INSPECTOR
 #endif
 		private EntityView _prefab = default;
-		[SerializeField, Min(0)]  private int _initialCapacity = 10;
+		[SerializeField, Min(0)] private int _initialCapacity = 10;
 		[SerializeField] private bool _createAsChildren = true;
 
 #if UNITY_EDITOR && ODIN_INSPECTOR
-		[HideInEditorMode, ShowInInspector] 
+		[HideInEditorMode, ShowInInspector]
 		private int CurrentCapacity => _allInstances.Count;
 #endif
 

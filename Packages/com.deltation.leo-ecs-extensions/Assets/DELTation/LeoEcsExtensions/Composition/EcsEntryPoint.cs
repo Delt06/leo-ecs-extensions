@@ -1,10 +1,11 @@
 ﻿using DELTation.LeoEcsExtensions.Services;
+using JetBrains.Annotations;
 using Leopotam.Ecs;
 using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Composition
 {
-	public class EcsEntryPoint : MonoBehaviour, IActiveEcsWorld
+	public abstract class EcsEntryPoint : MonoBehaviour, IActiveEcsWorld
 	{
 		public EcsWorld World
 		{
@@ -26,10 +27,11 @@ namespace DELTation.LeoEcsExtensions.Composition
 			Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create(_world);
 #endif
 
-			_systems = new EcsSystems(_world, "Systems");
-			_physicsSystems = new EcsSystems(_world, "Physics Systems");
+			_systems = new EcsSystems(_world, "Systems (Update)");
+			_physicsSystems = new EcsSystems(_world, "Physics Systems (Fixed Update)");
 
-			AddFeatures(_systems, _physicsSystems);
+			PopulateSystems(_systems);
+			PopulatePhysicsSystems(_physicsSystems);
 			Inject(_systems, _physicsSystems);
 
 			_systems.ProcessInjects();
@@ -41,15 +43,8 @@ namespace DELTation.LeoEcsExtensions.Composition
 #endif
 		}
 
-		private void AddFeatures(EcsSystems systems, EcsSystems physicsSystems)
-		{
-			var factories = GetComponentsInChildren<IEcsFeatureFactory>();
-
-			foreach (var factory in factories)
-			{
-				factory.AddFeatures(systems, physicsSystems);
-			}
-		}
+		protected abstract void PopulateSystems([NotNull] EcsSystems systems);
+		protected virtual void PopulatePhysicsSystems([NotNull] EcsSystems physicsSystems) { }
 
 		private void Inject(EcsSystems systems, EcsSystems physicsSystems)
 		{

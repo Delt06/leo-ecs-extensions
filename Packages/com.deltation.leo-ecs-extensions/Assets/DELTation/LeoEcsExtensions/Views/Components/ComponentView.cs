@@ -12,12 +12,12 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 #if UNITY_EDITOR && ODIN_INSPECTOR
 		[HideIf(nameof(EntityIsAlive)), SerializeField]
 #endif
-         private bool _enabled = true;
+		private bool _enabled = true;
 
 #if UNITY_EDITOR && ODIN_INSPECTOR
 		[HideIf(nameof(ComponentExists)), InlineProperty, HideLabel, SerializeField]
 #endif
-         private T _component = default;
+		private T _component = default;
 
 		private EcsEntity _entity = EcsEntity.Null;
 
@@ -39,7 +39,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 		protected virtual void PreInitializeEntity(EcsEntity entity) { }
 
 #if UNITY_EDITOR && ODIN_INSPECTOR
-		[ShowInInspector, ShowIf(nameof(ComponentExists)), InlineProperty, HideLabel]   
+		[ShowInInspector, ShowIf(nameof(ComponentExists)), InlineProperty, HideLabel]
 		private T AttachedComponentView
 		{
 			get => ComponentExists ? _entity.Get<T>() : default;
@@ -50,14 +50,14 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 			}
 		}
 
-		[Button, ShowIf(nameof(ComponentExists)), GUIColor(0.75f, 0.25f, 0.25f)]  
+		[Button, ShowIf(nameof(ComponentExists)), GUIColor(0.75f, 0.25f, 0.25f)]
 		private void DeleteComponent()
 		{
 			if (EntityIsAlive)
 				_entity.Del<T>();
 		}
 
-		[Button, ShowIf(nameof(ShowAddComponent)), GUIColor(0.25f, 0.75f, 0.25f)]  
+		[Button, ShowIf(nameof(ShowAddComponent)), GUIColor(0.25f, 0.75f, 0.25f)]
 		private void AddComponent()
 		{
 			if (EntityIsAlive)

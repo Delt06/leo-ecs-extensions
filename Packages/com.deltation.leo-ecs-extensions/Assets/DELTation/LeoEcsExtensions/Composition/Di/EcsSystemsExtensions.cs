@@ -1,5 +1,4 @@
 ﻿using System;
-using DELTation.LeoEcsExtensions.Features;
 using JetBrains.Annotations;
 using Leopotam.Ecs;
 using static DELTation.DIFramework.Di;
@@ -19,12 +18,13 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 			return systems;
 		}
 
-		public static (EcsSystems systems, EcsSystems physicsSystems) CreateAndAddFeature<T>(
-			this (EcsSystems systems, EcsSystems physicsSystems) systems) where T : Feature
+		public static EcsSystems CreateAndAddFeature<TFeature>([NotNull] this EcsSystems systems)
+			where TFeature : PrebuiltFeature
 		{
-			var feature = Create<T>();
-			feature.Register(systems.systems, systems.physicsSystems);
-			return systems;
+			if (systems == null) throw new ArgumentNullException(nameof(systems));
+
+			var feature = Create<TFeature>();
+			return systems.AddFeature(feature);
 		}
 	}
 }
