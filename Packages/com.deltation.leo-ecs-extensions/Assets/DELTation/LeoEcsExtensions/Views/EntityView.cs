@@ -61,10 +61,7 @@ namespace DELTation.LeoEcsExtensions.Views
 
             DestroyEntity();
             _entity = World.NewEntity();
-            _entity.ReplaceUnityObjectDataData(transform);
-            _entity.Get<Position>().WorldPosition = transform.position;
-            _entity.Get<Rotation>().WorldRotation = transform.rotation;
-            _entity.Get<Scale>().LocalScale = transform.localScale;
+            _entity.SetUnityObjectData(transform);
 
             if (_blueprint)
                 _blueprint.InitializeEntity(_entity);
