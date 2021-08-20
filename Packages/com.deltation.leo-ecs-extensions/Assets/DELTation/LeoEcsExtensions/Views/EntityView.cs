@@ -110,7 +110,7 @@ namespace DELTation.LeoEcsExtensions.Views
                 CreateEntity();
         }
 
-        protected EcsWorld World => _activeWorld.World;
+        public EcsWorld World => _activeWorld.World;
 
         protected virtual void OnAwake() { }
 
