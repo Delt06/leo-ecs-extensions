@@ -1,4 +1,5 @@
-﻿using Leopotam.Ecs;
+﻿using DELTation.LeoEcsExtensions.Views;
+using Leopotam.Ecs;
 using UnityEngine;
 
 namespace Cube
@@ -13,8 +14,10 @@ namespace Cube
 			cube.name = "Cube";
 
 			var cubeEntity = _world.NewEntity();
-			ref var cubeData = ref cubeEntity.Get<CubeData>();
-			cubeData.Cube = cube;
+			cubeEntity.SetUnityObjectData(cube.transform);
+			cubeEntity.SetTransformComponentsFromTransform(cube.transform);
+
+			cubeEntity.Get<CubeTag>();
 		}
 	}
 }

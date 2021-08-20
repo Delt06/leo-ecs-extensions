@@ -14,22 +14,31 @@ namespace DELTation.LeoEcsExtensions.Utilities
 		public static void UpdatePosition(this in EcsEntity entity, ref Position position, Vector3 newWorldPosition)
 		{
 			position.WorldPosition = newWorldPosition;
-			entity.Get<PositionWriteRequired>();
+			entity.RequirePositionWrite();
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void UpdateRotation(this in EcsEntity entity, ref Rotation rotation, Quaternion newWorldRotation)
 		{
 			rotation.WorldRotation = newWorldRotation;
-			entity.Get<RotationWriteRequired>();
+			entity.RequireRotationWrite();
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void UpdateScale(this in EcsEntity entity, ref Scale scale, Vector3 newLocalScale)
 		{
 			scale.LocalScale = newLocalScale;
-			entity.Get<ScaleWriteRequired>();
+			entity.RequireScaleWrite();
 		}
+		
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void RequirePositionWrite(this in EcsEntity entity) => entity.Get<PositionWriteRequired>();
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void RequireRotationWrite(this in EcsEntity entity) => entity.Get<RotationWriteRequired>();
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void RequireScaleWrite(this in EcsEntity entity) => entity.Get<ScaleWriteRequired>();
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void RequirePositionRead(this in EcsEntity entity) => entity.Get<PositionReadRequired>();

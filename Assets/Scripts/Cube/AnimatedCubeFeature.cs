@@ -1,4 +1,5 @@
 ﻿using DELTation.LeoEcsExtensions.Composition;
+using DELTation.LeoEcsExtensions.Systems;
 
 namespace Cube
 {
@@ -8,8 +9,10 @@ namespace Cube
 		{
 			featureBuilder
 				.Add(new CubeSpawnSystem())
+				.Add(new ReadFromTransformsSystem())
 				.Add(new CubeTranslationSystem())
 				.Add(new CubeRotationSystem())
+				.Add(new WriteToTransformsSystem())
 				;
 		}
 	}
