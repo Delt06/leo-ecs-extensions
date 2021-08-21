@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class StartSystem : IEcsInitSystem
 {
-	public void Init()
-	{
-		Debug.Log("Game started");
-	}
+    public void Init()
+    {
+        Debug.Log("Game started");
+    }
 }

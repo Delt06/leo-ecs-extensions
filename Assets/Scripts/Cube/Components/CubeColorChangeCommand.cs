@@ -2,8 +2,8 @@
 
 namespace Cube.Components
 {
-	public struct CubeColorChangeCommand
-	{
-		public GameObject Cube;
-	}
+    public struct CubeColorChangeCommand
+    {
+        public GameObject Cube;
+    }
 }

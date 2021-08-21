@@ -1,19 +1,19 @@
 {
-  "name": "DELTation.LeoEcsExtensions.Composition.Di",
-  "rootNamespace": "",
-  "references": [
-    "GUID:1b60fcce313931d4f9eefc7f1c079778",
-    "GUID:656c2c43d3cfe4855bd40e058874b0be",
-    "GUID:adc879d645c03624e9af334f48b854dd",
-    "GUID:ed1e04079e933a647a3cac1090197ef9"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "versionDefines": [],
-  "noEngineReferences": false
+    "name": "DELTation.LeoEcsExtensions.Composition.Di",
+    "rootNamespace": "",
+    "references": [
+        "GUID:1b60fcce313931d4f9eefc7f1c079778",
+        "GUID:656c2c43d3cfe4855bd40e058874b0be",
+        "GUID:adc879d645c03624e9af334f48b854dd",
+        "GUID:ed1e04079e933a647a3cac1090197ef9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

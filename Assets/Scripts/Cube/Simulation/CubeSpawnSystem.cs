@@ -5,20 +5,20 @@ using UnityEngine;
 
 namespace Cube.Simulation
 {
-	public class CubeSpawnSystem : IEcsInitSystem
-	{
-		private readonly EcsWorld _world = default;
+    public class CubeSpawnSystem : IEcsInitSystem
+    {
+        private readonly EcsWorld _world = default;
 
-		public void Init()
-		{
-			var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-			cube.name = "Cube";
+        public void Init()
+        {
+            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.name = "Cube";
 
-			var cubeEntity = _world.NewEntity();
-			cubeEntity.SetUnityObjectData(cube.transform);
-			cubeEntity.SetTransformComponentsFromTransform(cube.transform);
+            var cubeEntity = _world.NewEntity();
+            cubeEntity.SetUnityObjectData(cube.transform);
+            cubeEntity.SetTransformComponentsFromTransform(cube.transform);
 
-			cubeEntity.Get<CubeTag>();
-		}
-	}
+            cubeEntity.Get<CubeTag>();
+        }
+    }
 }

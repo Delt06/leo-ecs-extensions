@@ -2,5 +2,5 @@
 
 namespace Cube.Components
 {
-	public struct CubeTag : IEcsIgnoreInFilter { }
+    public struct CubeTag : IEcsIgnoreInFilter { }
 }

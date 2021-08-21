@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Components
 {
-	[Serializable]
-	public struct Position
-	{
-		public Vector3 WorldPosition;
-	}
+    [Serializable]
+    public struct Position
+    {
+        public Vector3 WorldPosition;
+    }
 
-	public struct PositionWriteRequired : IEcsIgnoreInFilter { }
+    public struct PositionWriteRequired : IEcsIgnoreInFilter { }
 
-	public struct PositionReadRequired : IEcsIgnoreInFilter { }
+    public struct PositionReadRequired : IEcsIgnoreInFilter { }
 }

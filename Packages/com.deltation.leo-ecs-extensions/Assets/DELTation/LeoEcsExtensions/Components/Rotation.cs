@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Components
 {
-	[Serializable]
-	public struct Rotation
-	{
-		public Quaternion WorldRotation;
-	}
+    [Serializable]
+    public struct Rotation
+    {
+        public Quaternion WorldRotation;
+    }
 
-	public struct RotationWriteRequired : IEcsIgnoreInFilter { }
+    public struct RotationWriteRequired : IEcsIgnoreInFilter { }
 
-	public struct RotationReadRequired : IEcsIgnoreInFilter { }
+    public struct RotationReadRequired : IEcsIgnoreInFilter { }
 }

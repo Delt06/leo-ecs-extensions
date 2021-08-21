@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class FramePrintingSystem : IEcsRunSystem
 {
-	public void Run()
-	{
-		Debug.Log($"Frame: {Time.frameCount}");
-	}
+    public void Run()
+    {
+        Debug.Log($"Frame: {Time.frameCount}");
+    }
 }
