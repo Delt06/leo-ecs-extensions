@@ -11,8 +11,9 @@ namespace DELTation.LeoEcsExtensions.Pooling
 {
     public class EntityViewPool : MonoBehaviour, IEntityViewPool
     {
-        [SerializeField] [Required]
+        [SerializeField]
 #if UNITY_EDITOR && ODIN_INSPECTOR
+        [Required]
 #endif
         private EntityView _prefab = default;
         [SerializeField] [Min(0)] private int _initialCapacity = 10;
