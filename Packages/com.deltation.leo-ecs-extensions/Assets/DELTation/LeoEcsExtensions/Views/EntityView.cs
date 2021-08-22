@@ -73,6 +73,7 @@ namespace DELTation.LeoEcsExtensions.Views
             }
 
             AddComponents(_entity);
+            OnCreatedEntity(_entity);
         }
 
         private List<IEntityInitializer> Initializers
@@ -90,6 +91,8 @@ namespace DELTation.LeoEcsExtensions.Views
         }
 
         protected virtual void AddComponents(EcsEntity entity) { }
+
+        protected virtual void OnCreatedEntity(EcsEntity entity) { }
 
         public void DestroyEntity()
         {
