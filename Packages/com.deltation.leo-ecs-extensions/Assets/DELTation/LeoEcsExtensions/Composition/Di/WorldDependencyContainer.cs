@@ -11,8 +11,9 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 {
     public class WorldDependencyContainer : MonoBehaviour, IDependencyContainer
     {
-        [SerializeField] [Required]
+        [SerializeField]
 #if UNITY_EDITOR && ODIN_INSPECTOR
+        [Required]
 #endif
         private EcsEntryPoint _ecsEntryPoint = default;
 
