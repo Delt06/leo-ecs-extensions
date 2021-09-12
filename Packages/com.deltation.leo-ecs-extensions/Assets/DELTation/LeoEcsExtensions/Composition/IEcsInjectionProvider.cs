@@ -5,6 +5,7 @@ namespace DELTation.LeoEcsExtensions.Composition
 {
     public interface IEcsInjectionProvider
     {
-        public void Inject([NotNull] EcsSystems systems, [NotNull] EcsSystems physicsSystems);
+        void Inject([NotNull] EcsSystems systems, [NotNull] EcsSystems physicsSystems,
+            [NotNull] EcsSystems lateSystems);
     }
 }
