@@ -1,5 +1,7 @@
+using Leopotam.Ecs;
+
 namespace DELTation.LeoEcsExtensions.Components
 {
     // ReSharper disable once UnusedTypeParameter
-    public struct UpdateEvent<T> where T : struct { }
+    public struct UpdateEvent<T> : IEcsIgnoreInFilter where T : struct { }
 }
