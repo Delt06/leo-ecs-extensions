@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using DELTation.LeoEcsExtensions.Views;
 using Leopotam.Ecs;

@@ -1,4 +1,4 @@
-﻿using DELTation.LeoEcsExtensions.Views;
+using DELTation.LeoEcsExtensions.Views;
 using JetBrains.Annotations;
 using UnityEngine;
 

@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+using JetBrains.Annotations;
 using Leopotam.Ecs;
 
 namespace DELTation.LeoEcsExtensions.Composition

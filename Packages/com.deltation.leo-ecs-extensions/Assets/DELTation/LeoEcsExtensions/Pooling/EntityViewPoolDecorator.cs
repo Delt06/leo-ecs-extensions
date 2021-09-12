@@ -1,4 +1,4 @@
-﻿using DELTation.LeoEcsExtensions.Views;
+using DELTation.LeoEcsExtensions.Views;
 using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Pooling

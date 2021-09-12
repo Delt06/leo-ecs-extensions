@@ -1,4 +1,4 @@
-﻿using Leopotam.Ecs;
+using Leopotam.Ecs;
 using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Views.Blueprints

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Systems;
