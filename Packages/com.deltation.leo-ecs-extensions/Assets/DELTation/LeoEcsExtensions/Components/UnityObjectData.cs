@@ -1,8 +1,10 @@
+using System;
 using Leopotam.Ecs;
-using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace DELTation.LeoEcsExtensions.Components
 {
+    [Serializable]
     public struct UnityObjectData<T> : IEcsAutoReset<UnityObjectData<T>> where T : Object
     {
         public T Object;

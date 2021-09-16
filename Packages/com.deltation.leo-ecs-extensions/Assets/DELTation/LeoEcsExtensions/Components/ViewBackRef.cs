@@ -1,5 +1,8 @@
+using System;
+
 namespace DELTation.LeoEcsExtensions.Components
 {
+    [Serializable]
     public struct ViewBackRef<TView>
     {
         public TView View;
