@@ -27,6 +27,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
             {
                 PreInitializeEntity(entity);
                 entity.Replace(_component);
+                PostInitializeEntity(entity);
             }
 
 #if UNITY_EDITOR && ODIN_INSPECTOR
@@ -37,6 +38,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         protected ref T Component => ref _component;
 
         protected virtual void PreInitializeEntity(EcsEntity entity) { }
+        protected virtual void PostInitializeEntity(EcsEntity entity) { }
 
 #if UNITY_EDITOR && ODIN_INSPECTOR
         [ShowInInspector] [ShowIf(nameof(ComponentExists))] [InlineProperty] [HideLabel]
