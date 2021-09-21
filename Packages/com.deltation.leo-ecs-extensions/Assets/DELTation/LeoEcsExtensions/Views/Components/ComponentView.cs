@@ -9,13 +9,15 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 {
     public abstract class ComponentView<T> : MonoBehaviour, IEntityInitializer where T : struct
     {
+        [SerializeField]
 #if UNITY_EDITOR && ODIN_INSPECTOR
-        [HideIf(nameof(EntityIsAlive))] [SerializeField]
+        [HideIf(nameof(EntityIsAlive))]
 #endif
         private bool _enabled = true;
 
+        [SerializeField]
 #if UNITY_EDITOR && ODIN_INSPECTOR
-        [HideIf(nameof(ComponentExists))] [InlineProperty] [HideLabel] [SerializeField]
+        [HideIf(nameof(ComponentExists))] [InlineProperty] [HideLabel]
 #endif
         private T _component = default;
 
