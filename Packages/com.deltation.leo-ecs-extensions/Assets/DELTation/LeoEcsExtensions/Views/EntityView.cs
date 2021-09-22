@@ -49,7 +49,11 @@ namespace DELTation.LeoEcsExtensions.Views
         }
 
 
-        public virtual void Destroy() => Destroy(gameObject);
+        public virtual void Destroy()
+        {
+            DestroyEntity();
+            Destroy(gameObject);
+        }
 
         public void CreateEntity()
         {
