@@ -7,6 +7,8 @@ namespace DELTation.LeoEcsExtensions.Composition
 {
     public abstract class PrebuiltFeature
     {
+        private string Name => GetFriendlyNameOf(GetType());
+
         public void AddTo([NotNull] EcsSystems parentSystems)
         {
             if (parentSystems == null) throw new ArgumentNullException(nameof(parentSystems));
@@ -14,8 +16,6 @@ namespace DELTation.LeoEcsExtensions.Composition
             ConfigureBuilder(featureBuilder);
             featureBuilder.Build();
         }
-
-        private string Name => GetFriendlyNameOf(GetType());
 
         private static string GetFriendlyNameOf(Type type)
         {

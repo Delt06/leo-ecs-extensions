@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using DELTation.LeoEcsExtensions.Views;
 using Leopotam.Ecs;
+using UnityEngine;
 #if UNITY_EDITOR && ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #endif
-using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Pooling
 {
@@ -15,14 +15,28 @@ namespace DELTation.LeoEcsExtensions.Pooling
 #if UNITY_EDITOR && ODIN_INSPECTOR
         [Required]
 #endif
-        private EntityView _prefab = default;
+        private EntityView _prefab;
         [SerializeField] [Min(0)] private int _initialCapacity = 10;
         [SerializeField] private bool _createAsChildren = true;
+        private readonly HashSet<EntityView> _allInstances = new HashSet<EntityView>();
+
+        private readonly Queue<EntityView> _freeInstancesQueue = new Queue<EntityView>();
+        private readonly HashSet<EntityView> _freeInstancesSet = new HashSet<EntityView>();
+        private readonly Dictionary<EntityView, IEntityViewPoolingListener[]> _listeners =
+            new Dictionary<EntityView, IEntityViewPoolingListener[]>();
 
 #if UNITY_EDITOR && ODIN_INSPECTOR
         [HideInEditorMode] [ShowInInspector]
         private int CurrentCapacity => _allInstances.Count;
 #endif
+
+        private void Awake()
+        {
+            for (var i = 0; i < _initialCapacity; i++)
+            {
+                CreateNewFree();
+            }
+        }
 
         public EntityView Create(Vector3 position, Quaternion rotation)
         {
@@ -69,19 +83,5 @@ namespace DELTation.LeoEcsExtensions.Pooling
             _allInstances.Add(instance);
             Dispose(instance);
         }
-
-        private void Awake()
-        {
-            for (var i = 0; i < _initialCapacity; i++)
-            {
-                CreateNewFree();
-            }
-        }
-
-        private readonly Queue<EntityView> _freeInstancesQueue = new Queue<EntityView>();
-        private readonly HashSet<EntityView> _freeInstancesSet = new HashSet<EntityView>();
-        private readonly HashSet<EntityView> _allInstances = new HashSet<EntityView>();
-        private readonly Dictionary<EntityView, IEntityViewPoolingListener[]> _listeners =
-            new Dictionary<EntityView, IEntityViewPoolingListener[]>();
     }
 }

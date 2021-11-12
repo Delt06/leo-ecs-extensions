@@ -7,6 +7,8 @@ namespace DELTation.LeoEcsExtensions.Views
 {
     internal static class EntityViewUtils
     {
+        private static readonly List<IEntityInitializer> Buffer = new List<IEntityInitializer>();
+
         public static void FindAllEntityInitializers([NotNull] Transform root,
             [NotNull] List<IEntityInitializer> initializers)
         {
@@ -22,6 +24,7 @@ namespace DELTation.LeoEcsExtensions.Views
 
             root.GetComponents(Buffer);
 
+            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < Buffer.Count; index++)
             {
                 initializers.Add(Buffer[index]);
@@ -35,7 +38,5 @@ namespace DELTation.LeoEcsExtensions.Views
                 FindAllEntityInitializers(child, initializers, true);
             }
         }
-
-        private static readonly List<IEntityInitializer> Buffer = new List<IEntityInitializer>();
     }
 }

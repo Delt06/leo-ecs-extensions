@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using DELTation.DIFramework;
 using Leopotam.Ecs;
+using UnityEngine;
 #if UNITY_EDITOR && ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #endif
-using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Composition.Di
 {
@@ -15,7 +15,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 #if UNITY_EDITOR && ODIN_INSPECTOR
         [Required]
 #endif
-        private EcsEntryPoint _ecsEntryPoint = default;
+        private EcsEntryPoint _ecsEntryPoint;
 
         public bool TryResolve(Type type, out object dependency)
         {

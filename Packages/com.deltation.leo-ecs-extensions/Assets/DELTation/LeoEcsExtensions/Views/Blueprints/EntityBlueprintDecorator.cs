@@ -5,7 +5,7 @@ namespace DELTation.LeoEcsExtensions.Views.Blueprints
 {
     public abstract class EntityBlueprintDecorator : EntityBlueprint
     {
-        [SerializeField] private EntityBlueprint _baseBlueprint = default;
+        [SerializeField] private EntityBlueprint _baseBlueprint;
 
         public sealed override void InitializeEntity(EcsEntity entity)
         {

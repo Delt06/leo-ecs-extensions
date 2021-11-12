@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Services;
 using DELTation.LeoEcsExtensions.Views.Blueprints;
 using Leopotam.Ecs;
@@ -15,13 +14,40 @@ namespace DELTation.LeoEcsExtensions.Views
         private EntityBlueprint _blueprint;
 
         private readonly List<IEntityInitializer> _initializers = new List<IEntityInitializer>();
-        private bool _searchedForInitializers;
         private IActiveEcsWorld _activeWorld;
         private EcsEntity _entity = EcsEntity.Null;
+        private bool _searchedForInitializers;
 
         public void Construct(IActiveEcsWorld activeWorld)
         {
             _activeWorld = activeWorld;
+        }
+
+        private List<IEntityInitializer> Initializers
+        {
+            get
+            {
+                if (!_searchedForInitializers)
+                {
+                    EntityViewUtils.FindAllEntityInitializers(transform, _initializers);
+                    _searchedForInitializers = true;
+                }
+
+                return _initializers;
+            }
+        }
+
+        protected void Awake()
+        {
+            OnAwake();
+            if (_createOnAwake)
+                CreateEntity();
+        }
+
+        protected void OnDestroy()
+        {
+            DestroyEntity();
+            OnDestroyed();
         }
 
         public EcsEntity Entity
@@ -80,24 +106,6 @@ namespace DELTation.LeoEcsExtensions.Views
             OnCreatedEntity(_entity);
         }
 
-        private List<IEntityInitializer> Initializers
-        {
-            get
-            {
-                if (!_searchedForInitializers)
-                {
-                    EntityViewUtils.FindAllEntityInitializers(transform, _initializers);
-                    _searchedForInitializers = true;
-                }
-
-                return _initializers;
-            }
-        }
-
-        protected virtual void AddComponents(EcsEntity entity) { }
-
-        protected virtual void OnCreatedEntity(EcsEntity entity) { }
-
         public void DestroyEntity()
         {
             if (!IsValid(_entity)) return;
@@ -105,24 +113,15 @@ namespace DELTation.LeoEcsExtensions.Views
             _entity = EcsEntity.Null;
         }
 
-        private static bool IsValid(in EcsEntity entity) => !entity.IsNull() && entity.IsAlive();
-
-        protected void Awake()
-        {
-            OnAwake();
-            if (_createOnAwake)
-                CreateEntity();
-        }
-
         public EcsWorld World => _activeWorld.World;
 
-        protected virtual void OnAwake() { }
+        protected virtual void AddComponents(EcsEntity entity) { }
 
-        protected void OnDestroy()
-        {
-            DestroyEntity();
-            OnDestroyed();
-        }
+        protected virtual void OnCreatedEntity(EcsEntity entity) { }
+
+        private static bool IsValid(in EcsEntity entity) => !entity.IsNull() && entity.IsAlive();
+
+        protected virtual void OnAwake() { }
 
         protected virtual void OnDestroyed() { }
     }

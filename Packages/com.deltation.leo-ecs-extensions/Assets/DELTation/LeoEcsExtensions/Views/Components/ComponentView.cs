@@ -19,9 +19,11 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 #if UNITY_EDITOR && ODIN_INSPECTOR
         [HideIf(nameof(ComponentExists))] [InlineProperty] [HideLabel]
 #endif
-        private T _component = default;
+        private T _component;
 
         private EcsEntity _entity = EcsEntity.Null;
+
+        public ref T StoreComponentValue => ref _component;
 
         public void InitializeEntity(EcsEntity entity)
         {
@@ -36,8 +38,6 @@ namespace DELTation.LeoEcsExtensions.Views.Components
             _entity = entity;
 #endif
         }
-
-        public ref T StoreComponentValue => ref _component;
 
         protected virtual void PreInitializeEntity(EcsEntity entity) { }
         protected virtual void PostInitializeEntity(EcsEntity entity) { }

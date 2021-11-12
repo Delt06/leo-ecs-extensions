@@ -8,9 +8,6 @@ namespace DELTation.LeoEcsExtensions.Testing
     [TestFixture]
     public abstract class EcsTestFixture
     {
-        protected EcsWorld World { get; private set; }
-        protected EcsSystems Systems { get; private set; }
-
         [SetUp]
         public void SetUp()
         {
@@ -19,8 +16,6 @@ namespace DELTation.LeoEcsExtensions.Testing
             OnSetUp();
         }
 
-        protected virtual void OnSetUp() { }
-
         [TearDown]
         public void TearDown()
         {
@@ -28,6 +23,11 @@ namespace DELTation.LeoEcsExtensions.Testing
             World?.Destroy();
             OnTearDown();
         }
+
+        protected EcsWorld World { get; private set; }
+        protected EcsSystems Systems { get; private set; }
+
+        protected virtual void OnSetUp() { }
 
         protected virtual void OnTearDown() { }
 

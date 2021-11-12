@@ -7,9 +7,9 @@ namespace DELTation.LeoEcsExtensions.Composition
 {
     public sealed class EcsFeatureBuilder
     {
+        [CanBeNull] private readonly string _name;
         private readonly EcsSystems _parentSystems;
         private readonly List<(IEcsSystem system, string name)> _systems = new List<(IEcsSystem system, string name)>();
-        [CanBeNull] private readonly string _name;
         private bool _isBuilt;
 
         internal EcsFeatureBuilder([NotNull] EcsSystems parentSystems, [CanBeNull] string name)
@@ -47,8 +47,8 @@ namespace DELTation.LeoEcsExtensions.Composition
         }
 
         /// <summary>
-        /// System for removing OneFrame component.
-        /// Same as OneFrame system from LeoECS core.
+        ///     System for removing OneFrame component.
+        ///     Same as OneFrame system from LeoECS core.
         /// </summary>
         /// <typeparam name="T">OneFrame component type.</typeparam>
         private sealed class RemoveOneFrame<T> : IEcsRunSystem where T : struct
