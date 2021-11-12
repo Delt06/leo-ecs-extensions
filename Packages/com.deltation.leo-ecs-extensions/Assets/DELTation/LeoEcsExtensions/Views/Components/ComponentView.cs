@@ -37,7 +37,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 #endif
         }
 
-        protected ref T Component => ref _component;
+        public ref T StoreComponentValue => ref _component;
 
         protected virtual void PreInitializeEntity(EcsEntity entity) { }
         protected virtual void PostInitializeEntity(EcsEntity entity) { }

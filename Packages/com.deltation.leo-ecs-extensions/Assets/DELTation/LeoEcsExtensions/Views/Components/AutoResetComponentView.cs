@@ -7,7 +7,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         protected override void PreInitializeEntity(EcsEntity entity)
         {
             base.PreInitializeEntity(entity);
-            Component.AutoReset(ref Component);
+            StoreComponentValue.AutoReset(ref StoreComponentValue);
         }
     }
 }
