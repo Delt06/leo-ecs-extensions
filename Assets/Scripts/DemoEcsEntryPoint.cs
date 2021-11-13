@@ -17,5 +17,7 @@ public class DemoEcsEntryPoint : EcsEntryPoint
         // Or use a prebuilt one
         var colorPresenter = new CubeColorPresenter(world);
         systems.AddFeature(new AnimatedCubeFeature(colorPresenter));
+
+        systems.Add(new TestComponentSystem());
     }
 }

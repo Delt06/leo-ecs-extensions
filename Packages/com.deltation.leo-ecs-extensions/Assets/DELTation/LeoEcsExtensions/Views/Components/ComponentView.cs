@@ -1,29 +1,35 @@
 using Leopotam.Ecs;
 using UnityEngine;
-#if UNITY_EDITOR && ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-
-#endif
 
 namespace DELTation.LeoEcsExtensions.Views.Components
 {
-    public abstract class ComponentView<T> : MonoBehaviour, IEntityInitializer where T : struct
+    public abstract class ComponentView : MonoBehaviour
     {
-        [SerializeField]
-#if UNITY_EDITOR && ODIN_INSPECTOR
-        [HideIf(nameof(EntityIsAlive))]
-#endif
-        private bool _enabled = true;
+        public EcsEntity Entity { get; protected set; } = EcsEntity.Null;
 
-        [SerializeField]
-#if UNITY_EDITOR && ODIN_INSPECTOR
-        [HideIf(nameof(ComponentExists))] [InlineProperty] [HideLabel]
-#endif
-        private T _component;
+        public abstract void TryAddComponent();
+        public abstract void TryDeleteComponent();
+        public abstract bool EntityHasComponent();
+    }
 
-        private EcsEntity _entity = EcsEntity.Null;
+    public abstract class ComponentView<T> : ComponentView, IEntityInitializer where T : struct
+    {
+        [SerializeField] private bool _enabled = true;
 
-        public ref T StoreComponentValue => ref _component;
+        [SerializeField] private T _component;
+
+        public ref T StoredComponentValue => ref _component;
+
+
+        protected virtual void OnValidate()
+        {
+            if (!Entity.IsAlive()) return;
+            if (!Entity.Has<T>()) return;
+
+            var attachedComponent = Entity.Get<T>();
+            if (!Equals(attachedComponent, _component))
+                Entity.Replace(_component);
+        }
 
         public void InitializeEntity(EcsEntity entity)
         {
@@ -34,45 +40,24 @@ namespace DELTation.LeoEcsExtensions.Views.Components
                 PostInitializeEntity(entity);
             }
 
-#if UNITY_EDITOR && ODIN_INSPECTOR
-            _entity = entity;
-#endif
+            Entity = entity;
         }
+
+        public sealed override void TryAddComponent()
+        {
+            if (Entity.IsAlive() && !Entity.Has<T>())
+                Entity.Replace(_component);
+        }
+
+        public sealed override void TryDeleteComponent()
+        {
+            if (Entity.IsAlive() && Entity.Has<T>())
+                Entity.Del<T>();
+        }
+
+        public sealed override bool EntityHasComponent() => Entity.IsAlive() && Entity.Has<T>();
 
         protected virtual void PreInitializeEntity(EcsEntity entity) { }
         protected virtual void PostInitializeEntity(EcsEntity entity) { }
-
-#if UNITY_EDITOR && ODIN_INSPECTOR
-        [ShowInInspector] [ShowIf(nameof(ComponentExists))] [InlineProperty] [HideLabel]
-        private T AttachedComponentView
-        {
-            get => ComponentExists ? _entity.Get<T>() : default;
-            set
-            {
-                if (EntityIsAlive)
-                    _entity.Replace(value);
-            }
-        }
-
-        [Button] [ShowIf(nameof(ComponentExists))] [GUIColor(0.75f, 0.25f, 0.25f)]
-        private void DeleteComponent()
-        {
-            if (EntityIsAlive)
-                _entity.Del<T>();
-        }
-
-        [Button] [ShowIf(nameof(ShowAddComponent))] [GUIColor(0.25f, 0.75f, 0.25f)]
-        private void AddComponent()
-        {
-            if (EntityIsAlive)
-                _entity.Replace(_component);
-        }
-
-        private bool ShowAddComponent => EntityIsAlive && !_entity.Has<T>();
-
-        private bool ComponentExists => EntityIsAlive && _entity.Has<T>();
-
-        private bool EntityIsAlive => _entity.IsAlive();
-#endif
     }
 }

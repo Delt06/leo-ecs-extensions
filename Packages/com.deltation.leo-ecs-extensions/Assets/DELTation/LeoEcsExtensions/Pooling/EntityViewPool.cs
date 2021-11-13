@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using DELTation.LeoEcsExtensions.Views;
 using Leopotam.Ecs;
 using UnityEngine;
-#if UNITY_EDITOR && ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
 
 namespace DELTation.LeoEcsExtensions.Pooling
 {
     public class EntityViewPool : MonoBehaviour, IEntityViewPool
     {
         [SerializeField]
-#if UNITY_EDITOR && ODIN_INSPECTOR
-        [Required]
-#endif
         private EntityView _prefab;
         [SerializeField] [Min(0)] private int _initialCapacity = 10;
         [SerializeField] private bool _createAsChildren = true;
@@ -24,11 +18,6 @@ namespace DELTation.LeoEcsExtensions.Pooling
         private readonly HashSet<EntityView> _freeInstancesSet = new HashSet<EntityView>();
         private readonly Dictionary<EntityView, IEntityViewPoolingListener[]> _listeners =
             new Dictionary<EntityView, IEntityViewPoolingListener[]>();
-
-#if UNITY_EDITOR && ODIN_INSPECTOR
-        [HideInEditorMode] [ShowInInspector]
-        private int CurrentCapacity => _allInstances.Count;
-#endif
 
         private void Awake()
         {
