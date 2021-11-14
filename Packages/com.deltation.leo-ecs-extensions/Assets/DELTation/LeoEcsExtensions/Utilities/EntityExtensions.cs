@@ -15,5 +15,16 @@ namespace DELTation.LeoEcsExtensions.Utilities
             component = default;
             return false;
         }
+        
+        public static bool TryGetRef<T>(this in EcsEntity entity, ref T component) where T : struct
+        {
+            if (entity.IsAlive() && entity.Has<T>())
+            {
+                component = entity.Get<T>();
+                return true;
+            }
+
+            return false;
+        }
     }
 }
