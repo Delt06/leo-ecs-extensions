@@ -375,7 +375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enabled: 1
   _component:
-    A: 0
+    Value: 0
 --- !u!114 &2009558562
 MonoBehaviour:
   m_ObjectHideFlags: 0

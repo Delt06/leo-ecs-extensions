@@ -9,7 +9,9 @@ public class TestComponentSystem : IEcsRunSystem
     {
         foreach (var i in _filter)
         {
-            var value = _filter.Get1(i).Value;
+            ref var testComponent = ref _filter.Get1(i);
+            ref var value = ref testComponent.Value;
+            value += Time.deltaTime;
             Debug.Log($"Test component value: {value}");
         }
     }

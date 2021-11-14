@@ -6,26 +6,49 @@ using UnityEngine;
 namespace DELTation.LeoEcsExtensions.Editor
 {
     [CustomEditor(typeof(ComponentView), true)]
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class ComponentViewEditor : UnityEditor.Editor
     {
-        private ComponentView _componentView;
         private Color _oldBgColor;
+
+        protected virtual void OnEnable()
+        {
+            Update();
+            EditorApplication.update += Update;
+        }
+
+        protected virtual void OnDisable()
+        {
+            EditorApplication.update -= Update;
+        }
+
+        private void Update()
+        {
+            var componentView = TargetAsComponentView();
+            componentView.TryUpdateStoredValueFromEntity();
+        }
+
+        private ComponentView TargetAsComponentView() => (ComponentView) target;
 
         public override void OnInspectorGUI()
         {
-            _componentView = (ComponentView) target;
-            base.OnInspectorGUI();
+            var componentView = TargetAsComponentView();
 
-            DrawEntity();
-            DrawComponentButtons();
+            EditorGUI.BeginChangeCheck();
+            base.OnInspectorGUI();
+            if (EditorGUI.EndChangeCheck())
+                componentView.TryUpdateEntityFromStoredValue();
+
+            DrawEntity(componentView);
+            DrawComponentButtons(componentView);
         }
 
-        private void DrawEntity()
+        private static void DrawEntity(ComponentView componentView)
         {
-            if (!_componentView.Entity.IsAlive()) return;
+            if (!componentView.Entity.IsAlive()) return;
 
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField("Entity", _componentView.Entity.ToString());
+            EditorGUILayout.TextField("Entity", componentView.Entity.ToString());
             EditorGUI.EndDisabledGroup();
 
             var labelStyle = new GUIStyle(GUI.skin.label)
@@ -33,15 +56,15 @@ namespace DELTation.LeoEcsExtensions.Editor
                 richText = true,
             };
 
-            var componentStatus = _componentView.EntityHasComponent()
+            var componentStatus = componentView.EntityHasComponent()
                 ? "<color=green>added</color>"
                 : "<color=red>not added</color>";
             EditorGUILayout.LabelField($"Component: {componentStatus}.", labelStyle);
         }
 
-        private void DrawComponentButtons()
+        private void DrawComponentButtons(ComponentView componentView)
         {
-            if (!_componentView.Entity.IsAlive()) return;
+            if (!componentView.Entity.IsAlive()) return;
 
 
             GUILayout.BeginHorizontal();
@@ -49,16 +72,16 @@ namespace DELTation.LeoEcsExtensions.Editor
 
             SetBackgroundColor(new Color(0.75f, 0.25f, 0.25f));
 
-            EditorGUI.BeginDisabledGroup(!_componentView.EntityHasComponent());
+            EditorGUI.BeginDisabledGroup(!componentView.EntityHasComponent());
             if (GUILayout.Button("Delete component"))
-                _componentView.TryDeleteComponent();
+                componentView.TryDeleteComponent();
             EditorGUI.EndDisabledGroup();
 
             SetBackgroundColor(new Color(0.25f, 0.75f, 0.25f));
 
-            EditorGUI.BeginDisabledGroup(_componentView.EntityHasComponent());
+            EditorGUI.BeginDisabledGroup(componentView.EntityHasComponent());
             if (GUILayout.Button("Add component"))
-                _componentView.TryAddComponent();
+                componentView.TryAddComponent();
             EditorGUI.EndDisabledGroup();
 
             RestoreBackgroundColor();

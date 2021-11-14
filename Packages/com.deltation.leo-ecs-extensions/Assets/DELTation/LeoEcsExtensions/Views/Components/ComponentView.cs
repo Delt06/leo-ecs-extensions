@@ -10,6 +10,8 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         public abstract void TryAddComponent();
         public abstract void TryDeleteComponent();
         public abstract bool EntityHasComponent();
+        public abstract void TryUpdateStoredValueFromEntity();
+        public abstract void TryUpdateEntityFromStoredValue();
     }
 
     public abstract class ComponentView<T> : ComponentView, IEntityInitializer where T : struct
@@ -19,17 +21,6 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         [SerializeField] private T _component;
 
         public ref T StoredComponentValue => ref _component;
-
-
-        protected virtual void OnValidate()
-        {
-            if (!Entity.IsAlive()) return;
-            if (!Entity.Has<T>()) return;
-
-            var attachedComponent = Entity.Get<T>();
-            if (!Equals(attachedComponent, _component))
-                Entity.Replace(_component);
-        }
 
         public void InitializeEntity(EcsEntity entity)
         {
@@ -43,6 +34,18 @@ namespace DELTation.LeoEcsExtensions.Views.Components
             Entity = entity;
         }
 
+        public override void TryUpdateEntityFromStoredValue()
+        {
+            if (!Entity.IsAlive()) return;
+            if (!Entity.Has<T>()) return;
+
+            ref var attachedComponent = ref Entity.Get<T>();
+            if (!StoredComponentEquals(attachedComponent))
+                Entity.Replace(_component);
+        }
+
+        private bool StoredComponentEquals(in T other) => Equals(_component, other);
+
         public sealed override void TryAddComponent()
         {
             if (Entity.IsAlive() && !Entity.Has<T>())
@@ -53,6 +56,16 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         {
             if (Entity.IsAlive() && Entity.Has<T>())
                 Entity.Del<T>();
+        }
+
+        public sealed override void TryUpdateStoredValueFromEntity()
+        {
+            if (!Entity.IsAlive()) return;
+            if (!Entity.Has<T>()) return;
+
+            ref var attachedComponent = ref Entity.Get<T>();
+            if (!StoredComponentEquals(attachedComponent))
+                _component = attachedComponent;
         }
 
         public sealed override bool EntityHasComponent() => Entity.IsAlive() && Entity.Has<T>();
