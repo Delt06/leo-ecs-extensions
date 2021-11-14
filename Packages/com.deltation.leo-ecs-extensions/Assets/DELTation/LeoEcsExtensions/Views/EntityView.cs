@@ -92,6 +92,7 @@ namespace DELTation.LeoEcsExtensions.Views
             DestroyEntity();
             _entity = World.NewEntity();
             _entity.SetUnityObjectData(transform);
+            _entity.SetViewBackRef(this);
 
             if (_blueprint)
                 _blueprint.InitializeEntity(_entity);
