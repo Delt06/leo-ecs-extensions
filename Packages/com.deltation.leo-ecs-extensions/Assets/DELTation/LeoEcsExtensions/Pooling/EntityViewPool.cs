@@ -43,7 +43,7 @@ namespace DELTation.LeoEcsExtensions.Pooling
 
             instance.gameObject.SetActive(true);
             instance.CreateEntity();
-            instance.Entity.Get<PoolBackRef>().Pool = this;
+            instance.GetOrCreateEntity().Get<PoolBackRef>().Pool = this;
 
             return instance;
         }

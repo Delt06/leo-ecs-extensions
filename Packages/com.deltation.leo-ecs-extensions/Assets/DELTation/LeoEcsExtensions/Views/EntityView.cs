@@ -50,16 +50,13 @@ namespace DELTation.LeoEcsExtensions.Views
             OnDestroyed();
         }
 
-        public EcsEntity Entity
+        public EcsEntity GetOrCreateEntity()
         {
-            get
-            {
-                if (TryGetEntity(out var entity))
-                    return entity;
+            if (TryGetEntity(out var entity))
+                return entity;
 
-                CreateEntity();
-                return _entity;
-            }
+            CreateEntity();
+            return _entity;
         }
 
         public bool TryGetEntity(out EcsEntity entity)
