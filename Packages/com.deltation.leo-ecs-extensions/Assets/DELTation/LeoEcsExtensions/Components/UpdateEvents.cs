@@ -15,8 +15,8 @@ namespace DELTation.LeoEcsExtensions.Components
             AllEventsMetadata.Add(new EventMetadata
                 {
                     Type = typeof(T),
-                    OneFrameFilterType = typeof(EcsFilter<T>),
-                    DelHandler = (in EcsEntity entity) => entity.Del<T>(),
+                    OneFrameFilterType = typeof(EcsFilter<UpdateEvent<T>>),
+                    DelHandler = (in EcsEntity entity) => entity.Del<UpdateEvent<T>>(),
                 }
             );
         }

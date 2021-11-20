@@ -19,5 +19,7 @@ public class DemoEcsEntryPoint : EcsEntryPoint
         systems.AddFeature(new AnimatedCubeFeature(colorPresenter));
 
         systems.Add(new TestComponentSystem());
+
+        systems.OneFrameUpdateEvents();
     }
 }
