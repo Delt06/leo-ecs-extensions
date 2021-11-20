@@ -1,4 +1,5 @@
 using System;
+using DELTation.LeoEcsExtensions.Systems;
 using JetBrains.Annotations;
 using Leopotam.Ecs;
 
@@ -21,6 +22,14 @@ namespace DELTation.LeoEcsExtensions.Composition
 
             prebuiltFeature.AddTo(parentSystems);
             return parentSystems;
+        }
+
+        public static EcsSystems OneFrameUpdateEvents([NotNull] this EcsSystems systems)
+        {
+            if (systems == null) throw new ArgumentNullException(nameof(systems));
+
+            systems.Add(new OneFrameUpdateEventsSystem());
+            return systems;
         }
     }
 }
