@@ -66,8 +66,11 @@ namespace DELTation.LeoEcsExtensions.Editor
                     EditorGUILayout.BeginHorizontal();
 
                 var componentType = componentTypes[index];
-                GUI.backgroundColor = componentType.GetColor();
-                DrawComponentCell(componentType);
+                if (componentType != null)
+                {
+                    GUI.backgroundColor = componentType.GetColor();
+                    DrawComponentCell(componentType);
+                }
 
                 if (ShouldEndRow(index)) EditorGUILayout.EndHorizontal();
             }

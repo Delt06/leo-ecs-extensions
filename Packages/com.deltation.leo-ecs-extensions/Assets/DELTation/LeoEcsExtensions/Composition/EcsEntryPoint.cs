@@ -33,6 +33,20 @@ namespace DELTation.LeoEcsExtensions.Composition
 
         private EcsWorld _world;
 
+#if UNITY_EDITOR
+        [CanBeNull]
+        // ReSharper disable once ConvertToAutoPropertyWithPrivateSetter
+        internal EcsSystems LateSystems => _lateSystems;
+
+        [CanBeNull]
+        // ReSharper disable once ConvertToAutoPropertyWithPrivateSetter
+        internal EcsSystems PhysicsSystems => _physicsSystems;
+
+        [CanBeNull]
+        // ReSharper disable once ConvertToAutoPropertyWithPrivateSetter
+        internal EcsSystems Systems => _systems;
+#endif
+
         protected void Start()
         {
             EnsureInitialized();
