@@ -1,30 +1,90 @@
+using System;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
+#if LEOECS_EXTENSIONS_LITE
+using DELTation.LeoEcsExtensions.Components;
+using Leopotam.EcsLite;
+
+#else
 using Leopotam.Ecs;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Utilities
 {
     public static class EntityExtensions
     {
+#if LEOECS_EXTENSIONS_LITE
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsFilter.Mask IncComponentAndUpdateOf<T>([NotNull] this EcsFilter.Mask filter) where T : struct
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+            return filter.Inc<T>().IncUpdateOf<T>();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsFilter.Mask IncUpdateOf<T>([NotNull] this EcsFilter.Mask filter) where T : struct
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+            return filter.Inc<UpdateEvent<T>>();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsFilter.Mask FilterOnUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return world.Filter<UpdateEvent<T>>();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsReadWritePool<T> AsReadWrite<T>([NotNull] this EcsPool<T> pool) where T : struct
+        {
+#if DEBUG
+            if (pool == null) throw new ArgumentNullException(nameof(pool));
+#endif
+
+            var updatesPool = pool.GetWorld().GetUpdatesPool<T>();
+            return new EcsReadWritePool<T>(pool, updatesPool);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsReadOnlyPool<T> AsReadOnly<T>([NotNull] this EcsPool<T> pool) where T : struct
+        {
+#if DEBUG
+            if (pool == null) throw new ArgumentNullException(nameof(pool));
+#endif
+
+            return new EcsReadOnlyPool<T>(pool);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsPool<UpdateEvent<T>> GetUpdatesPool<T>([NotNull] this EcsWorld world) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return world.GetPool<UpdateEvent<T>>();
+        }
+
+#else
         public static bool TryGet<T>(this in EcsEntity entity, out T component) where T : struct
         {
             if (entity.IsAlive() && entity.Has<T>())
             {
-                component = entity.Get<T>();
+                component = entity.get
                 return true;
             }
 
             component = default;
             return false;
         }
-        
-        public static bool TryGetRef<T>(this in EcsEntity entity, ref T component) where T : struct
-        {
-            if (entity.IsAlive() && entity.Has<T>())
-            {
-                component = entity.Get<T>();
-                return true;
-            }
 
-            return false;
-        }
+#endif
     }
 }

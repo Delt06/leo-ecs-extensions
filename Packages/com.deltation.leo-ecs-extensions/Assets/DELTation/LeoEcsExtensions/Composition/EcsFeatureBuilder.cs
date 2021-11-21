@@ -18,6 +18,14 @@ namespace DELTation.LeoEcsExtensions.Composition
         private readonly List<(IEcsSystem system, string name)> _systems = new List<(IEcsSystem system, string name)>();
         private bool _isBuilt;
 
+        public EcsWorld World =>
+#if LEOECS_EXTENSIONS_LITE
+            _parentSystems.GetWorld();
+#else
+            _parentSystems.World;
+#endif
+
+
         internal EcsFeatureBuilder([NotNull] EcsSystems parentSystems, [CanBeNull] string name)
         {
             _parentSystems = parentSystems ?? throw new ArgumentNullException(nameof(parentSystems));
@@ -58,50 +66,6 @@ namespace DELTation.LeoEcsExtensions.Composition
             }
 
             _parentSystems.Add(systems);
-#endif
-        }
-
-        /// <summary>
-        ///     System for removing OneFrame component.
-        ///     Same as OneFrame system from LeoECS core.
-        /// </summary>
-        /// <typeparam name="T">OneFrame component type.</typeparam>
-        private sealed class RemoveOneFrame<T> : IEcsRunSystem
-#if LEOECS_EXTENSIONS_LITE
-            , IEcsInitSystem
-#endif
-            where T : struct
-
-        {
-#if LEOECS_EXTENSIONS_LITE
-            private EcsPool<T> _pool;
-            private EcsFilter _filter;
-
-            public void Init(EcsSystems systems)
-            {
-                var world = systems.GetWorld();
-                _pool = world.GetPool<T>();
-                _filter = world.Filter<T>().End();
-            }
-
-            public void Run(EcsSystems systems)
-            {
-                for (var idx = _filter.GetEntitiesCount() - 1; idx >= 0; idx--)
-                {
-                    _pool.Del(idx);
-                }
-            }
-
-#else
-            private readonly EcsFilter<T> _oneFrames = null;
-
-            void IEcsRunSystem.Run()
-            {
-                for (var idx = _oneFrames.GetEntitiesCount() - 1; idx >= 0; idx--)
-                {
-                    _oneFrames.GetEntity(idx).Del<T>();
-                }
-            }
 #endif
         }
     }

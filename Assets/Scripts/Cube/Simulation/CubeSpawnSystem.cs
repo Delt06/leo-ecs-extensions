@@ -16,9 +16,12 @@ namespace Cube.Simulation
 
             var cubeEntity = world.NewPackedEntityWithWorld();
             cubeEntity.SetUnityObjectData(cube.transform);
-            cubeEntity.SetTransformComponentsFromTransform(cube.transform);
 
             cubeEntity.Add<CubeTag>();
+            cubeEntity.Add<Position>();
+            cubeEntity.OnUpdated<Position>();
+            cubeEntity.Add<Rotation>();
+            cubeEntity.OnUpdated<Rotation>();
         }
     }
 }

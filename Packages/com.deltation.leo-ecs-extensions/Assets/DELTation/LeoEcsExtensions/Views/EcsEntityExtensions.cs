@@ -2,7 +2,6 @@ using System;
 using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Components;
 using JetBrains.Annotations;
-using UnityEngine;
 using Object = UnityEngine.Object;
 #if LEOECS_EXTENSIONS_LITE
 using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
@@ -43,19 +42,6 @@ namespace DELTation.LeoEcsExtensions.Views
 #endif
 
             entity.GetCompatible<UnityObjectData<T>>().Object = @object;
-        }
-
-        public static void SetTransformComponentsFromTransform(this EcsPackedEntity entity,
-            [NotNull] Transform transform)
-        {
-#if DEBUG
-            if (!entity.IsAliveCompatible()) throw new ArgumentNullException(nameof(entity));
-            if (transform == null) throw new ArgumentNullException(nameof(transform));
-#endif
-
-            entity.GetCompatible<Position>().WorldPosition = transform.position;
-            entity.GetCompatible<Rotation>().WorldRotation = transform.rotation;
-            entity.GetCompatible<Scale>().LocalScale = transform.localScale;
         }
     }
 }

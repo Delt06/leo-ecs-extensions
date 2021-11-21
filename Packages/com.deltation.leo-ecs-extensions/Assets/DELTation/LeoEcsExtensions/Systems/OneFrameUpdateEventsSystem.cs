@@ -43,14 +43,18 @@ namespace DELTation.LeoEcsExtensions.Systems
                 var pool = GetPool(metadata, world);
 #endif
 
+
+#if LEOECS_EXTENSIONS_LITE
+                foreach (var i in filter)
+                {
+                    pool.Del(i);
+                }
+#else
                 for (var idx = filter.GetEntitiesCount() - 1; idx >= 0; idx--)
                 {
-#if LEOECS_EXTENSIONS_LITE
-                    pool.Del(idx);
-#else
                     metadata.DelHandler(filter.GetEntity(idx));
-#endif
                 }
+#endif
             }
         }
 

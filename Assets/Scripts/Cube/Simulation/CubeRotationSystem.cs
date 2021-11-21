@@ -1,35 +1,31 @@
 ﻿using Cube.Components;
-using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Utilities;
+using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Cube.Simulation
 {
-    public class CubeRotationSystem : IEcsRunSystem, IEcsInitSystem
+    public class CubeRotationSystem : IEcsRunSystem
     {
-        private EcsFilter _filter;
-        private EcsPool<Rotation> _rotations;
-        private EcsPool<RotationWriteRequired> _writes;
+        private readonly EcsFilter _filter;
+        private readonly EcsReadWritePool<Rotation> _rotations;
 
-        public void Init(EcsSystems systems)
+        [UsedImplicitly]
+        public CubeRotationSystem(EcsWorld world)
         {
-            var world = systems.GetWorld();
             _filter = world.Filter<Rotation>().Inc<CubeTag>().End();
-            _rotations = world.GetPool<Rotation>();
-            _writes = world.GetPool<RotationWriteRequired>();
+            _rotations = world.GetPool<Rotation>().AsReadWrite();
         }
 
         public void Run(EcsSystems systems)
         {
             foreach (var i in _filter)
             {
-                ref var rotation = ref _rotations.Get(i);
+                ref var rotation = ref _rotations.Modify(i);
                 const float rotationSpeed = 90f;
-                var newWorldRotation = Quaternion.AngleAxis(Time.deltaTime * rotationSpeed, Vector3.up) *
-                                       rotation.WorldRotation;
-
-                _writes.UpdateRotation(i, ref rotation, newWorldRotation);
+                rotation.WorldRotation = Quaternion.AngleAxis(Time.deltaTime * rotationSpeed, Vector3.up) *
+                                         rotation.WorldRotation;
             }
         }
     }

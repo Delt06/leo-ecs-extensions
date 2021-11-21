@@ -37,5 +37,13 @@ namespace DELTation.LeoEcsExtensions.Composition
             systems.Add(new OneFrameUpdateEventsSystem());
             return systems;
         }
+
+        public static EcsSystems OneFrame<T>([NotNull] this EcsSystems systems) where T : struct
+        {
+            if (systems == null) throw new ArgumentNullException(nameof(systems));
+
+            systems.Add(new RemoveOneFrame<T>());
+            return systems;
+        }
     }
 }
