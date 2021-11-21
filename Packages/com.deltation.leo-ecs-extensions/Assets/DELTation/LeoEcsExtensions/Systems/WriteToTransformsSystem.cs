@@ -1,3 +1,4 @@
+#if !LEOECS_EXTENSIONS_LITE
 using DELTation.LeoEcsExtensions.Components;
 using Leopotam.Ecs;
 using UnityEngine;
@@ -54,3 +55,4 @@ namespace DELTation.LeoEcsExtensions.Systems
         }
     }
 }
+#endif

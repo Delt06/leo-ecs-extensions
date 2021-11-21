@@ -1,11 +1,17 @@
-using Leopotam.Ecs;
+using DELTation.LeoEcsExtensions.Compatibility;
 using UnityEngine;
+#if LEOECS_EXTENSIONS_LITE
+using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
+
+#else
+using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Views.Components
 {
     public abstract class ComponentView : MonoBehaviour
     {
-        public EcsEntity Entity { get; protected set; } = EcsEntity.Null;
+        public EcsPackedEntity Entity { get; protected set; }
 
         public abstract void TryAddComponent();
         public abstract void TryDeleteComponent();
@@ -22,12 +28,12 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 
         public ref T StoredComponentValue => ref _component;
 
-        public void InitializeEntity(EcsEntity entity)
+        public void InitializeEntity(EcsPackedEntity entity)
         {
             if (_enabled)
             {
                 PreInitializeEntity(entity);
-                entity.Replace(_component);
+                entity.GetCompatible<T>() = _component;
                 PostInitializeEntity(entity);
             }
 
@@ -36,41 +42,39 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 
         public override void TryUpdateEntityFromStoredValue()
         {
-            if (!Entity.IsAlive()) return;
-            if (!Entity.Has<T>()) return;
+            if (!EntityHasComponent()) return;
 
-            ref var attachedComponent = ref Entity.Get<T>();
+            ref var attachedComponent = ref Entity.GetCompatible<T>();
             if (!StoredComponentEquals(attachedComponent))
-                Entity.Replace(_component);
+                Entity.GetCompatible<T>() = _component;
         }
 
         private bool StoredComponentEquals(in T other) => Equals(_component, other);
 
         public sealed override void TryAddComponent()
         {
-            if (Entity.IsAlive() && !Entity.Has<T>())
-                Entity.Replace(_component);
+            if (Entity.IsAliveCompatible() && !Entity.HasCompatible<T>())
+                Entity.GetCompatible<T>() = _component;
         }
 
         public sealed override void TryDeleteComponent()
         {
-            if (Entity.IsAlive() && Entity.Has<T>())
-                Entity.Del<T>();
+            if (Entity.HasCompatible<T>())
+                Entity.DelCompatible<T>();
         }
 
         public sealed override void TryUpdateStoredValueFromEntity()
         {
-            if (!Entity.IsAlive()) return;
-            if (!Entity.Has<T>()) return;
+            if (!EntityHasComponent()) return;
 
-            ref var attachedComponent = ref Entity.Get<T>();
+            ref var attachedComponent = ref Entity.GetCompatible<T>();
             if (!StoredComponentEquals(attachedComponent))
                 _component = attachedComponent;
         }
 
-        public sealed override bool EntityHasComponent() => Entity.IsAlive() && Entity.Has<T>();
+        public sealed override bool EntityHasComponent() => Entity.HasCompatible<T>();
 
-        protected virtual void PreInitializeEntity(EcsEntity entity) { }
-        protected virtual void PostInitializeEntity(EcsEntity entity) { }
+        protected virtual void PreInitializeEntity(EcsPackedEntity entity) { }
+        protected virtual void PostInitializeEntity(EcsPackedEntity entity) { }
     }
 }

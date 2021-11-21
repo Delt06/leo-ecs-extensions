@@ -1,9 +1,22 @@
+#if LEOECS_EXTENSIONS_LITE
+using DELTation.LeoEcsExtensions.Services;
+using JetBrains.Annotations;
+using Leopotam.EcsLite;
+using UnityEngine;
+using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
+#if UNITY_EDITOR
+using Leopotam.EcsLite.UnityEditor;
+#endif
+
+#else
+using UnityEngine;
 using DELTation.LeoEcsExtensions.Services;
 using JetBrains.Annotations;
 using Leopotam.Ecs;
-using UnityEngine;
+using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
 #if UNITY_EDITOR
 using Leopotam.Ecs.UnityIntegration;
+#endif
 #endif
 
 namespace DELTation.LeoEcsExtensions.Composition
@@ -14,11 +27,16 @@ namespace DELTation.LeoEcsExtensions.Composition
         private EcsSystems _lateSystems;
         private EcsSystems _physicsSystems;
         private EcsSystems _systems;
+#if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
+        private EcsSystems _editorSystems;
+#endif
+
         private EcsWorld _world;
 
         protected void Start()
         {
             EnsureInitialized();
+
 
             _systems.Init();
             _physicsSystems.Init();
@@ -27,6 +45,9 @@ namespace DELTation.LeoEcsExtensions.Composition
 
         protected void Update()
         {
+#if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
+            _editorSystems.Run();
+#endif
             _systems.Run();
         }
 
@@ -42,6 +63,9 @@ namespace DELTation.LeoEcsExtensions.Composition
 
         protected void OnDestroy()
         {
+#if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
+            _editorSystems?.Destroy();
+#endif
             _systems?.Destroy();
             _physicsSystems?.Destroy();
             _world?.Destroy();
@@ -63,7 +87,7 @@ namespace DELTation.LeoEcsExtensions.Composition
             _initialized = true;
             _world = new EcsWorld();
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !LEOECS_EXTENSIONS_LITE
             EcsWorldObserver.Create(_world);
 #endif
 
@@ -71,16 +95,26 @@ namespace DELTation.LeoEcsExtensions.Composition
             _physicsSystems = new EcsSystems(_world, "Physics Systems (Fixed Update)");
             _lateSystems = new EcsSystems(_world, "Late Systems (Late Update)");
 
+#if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
+            _editorSystems = new EcsSystems(_world, "Editor Systems")
+                    .Add(new EcsWorldDebugSystem())
+                ;
+            _editorSystems.Init();
+#endif
+
             PopulateSystems(_systems, _world);
             PopulatePhysicsSystems(_physicsSystems, _world);
             PopulateLateSystems(_lateSystems, _world);
-            Inject(_systems, _physicsSystems, _lateSystems);
 
+
+#if !LEOECS_EXTENSIONS_LITE
+            Inject(_systems, _physicsSystems, _lateSystems);
             _systems.ProcessInjects();
             _physicsSystems.ProcessInjects();
             _lateSystems.ProcessInjects();
+#endif
 
-#if UNITY_EDITOR
+#if UNITY_EDITOR && !LEOECS_EXTENSIONS_LITE
             EcsSystemsObserver.Create(_systems);
             EcsSystemsObserver.Create(_physicsSystems);
             EcsSystemsObserver.Create(_lateSystems);
@@ -93,6 +127,7 @@ namespace DELTation.LeoEcsExtensions.Composition
 
         protected virtual void PopulateLateSystems([NotNull] EcsSystems lateSystems, [NotNull] EcsWorld world) { }
 
+#if !LEOECS_EXTENSIONS_LITE
         private void Inject(EcsSystems systems, EcsSystems physicsSystems, EcsSystems lateSystems)
         {
             var providers = GetComponentsInChildren<IEcsInjectionProvider>();
@@ -102,5 +137,7 @@ namespace DELTation.LeoEcsExtensions.Composition
                 provider.Inject(systems, physicsSystems, lateSystems);
             }
         }
+
+#endif
     }
 }

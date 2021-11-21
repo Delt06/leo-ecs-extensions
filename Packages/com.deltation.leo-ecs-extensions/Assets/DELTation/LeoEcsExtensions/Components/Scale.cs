@@ -1,6 +1,8 @@
 using System;
-using Leopotam.Ecs;
 using UnityEngine;
+#if !LEOECS_EXTENSIONS_LITE
+using Leopotam.Ecs;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Components
 {
@@ -10,7 +12,15 @@ namespace DELTation.LeoEcsExtensions.Components
         public Vector3 LocalScale;
     }
 
-    public struct ScaleWriteRequired : IEcsIgnoreInFilter { }
+    public struct ScaleWriteRequired
+#if !LEOECS_EXTENSIONS_LITE
+        : IEcsIgnoreInFilter
+#endif
+    { }
 
-    public struct ScaleReadRequired : IEcsIgnoreInFilter { }
+    public struct ScaleReadRequired
+#if !LEOECS_EXTENSIONS_LITE
+        : IEcsIgnoreInFilter
+#endif
+    { }
 }

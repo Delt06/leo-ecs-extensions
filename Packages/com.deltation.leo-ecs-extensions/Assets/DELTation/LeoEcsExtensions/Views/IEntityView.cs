@@ -1,12 +1,19 @@
-using Leopotam.Ecs;
+#if LEOECS_EXTENSIONS_LITE
+using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
+using EcsWorld = Leopotam.EcsLite.EcsWorld;
+
+#else
+using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
+using EcsWorld = Leopotam.Ecs.EcsWorld;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Views
 {
     public interface IEntityView
     {
         EcsWorld World { get; }
-        EcsEntity GetOrCreateEntity();
-        bool TryGetEntity(out EcsEntity entity);
+        EcsPackedEntity GetOrCreateEntity();
+        bool TryGetEntity(out EcsPackedEntity entity);
 
         void CreateEntity();
         void DestroyEntity();

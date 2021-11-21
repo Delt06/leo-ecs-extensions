@@ -1,5 +1,7 @@
-using System;
+#if !LEOECS_EXTENSIONS_LITE
 using Leopotam.Ecs;
+#endif
+using System;
 using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Components
@@ -10,7 +12,15 @@ namespace DELTation.LeoEcsExtensions.Components
         public Vector3 WorldPosition;
     }
 
-    public struct PositionWriteRequired : IEcsIgnoreInFilter { }
+    public struct PositionWriteRequired
+#if !LEOECS_EXTENSIONS_LITE
+        : IEcsIgnoreInFilter
+#endif
+    { }
 
-    public struct PositionReadRequired : IEcsIgnoreInFilter { }
+    public struct PositionReadRequired
+#if !LEOECS_EXTENSIONS_LITE
+        : IEcsIgnoreInFilter
+#endif
+    { }
 }

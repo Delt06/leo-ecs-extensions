@@ -1,4 +1,4 @@
-using Leopotam.Ecs;
+using DELTation.LeoEcsExtensions.Compatibility;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +29,7 @@ namespace DELTation.LeoEcsExtensions.Views.Ui
         {
             if (_entityView.TryGetEntity(out var entity))
             {
-                ref var @event = ref entity.Get<TEvent>();
+                ref var @event = ref entity.GetCompatible<TEvent>();
                 ConfigureEvent(ref @event);
             }
         }

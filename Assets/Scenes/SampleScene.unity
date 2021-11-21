@@ -389,7 +389,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _createOnAwake: 1
-  _blueprint: {fileID: 0}
 --- !u!4 &2009558563
 Transform:
   m_ObjectHideFlags: 0
@@ -429,6 +428,7 @@ GameObject:
   - component: {fileID: 2144111140}
   - component: {fileID: 2144111139}
   - component: {fileID: 2144111138}
+  - component: {fileID: 2144111141}
   m_Layer: 0
   m_Name: '[Dependencies]'
   m_TagString: Untagged
@@ -477,3 +477,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2144111141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2144111137}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 126626e14f8f4fa781f09bfe7fd9a6b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _ecsEntryPoint: {fileID: 669395525}

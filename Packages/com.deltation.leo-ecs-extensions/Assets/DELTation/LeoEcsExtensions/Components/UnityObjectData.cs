@@ -1,6 +1,11 @@
 using System;
-using Leopotam.Ecs;
 using Object = UnityEngine.Object;
+#if LEOECS_EXTENSIONS_LITE
+using Leopotam.EcsLite;
+
+#else
+using Leopotam.Ecs;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Components
 {

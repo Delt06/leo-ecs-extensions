@@ -1,6 +1,8 @@
 using System;
-using Leopotam.Ecs;
 using UnityEngine;
+#if !LEOECS_EXTENSIONS_LITE
+using Leopotam.Ecs;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Components
 {
@@ -10,7 +12,15 @@ namespace DELTation.LeoEcsExtensions.Components
         public Quaternion WorldRotation;
     }
 
-    public struct RotationWriteRequired : IEcsIgnoreInFilter { }
+    public struct RotationWriteRequired
+#if !LEOECS_EXTENSIONS_LITE
+        : IEcsIgnoreInFilter
+#endif
+    { }
 
-    public struct RotationReadRequired : IEcsIgnoreInFilter { }
+    public struct RotationReadRequired
+#if !LEOECS_EXTENSIONS_LITE
+        : IEcsIgnoreInFilter
+#endif
+    { }
 }

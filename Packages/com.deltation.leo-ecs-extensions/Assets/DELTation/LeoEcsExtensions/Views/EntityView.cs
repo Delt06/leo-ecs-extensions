@@ -1,8 +1,15 @@
 using System.Collections.Generic;
+using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Services;
-using DELTation.LeoEcsExtensions.Views.Blueprints;
-using Leopotam.Ecs;
 using UnityEngine;
+#if LEOECS_EXTENSIONS_LITE
+using Leopotam.EcsLite;
+using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
+
+#else
+using Leopotam.Ecs;
+using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Views
 {
@@ -10,12 +17,12 @@ namespace DELTation.LeoEcsExtensions.Views
     public class EntityView : MonoBehaviour, IEntityView
     {
         [SerializeField] private bool _createOnAwake = true;
-        [Tooltip("Optional blueprint for created entity.")] [SerializeField]
-        private EntityBlueprint _blueprint;
 
         private readonly List<IEntityInitializer> _initializers = new List<IEntityInitializer>();
         private IActiveEcsWorld _activeWorld;
-        private EcsEntity _entity = EcsEntity.Null;
+
+        private EcsPackedEntity _entity;
+
         private bool _searchedForInitializers;
 
         public void Construct(IActiveEcsWorld activeWorld)
@@ -50,7 +57,7 @@ namespace DELTation.LeoEcsExtensions.Views
             OnDestroyed();
         }
 
-        public EcsEntity GetOrCreateEntity()
+        public EcsPackedEntity GetOrCreateEntity()
         {
             if (TryGetEntity(out var entity))
                 return entity;
@@ -59,18 +66,17 @@ namespace DELTation.LeoEcsExtensions.Views
             return _entity;
         }
 
-        public bool TryGetEntity(out EcsEntity entity)
+        public bool TryGetEntity(out EcsPackedEntity entity)
         {
-            if (!_entity.IsNull() && _entity.IsAlive())
+            if (_entity.IsAliveCompatible())
             {
                 entity = _entity;
                 return true;
             }
 
-            entity = EcsEntity.Null;
+            entity = default;
             return false;
         }
-
 
         public virtual void Destroy()
         {
@@ -87,12 +93,9 @@ namespace DELTation.LeoEcsExtensions.Views
             }
 
             DestroyEntity();
-            _entity = World.NewEntity();
+            _entity = World.NewPackedEntityCompatible();
             _entity.SetUnityObjectData(transform);
             _entity.SetViewBackRef(this);
-
-            if (_blueprint)
-                _blueprint.InitializeEntity(_entity);
 
             for (var index = 0; index < Initializers.Count; index++)
             {
@@ -106,18 +109,17 @@ namespace DELTation.LeoEcsExtensions.Views
 
         public void DestroyEntity()
         {
-            if (!IsValid(_entity)) return;
-            _entity.Destroy();
-            _entity = EcsEntity.Null;
+            if (!_entity.IsAliveCompatible()) return;
+
+            _entity.DestroyCompatible();
+            _entity = default;
         }
 
         public EcsWorld World => _activeWorld.World;
 
-        protected virtual void AddComponents(EcsEntity entity) { }
+        protected virtual void AddComponents(EcsPackedEntity entity) { }
 
-        protected virtual void OnCreatedEntity(EcsEntity entity) { }
-
-        private static bool IsValid(in EcsEntity entity) => !entity.IsNull() && entity.IsAlive();
+        protected virtual void OnCreatedEntity(EcsPackedEntity entity) { }
 
         protected virtual void OnAwake() { }
 

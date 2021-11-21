@@ -1,16 +1,36 @@
 ﻿using System;
-using Leopotam.Ecs;
+using DELTation.LeoEcsExtensions.Compatibility;
+using JetBrains.Annotations;
+#if LEOECS_EXTENSIONS_LITE
+using Leopotam.EcsLite;
+using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
+
+#else
+using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Components
 {
     public static class EcsEntityExtensions
     {
-        public static void OnUpdated<T>(this EcsEntity entity) where T : struct
+        public static void OnUpdated<T>(this EcsPackedEntity entity) where T : struct
         {
 #if DEBUG
-            if (entity.IsNull()) throw new ArgumentNullException(nameof(entity));
+            if (!entity.IsAliveCompatible()) throw new ArgumentNullException(nameof(entity));
 #endif
-            entity.Get<UpdateEvent<T>>();
+            entity.GetCompatible<UpdateEvent<T>>();
         }
+
+#if LEOECS_EXTENSIONS_LITE
+        public static ref T GetOrAdd<T>([NotNull] this EcsPool<T> pool, int entity) where T : struct
+        {
+#if DEBUG
+            if (pool == null) throw new ArgumentNullException(nameof(pool));
+#endif
+            if (pool.Has(entity))
+                return ref pool.Get(entity);
+            return ref pool.Add(entity);
+        }
+#endif
     }
 }

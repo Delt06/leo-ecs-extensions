@@ -1,5 +1,5 @@
-﻿using DELTation.LeoEcsExtensions.Views.Components;
-using Leopotam.Ecs;
+﻿using DELTation.LeoEcsExtensions.Compatibility;
+using DELTation.LeoEcsExtensions.Views.Components;
 using UnityEditor;
 using UnityEngine;
 
@@ -45,7 +45,7 @@ namespace DELTation.LeoEcsExtensions.Editor
 
         private static void DrawEntity(ComponentView componentView)
         {
-            if (!componentView.Entity.IsAlive()) return;
+            if (!componentView.Entity.IsAliveCompatible()) return;
 
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.TextField("Entity", componentView.Entity.ToString());
@@ -64,7 +64,7 @@ namespace DELTation.LeoEcsExtensions.Editor
 
         private void DrawComponentButtons(ComponentView componentView)
         {
-            if (!componentView.Entity.IsAlive()) return;
+            if (!componentView.Entity.IsAliveCompatible()) return;
 
 
             GUILayout.BeginHorizontal();

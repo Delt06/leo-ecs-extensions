@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Views;
-using Leopotam.Ecs;
 using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Pooling
@@ -43,7 +43,7 @@ namespace DELTation.LeoEcsExtensions.Pooling
 
             instance.gameObject.SetActive(true);
             instance.CreateEntity();
-            instance.GetOrCreateEntity().Get<PoolBackRef>().Pool = this;
+            instance.GetOrCreateEntity().GetCompatible<PoolBackRef>().Pool = this;
 
             return instance;
         }

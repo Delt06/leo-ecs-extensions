@@ -1,7 +1,8 @@
 ﻿using Cube;
 using Cube.Presentation;
 using DELTation.LeoEcsExtensions.Composition;
-using Leopotam.Ecs;
+using DELTation.LeoEcsExtensions.Composition.Di;
+using Leopotam.EcsLite;
 
 public class DemoEcsEntryPoint : EcsEntryPoint
 {
@@ -18,8 +19,9 @@ public class DemoEcsEntryPoint : EcsEntryPoint
         var colorPresenter = new CubeColorPresenter(world);
         systems.AddFeature(new AnimatedCubeFeature(colorPresenter));
 
-        systems.Add(new TestComponentSystem());
-
-        systems.OneFrameUpdateEvents();
+        systems
+            .CreateAndAdd<TestComponentSystem>()
+            .OneFrameUpdateEvents()
+            ;
     }
 }

@@ -1,12 +1,18 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+#if LEOECS_EXTENSIONS_LITE
+using Leopotam.EcsLite;
+
+#else
 using Leopotam.Ecs;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Composition
 {
     public sealed class EcsFeatureBuilder
     {
+        // ReSharper disable once NotAccessedField.Local
         [CanBeNull] private readonly string _name;
         private readonly EcsSystems _parentSystems;
         private readonly List<(IEcsSystem system, string name)> _systems = new List<(IEcsSystem system, string name)>();
@@ -36,6 +42,14 @@ namespace DELTation.LeoEcsExtensions.Composition
             if (_isBuilt) throw new InvalidOperationException("Builder has already built the feature.");
 
             _isBuilt = true;
+#if LEOECS_EXTENSIONS_LITE
+
+            foreach (var (system, _) in _systems)
+            {
+                _parentSystems.Add(system);
+            }
+
+#else
             var systems = new EcsSystems(_parentSystems.World, _name);
 
             foreach (var (system, name) in _systems)
@@ -44,6 +58,7 @@ namespace DELTation.LeoEcsExtensions.Composition
             }
 
             _parentSystems.Add(systems);
+#endif
         }
 
         /// <summary>
@@ -51,8 +66,33 @@ namespace DELTation.LeoEcsExtensions.Composition
         ///     Same as OneFrame system from LeoECS core.
         /// </summary>
         /// <typeparam name="T">OneFrame component type.</typeparam>
-        private sealed class RemoveOneFrame<T> : IEcsRunSystem where T : struct
+        private sealed class RemoveOneFrame<T> : IEcsRunSystem
+#if LEOECS_EXTENSIONS_LITE
+            , IEcsInitSystem
+#endif
+            where T : struct
+
         {
+#if LEOECS_EXTENSIONS_LITE
+            private EcsPool<T> _pool;
+            private EcsFilter _filter;
+
+            public void Init(EcsSystems systems)
+            {
+                var world = systems.GetWorld();
+                _pool = world.GetPool<T>();
+                _filter = world.Filter<T>().End();
+            }
+
+            public void Run(EcsSystems systems)
+            {
+                for (var idx = _filter.GetEntitiesCount() - 1; idx >= 0; idx--)
+                {
+                    _pool.Del(idx);
+                }
+            }
+
+#else
             private readonly EcsFilter<T> _oneFrames = null;
 
             void IEcsRunSystem.Run()
@@ -62,6 +102,7 @@ namespace DELTation.LeoEcsExtensions.Composition
                     _oneFrames.GetEntity(idx).Del<T>();
                 }
             }
+#endif
         }
     }
 }

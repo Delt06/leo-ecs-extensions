@@ -1,6 +1,10 @@
+#if LEOECS_EXTENSIONS_LITE
+using Leopotam.EcsLite;
+#else
+using Leopotam.Ecs;
+#endif
 using System;
 using JetBrains.Annotations;
-using Leopotam.Ecs;
 using static DELTation.DIFramework.Di;
 
 namespace DELTation.LeoEcsExtensions.Composition.Di
