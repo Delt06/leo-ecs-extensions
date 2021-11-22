@@ -21,6 +21,7 @@ public class DemoEcsEntryPoint : EcsEntryPoint
 
         systems
             .CreateAndAdd<TestComponentSystem>()
+            .CreateAndAdd<TestComponentTextSystem>()
             .OneFrameUpdateEvents()
             ;
     }

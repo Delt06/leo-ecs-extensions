@@ -34,6 +34,15 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsFilter.Mask FilterAndIncUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return world.Filter<T>().Inc<UpdateEvent<T>>();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsFilter.Mask FilterOnUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
         {
 #if DEBUG

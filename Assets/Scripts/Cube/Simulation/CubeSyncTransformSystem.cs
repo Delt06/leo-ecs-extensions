@@ -13,7 +13,7 @@ namespace Cube.Simulation
         private readonly EcsReadOnlyPool<Position> _positions;
         private readonly EcsFilter _rotationFilter;
         private readonly EcsReadOnlyPool<Rotation> _rotations;
-        private readonly EcsPool<UnityObjectData<Transform>> _transforms;
+        private readonly EcsReadOnlyPool<UnityObjectData<Transform>> _transforms;
 
         [UsedImplicitly]
         public CubeSyncTransformSystem(EcsWorld world)
@@ -28,20 +28,20 @@ namespace Cube.Simulation
                 .End();
             _positions = world.GetPool<Position>().AsReadOnly();
             _rotations = world.GetPool<Rotation>().AsReadOnly();
-            _transforms = world.GetPool<UnityObjectData<Transform>>();
+            _transforms = world.GetPool<UnityObjectData<Transform>>().AsReadOnly();
         }
 
         public void Run(EcsSystems systems)
         {
             foreach (var i in _positionFilter)
             {
-                Transform transform = _transforms.Get(i);
+                Transform transform = _transforms.Read(i);
                 transform.position = _positions.Read(i).WorldPosition;
             }
 
             foreach (var i in _rotationFilter)
             {
-                Transform transform = _transforms.Get(i);
+                Transform transform = _transforms.Read(i);
                 transform.rotation = _rotations.Read(i).WorldRotation;
             }
         }
