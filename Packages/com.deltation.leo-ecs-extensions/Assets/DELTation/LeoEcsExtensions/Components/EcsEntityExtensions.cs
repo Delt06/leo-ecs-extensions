@@ -34,18 +34,6 @@ namespace DELTation.LeoEcsExtensions.Components
                 return ref pool.Get(entity);
             return ref pool.Add(entity);
         }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAlive(this Leopotam.EcsLite.EcsPackedEntity entity, EcsWorld world)
-        {
-#if DEBUG
-            if (world == null) throw new ArgumentNullException(nameof(world));
-#endif
-            return entity.Unpack(world, out _);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAlive(this EcsPackedEntity entity) => entity.IsAliveCompatible();
 #endif
     }
 }

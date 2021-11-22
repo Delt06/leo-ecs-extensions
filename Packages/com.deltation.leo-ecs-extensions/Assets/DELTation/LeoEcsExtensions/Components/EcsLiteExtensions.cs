@@ -48,6 +48,21 @@ namespace DELTation.LeoEcsExtensions.Components
             var pool = world.GetPool<T>();
             return ref pool.Add(idx);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAlive(this EcsPackedEntity entity, EcsWorld world)
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return entity.Unpack(world, out _);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAlive(this EcsPackedEntityWithWorld entity) => entity.IsAliveCompatible();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Has<T>(this EcsPackedEntityWithWorld entity) where T : struct => entity.HasCompatible<T>();
     }
 }
 
