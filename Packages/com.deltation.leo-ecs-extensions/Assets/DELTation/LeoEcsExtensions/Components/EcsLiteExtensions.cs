@@ -63,6 +63,15 @@ namespace DELTation.LeoEcsExtensions.Components
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Has<T>(this EcsPackedEntityWithWorld entity) where T : struct => entity.HasCompatible<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsEmpty(this EcsFilter filter)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+            return filter.GetEntitiesCount() == 0;
+        }
     }
 }
 
