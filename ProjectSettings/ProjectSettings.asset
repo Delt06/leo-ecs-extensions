@@ -578,7 +578,7 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
-    1: ODIN_INSPECTOR;ODIN_INSPECTOR_3;LEOECS_EXTENSIONS_LITE
+    1: LEOECS_EXTENSIONS_LITE
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

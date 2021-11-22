@@ -77,7 +77,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         {
             if (entity.IsAlive() && entity.Has<T>())
             {
-                component = entity.get
+                component = entity.Get<T>();
                 return true;
             }
 

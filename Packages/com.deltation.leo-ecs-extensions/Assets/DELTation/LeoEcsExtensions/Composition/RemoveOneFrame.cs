@@ -1,4 +1,8 @@
-﻿using Leopotam.EcsLite;
+﻿#if LEOECS_EXTENSIONS_LITE
+using Leopotam.EcsLite;
+#else
+using Leopotam.Ecs;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Composition
 {

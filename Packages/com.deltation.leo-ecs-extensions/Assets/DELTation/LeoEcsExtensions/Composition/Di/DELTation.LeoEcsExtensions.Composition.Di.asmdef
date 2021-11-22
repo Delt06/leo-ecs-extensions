@@ -15,6 +15,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.leopotam.ecslite",
+            "expression": "",
+            "define": "LEOECS_EXTENSIONS_LITE"
+        }
+    ],
     "noEngineReferences": false
 }
