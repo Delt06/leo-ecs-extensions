@@ -1,13 +1,10 @@
 # LeoECS Extensions
 
 ## Dependencies
-- [LeoECS](https://github.com/Leopotam/ecs)
-- [LeoECS Unity Integration](https://github.com/Leopotam/ecs-unityintegration)
+- [LeoECS](https://github.com/Leopotam/ecs) / [LeoEcs Lite](https://github.com/Leopotam/ecslite)
+- [LeoECS Unity Integration](https://github.com/Leopotam/ecs-unityintegration) / [LeoEcs Lite Unity Integration](https://github.com/Leopotam/ecslite-unityeditor)
 - [DI Framework](https://github.com/Delt06/di-framework)
-- [Odin Inspector](https://odininspector.com)\*
 - Custom NUnit (built into Unity)
-
-\* \- optional, but recommended.
 
 ## Installation
 Before proceeding, the dependencies have to be satisfied.
