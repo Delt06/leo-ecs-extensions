@@ -1,7 +1,11 @@
 using System;
 using JetBrains.Annotations;
-using Leopotam.Ecs;
 using NUnit.Framework;
+#if LEOECS_EXTENSIONS_LITE
+using Leopotam.EcsLite;
+#else
+using Leopotam.Ecs;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Testing
 {
@@ -35,7 +39,9 @@ namespace DELTation.LeoEcsExtensions.Testing
         {
             if (system == null) throw new ArgumentNullException(nameof(system));
             Systems.Add(system);
+#if !LEOECS_EXTENSIONS_LITE
             Systems.ProcessInjects();
+#endif
             Systems.Init();
         }
     }
