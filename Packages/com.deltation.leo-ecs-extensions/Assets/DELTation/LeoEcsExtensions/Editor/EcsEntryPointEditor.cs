@@ -17,9 +17,10 @@ namespace DELTation.LeoEcsExtensions.Editor
     [CustomEditor(typeof(EcsEntryPoint), true)]
     public class EcsEntryPointEditor : UnityEditor.Editor
     {
-        private bool _lateSystemsExpanded;
-        private bool _physicsSystemsExpanded;
-        private bool _systemsExpanded;
+        private static bool _lateSystemsExpanded;
+        private static bool _physicsSystemsExpanded;
+        private static string _searchQuery;
+        private static bool _systemsExpanded;
 
         public override void OnInspectorGUI()
         {
@@ -27,19 +28,29 @@ namespace DELTation.LeoEcsExtensions.Editor
 
             var entryPoint = (EcsEntryPoint) target;
 
-            TryDrawSystems(entryPoint.Systems, "Systems", ref _systemsExpanded);
-            TryDrawSystems(entryPoint.PhysicsSystems, "Physics Systems", ref _physicsSystemsExpanded);
-            TryDrawSystems(entryPoint.LateSystems, "Late Systems", ref _lateSystemsExpanded);
+            TryDrawSearchBar(entryPoint);
+            TryDrawSystems(entryPoint.Systems, "Systems", ref _systemsExpanded, _searchQuery);
+            TryDrawSystems(entryPoint.PhysicsSystems, "Physics Systems", ref _physicsSystemsExpanded, _searchQuery);
+            TryDrawSystems(entryPoint.LateSystems, "Late Systems", ref _lateSystemsExpanded, _searchQuery);
         }
 
-        private static void TryDrawSystems(EcsSystems systemsCollection, string label, ref bool expanded)
+        private static void TryDrawSearchBar(EcsEntryPoint entryPoint)
+        {
+            if (entryPoint.Systems == null) return;
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Filter (case-insensitive)", GUILayout.Width(175));
+            _searchQuery = EditorGUILayout.TextField(_searchQuery, GUILayout.Width(250));
+            EditorGUILayout.EndHorizontal();
+        }
+
+        private static void TryDrawSystems(EcsSystems systemsCollection, string label, ref bool expanded,
+            string searchQuery)
         {
             if (systemsCollection == null) return;
 
-            IEcsSystem[] systems = null;
-            systemsCollection.GetAllSystems(ref systems);
-            if (systems == null) return;
-            if (systems.Length == 0) return;
+            var systemsAnalysis = AnalyzeSystemsCollection(systemsCollection)
+                .ToArray();
+            if (systemsAnalysis.Length == 0) return;
 
             expanded = EditorGUILayout.Foldout(expanded, label);
             if (!expanded) return;
@@ -47,10 +58,16 @@ namespace DELTation.LeoEcsExtensions.Editor
             EditorGUI.indentLevel++;
 
 
-            foreach (var system in systems)
+            foreach (var (system, systemAnalysis) in systemsAnalysis)
             {
-                if (system == null) continue;
-
+                var isFiltering = !string.IsNullOrWhiteSpace(searchQuery);
+                var filteredSystemAnalysis =
+                    !isFiltering
+                        ? systemAnalysis
+                        : systemAnalysis.Where((t, _) =>
+                            ShouldAppearInSearchResults(t.type, t.accessType, searchQuery)
+                        ).ToArray();
+                if (isFiltering && filteredSystemAnalysis.Length == 0) continue;
 
                 var systemName = system.GetType().GetFriendlyName();
 
@@ -61,12 +78,12 @@ namespace DELTation.LeoEcsExtensions.Editor
 
                 GUILayout.Space(16);
 
-                foreach (var (type, accessType) in AccessAnalysis.Analyze(system.GetType()))
+
+                foreach (var (type, accessType) in filteredSystemAnalysis)
                 {
                     var color = GetAccessTypeColor(accessType);
                     GUI.backgroundColor = color;
-                    var friendlyName = type.GetFriendlyName();
-                    GUILayout.Button($"{friendlyName} [{accessType.ToShortString()}]", GUILayout.Width(250));
+                    GUILayout.Button(ComponentWithAccessToString(type, accessType), GUILayout.Width(250));
                 }
 
                 EditorGUI.EndDisabledGroup();
@@ -76,6 +93,31 @@ namespace DELTation.LeoEcsExtensions.Editor
 
 
             EditorGUI.indentLevel--;
+        }
+
+        private static string ComponentWithAccessToString(Type componentType, ComponentAccessType accessType) =>
+            $"{componentType.GetFriendlyName()} [{accessType.ToShortString()}]";
+
+        private static bool ShouldAppearInSearchResults(Type componentType, ComponentAccessType accessType,
+            string searchQuery) =>
+            ComponentWithAccessToString(componentType, accessType).ToLower()
+                .Contains(searchQuery.ToLower());
+
+        private static IEnumerable<(IEcsSystem system, (Type type, ComponentAccessType accessType)[] analysis)>
+            AnalyzeSystemsCollection(EcsSystems systemsCollection)
+        {
+            IEcsSystem[] systems = null;
+            systemsCollection.GetAllSystems(ref systems);
+            if (systems == null) yield break;
+            if (systems.Length == 0) yield break;
+
+            foreach (var system in systems)
+            {
+                if (system == null) continue;
+
+                var systemAnalysis = AccessAnalysis.Analyze(system.GetType());
+                yield return (system, systemAnalysis);
+            }
         }
 
         private static Color GetAccessTypeColor(ComponentAccessType componentAccessType) =>
