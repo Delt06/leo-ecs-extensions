@@ -1,3 +1,4 @@
+#if !LEOECS_EXTENSIONS_LITE
 using JetBrains.Annotations;
 using Leopotam.Ecs;
 
@@ -9,3 +10,5 @@ namespace DELTation.LeoEcsExtensions.Composition
             [NotNull] EcsSystems lateSystems);
     }
 }
+
+#endif
