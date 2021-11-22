@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Compatibility;
 using JetBrains.Annotations;
 #if LEOECS_EXTENSIONS_LITE
@@ -13,6 +14,7 @@ namespace DELTation.LeoEcsExtensions.Components
 {
     public static class EcsEntityExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void OnUpdated<T>(this EcsPackedEntity entity) where T : struct
         {
 #if DEBUG
@@ -22,6 +24,7 @@ namespace DELTation.LeoEcsExtensions.Components
         }
 
 #if LEOECS_EXTENSIONS_LITE
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T GetOrAdd<T>([NotNull] this EcsPool<T> pool, int entity) where T : struct
         {
 #if DEBUG
@@ -31,6 +34,18 @@ namespace DELTation.LeoEcsExtensions.Components
                 return ref pool.Get(entity);
             return ref pool.Add(entity);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAlive(this Leopotam.EcsLite.EcsPackedEntity entity, EcsWorld world)
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return entity.Unpack(world, out _);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool IsAlive(this EcsPackedEntity entity) => entity.IsAliveCompatible();
 #endif
     }
 }
