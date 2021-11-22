@@ -72,6 +72,14 @@ namespace DELTation.LeoEcsExtensions.Components
 #endif
             return filter.GetEntitiesCount() == 0;
         }
+
+        public static ref T AddNewEntity<T>(this EcsPool<T> pool) where T : struct
+        {
+#if DEBUG
+            if (pool == null) throw new ArgumentNullException(nameof(pool));
+#endif
+            return ref pool.Add(pool.GetWorld().NewEntity());
+        }
     }
 }
 
