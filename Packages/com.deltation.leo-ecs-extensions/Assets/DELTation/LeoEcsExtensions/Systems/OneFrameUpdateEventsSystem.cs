@@ -11,7 +11,7 @@ using Leopotam.Ecs;
 
 namespace DELTation.LeoEcsExtensions.Systems
 {
-    [SystemComponentAccess(typeof(UpdateEvent<>), ComponentAccessType.ReadWrite)]
+    [SystemComponentAccess(typeof(UpdateEvent<>), ComponentAccessType.Unstructured)]
     internal class OneFrameUpdateEventsSystem : IEcsRunSystem
     {
         private readonly IDictionary<Type, EcsFilter> _filtersCache = new Dictionary<Type, EcsFilter>();
