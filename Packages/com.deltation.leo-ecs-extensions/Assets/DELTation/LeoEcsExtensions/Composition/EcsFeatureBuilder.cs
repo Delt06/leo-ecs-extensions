@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DELTation.LeoEcsExtensions.Systems;
 using JetBrains.Annotations;
 #if LEOECS_EXTENSIONS_LITE
 using Leopotam.EcsLite;

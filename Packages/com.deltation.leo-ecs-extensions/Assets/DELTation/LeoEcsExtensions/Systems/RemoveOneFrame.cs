@@ -1,12 +1,11 @@
-﻿using DELTation.LeoEcsExtensions.Utilities;
-#if LEOECS_EXTENSIONS_LITE
+﻿#if LEOECS_EXTENSIONS_LITE
 using Leopotam.EcsLite;
 
 #else
 using Leopotam.Ecs;
 #endif
 
-namespace DELTation.LeoEcsExtensions.Composition
+namespace DELTation.LeoEcsExtensions.Systems
 {
     /// <summary>
     ///     System for removing OneFrame component.
@@ -21,13 +20,13 @@ namespace DELTation.LeoEcsExtensions.Composition
 
     {
 #if LEOECS_EXTENSIONS_LITE
-        private EcsReadWritePool<T> _pool;
+        private EcsPool<T> _pool;
         private EcsFilter _filter;
 
         public void Init(EcsSystems systems)
         {
             var world = systems.GetWorld();
-            _pool = world.GetPool<T>().AsReadWrite();
+            _pool = world.GetPool<T>();
             _filter = world.Filter<T>().End();
         }
 
