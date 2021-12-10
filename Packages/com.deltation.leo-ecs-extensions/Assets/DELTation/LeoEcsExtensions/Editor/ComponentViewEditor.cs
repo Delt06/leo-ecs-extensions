@@ -2,12 +2,20 @@
 using DELTation.LeoEcsExtensions.Views.Components;
 using UnityEditor;
 using UnityEngine;
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector.Editor;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Editor
 {
     [CustomEditor(typeof(ComponentView), true)]
     // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
-    public class ComponentViewEditor : UnityEditor.Editor
+    public class ComponentViewEditor :
+#if ODIN_INSPECTOR
+        OdinEditor
+#else
+        UnityEditor.Editor
+#endif
     {
         private Color _oldBgColor;
 
