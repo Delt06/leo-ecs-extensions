@@ -10,7 +10,6 @@ namespace Cube.Simulation
         private EcsReadOnlyPool<CubeColorChangeCommand> _commands;
         private EcsFilter _filter;
 
-
         public void Init(EcsSystems systems)
         {
             var world = systems.GetWorld();

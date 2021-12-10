@@ -11,7 +11,6 @@ namespace Cube.Simulation
         private readonly EcsFilter _filter;
         private readonly EcsReadWritePool<Position> _positions;
 
-        [UsedImplicitly]
         public CubeTranslationSystem(EcsWorld world)
         {
             _filter = world.Filter<Position>().Inc<CubeTag>().End();

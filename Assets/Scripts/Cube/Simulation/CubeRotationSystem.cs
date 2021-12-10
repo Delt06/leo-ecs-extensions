@@ -11,7 +11,6 @@ namespace Cube.Simulation
         private readonly EcsFilter _filter;
         private readonly EcsReadWritePool<Rotation> _rotations;
 
-        [UsedImplicitly]
         public CubeRotationSystem(EcsWorld world)
         {
             _filter = world.Filter<Rotation>().Inc<CubeTag>().End();

@@ -11,7 +11,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 {
     public static class FeatureBuilderExtensions
     {
-        public static EcsFeatureBuilder CreateAndAdd<TSystem>([NotNull] this EcsFeatureBuilder featureBuilder,
+        public static EcsFeatureBuilder CreateAndAdd<[MeansImplicitUse] TSystem>([NotNull] this EcsFeatureBuilder featureBuilder,
             [CanBeNull] string name = null) where TSystem : class, IEcsSystem
         {
             if (featureBuilder == null) throw new ArgumentNullException(nameof(featureBuilder));

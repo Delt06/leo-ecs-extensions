@@ -15,7 +15,6 @@ namespace Cube.Simulation
         private readonly EcsReadOnlyPool<Rotation> _rotations;
         private readonly EcsReadOnlyPool<UnityObjectData<Transform>> _transforms;
 
-        [UsedImplicitly]
         public CubeSyncTransformSystem(EcsWorld world)
         {
             _positionFilter = world.Filter<CubeTag>()
