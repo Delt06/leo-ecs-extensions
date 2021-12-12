@@ -14,6 +14,13 @@ namespace DELTation.LeoEcsExtensions.Utilities
     public static class EntityExtensions
     {
 #if LEOECS_EXTENSIONS_LITE
+        public static EcsPackedFilter EndPacked([NotNull] this EcsFilter.Mask filter)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+            return new EcsPackedFilter(filter.End());
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsFilter.Mask IncComponentAndUpdateOf<T>([NotNull] this EcsFilter.Mask filter) where T : struct

@@ -65,7 +65,7 @@ namespace DELTation.LeoEcsExtensions.Editor
                     !isFiltering
                         ? systemAnalysis
                         : systemAnalysis.Where((t, _) =>
-                            ShouldAppearInSearchResults(t.type, t.accessType, searchQuery)
+                            ShouldAppearInSearchResults(t, searchQuery)
                         ).ToArray();
                 if (isFiltering && filteredSystemAnalysis.Length == 0) continue;
 
@@ -79,11 +79,11 @@ namespace DELTation.LeoEcsExtensions.Editor
                 GUILayout.Space(16);
 
 
-                foreach (var (type, accessType) in filteredSystemAnalysis)
+                foreach (var t in filteredSystemAnalysis)
                 {
-                    var color = GetAccessTypeColor(accessType);
+                    var (color, text) = AnalysisResultToButtonAttributes(t);
                     GUI.backgroundColor = color;
-                    GUILayout.Button(ComponentWithAccessToString(type, accessType), GUILayout.Width(250));
+                    GUILayout.Button(text, GUILayout.Width(250));
                 }
 
                 EditorGUI.EndDisabledGroup();
@@ -95,15 +95,38 @@ namespace DELTation.LeoEcsExtensions.Editor
             EditorGUI.indentLevel--;
         }
 
+        private static (Color color, string text) AnalysisResultToButtonAttributes(
+            (Type type, ComponentAccessType accessType)? result)
+        {
+            Color color;
+            string text;
+            if (result != null)
+            {
+                var (type, accessType) = result.Value;
+                color = GetAccessTypeColor(accessType);
+                text = ComponentWithAccessToString(type, accessType);
+            }
+            else
+            {
+                text = "Packed Filter [*]";
+                color = Color.red;
+            }
+
+            return (color, text);
+        }
+
         private static string ComponentWithAccessToString(Type componentType, ComponentAccessType accessType) =>
             $"{componentType.GetFriendlyName()} [{accessType.ToShortString()}]";
 
-        private static bool ShouldAppearInSearchResults(Type componentType, ComponentAccessType accessType,
-            string searchQuery) =>
-            ComponentWithAccessToString(componentType, accessType).ToLower()
+        private static bool ShouldAppearInSearchResults((Type componentType, ComponentAccessType accessType)? result,
+            string searchQuery)
+        {
+            var (_, text) = AnalysisResultToButtonAttributes(result);
+            return text.ToLower()
                 .Contains(searchQuery.ToLower());
+        }
 
-        private static IEnumerable<(IEcsSystem system, (Type type, ComponentAccessType accessType)[] analysis)>
+        private static IEnumerable<(IEcsSystem system, (Type type, ComponentAccessType accessType)?[] analysis)>
             AnalyzeSystemsCollection(EcsSystems systemsCollection)
         {
             IEcsSystem[] systems = null;
@@ -142,11 +165,11 @@ internal static class AccessAnalysis
             _ => throw new ArgumentOutOfRangeException(nameof(componentAccessType), componentAccessType, null),
         };
 
-    public static (Type type, ComponentAccessType accessType)[] Analyze([NotNull] Type systemType)
+    public static (Type type, ComponentAccessType accessType)?[] Analyze([NotNull] Type systemType)
     {
         if (systemType == null) throw new ArgumentNullException(nameof(systemType));
 
-        var results = new List<(Type type, ComponentAccessType accessType)>();
+        var results = new List<(Type type, ComponentAccessType accessType)?>();
 
         var systemComponentAccessAttributes = systemType.GetCustomAttributes<SystemComponentAccessAttribute>();
 
@@ -160,10 +183,16 @@ internal static class AccessAnalysis
         foreach (var field in fields)
         {
             var fieldType = field.FieldType;
-            if (!fieldType.IsConstructedGenericType) continue;
-
-            var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
-            CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
+            if (fieldType.IsConstructedGenericType)
+            {
+                var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
+                CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
+            }
+            else if (fieldType == typeof(EcsPackedFilter))
+            {
+                if (!results.Contains(null))
+                    results.Add(null);
+            }
         }
 
         var baseType = systemType.BaseType;
@@ -174,7 +203,7 @@ internal static class AccessAnalysis
     }
 
     private static void CheckGenericTypeAndAdd(Type genericTypeDefinition, Type fieldType,
-        List<(Type type, ComponentAccessType accessType)> results)
+        List<(Type type, ComponentAccessType accessType)?> results)
     {
         if (genericTypeDefinition == typeof(EcsPool<>))
         {

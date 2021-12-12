@@ -1,12 +1,45 @@
 ﻿using Cube.Components;
 using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Utilities;
-using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Cube.Simulation
 {
+    public class CubeSyncTransformPrototypeSystem : IEcsRunSystem
+    {
+        private readonly EcsPackedFilter _positionFilter;
+        private readonly EcsPackedFilter _rotationFilter;
+
+        public CubeSyncTransformPrototypeSystem(EcsWorld world)
+        {
+            _positionFilter = world.Filter<CubeTag>()
+                .Inc<UnityObjectData<Transform>>()
+                .IncComponentAndUpdateOf<Position>()
+                .EndPacked();
+
+            _rotationFilter = world.Filter<CubeTag>()
+                .Inc<UnityObjectData<Transform>>()
+                .IncComponentAndUpdateOf<Rotation>()
+                .EndPacked();
+        }
+
+        public void Run(EcsSystems systems)
+        {
+            foreach (var e in _positionFilter)
+            {
+                var transform = e.GetTransform();
+                transform.position = e.Read<Position>().WorldPosition;
+            }
+
+            foreach (var e in _rotationFilter)
+            {
+                var transform = e.GetTransform();
+                transform.rotation = e.Read<Rotation>().WorldRotation;
+            }
+        }
+    }
+
     public class CubeSyncTransformSystem : IEcsRunSystem
     {
         private readonly EcsFilter _positionFilter;

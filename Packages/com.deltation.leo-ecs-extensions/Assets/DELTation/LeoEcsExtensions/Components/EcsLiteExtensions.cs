@@ -2,8 +2,11 @@
 using System;
 using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Compatibility;
+using DELTation.LeoEcsExtensions.Utilities;
+using DELTation.LeoEcsExtensions.Views;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Components
 {
@@ -37,6 +40,63 @@ namespace DELTation.LeoEcsExtensions.Components
             var pool = world.GetPool<T>();
             return ref pool.GetOrAdd(idx);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref T Get<T>(this EcsPackedEntityWithWorld entity) where T : struct
+        {
+#if DEBUG
+            if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
+#endif
+
+            var pool = world.GetPool<T>();
+            return ref pool.Get(idx);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Transform GetTransform(this EcsPackedEntityWithWorld entity) =>
+            entity.Get<UnityObjectData<Transform>>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static IEntityView GetView(this EcsPackedEntityWithWorld entity) => entity.Get<ViewBackRef>().View;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static TView GetView<TView>(this EcsPackedEntityWithWorld entity) => entity.Get<ViewBackRef<TView>>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref readonly T Read<T>(this EcsPackedEntityWithWorld entity) where T : struct
+        {
+#if DEBUG
+            if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
+#endif
+
+            var pool = world.GetPool<T>();
+            return ref pool.Get(idx);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref T Modify<T>(this EcsPackedEntityWithWorld entity) where T : struct
+        {
+#if DEBUG
+            if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
+#endif
+
+            var pool = world.GetPool<T>();
+            world.GetUpdatesPool<T>().GetOrAdd(idx);
+            return ref pool.Get(idx);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static ref T ModifyOrAdd<T>(this EcsPackedEntityWithWorld entity) where T : struct
+        {
+#if DEBUG
+            if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
+#endif
+
+            var pool = world.GetPool<T>();
+            world.GetUpdatesPool<T>().GetOrAdd(idx);
+            return ref pool.GetOrAdd(idx);
+        }
+
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T Add<T>(this EcsPackedEntityWithWorld entity) where T : struct
