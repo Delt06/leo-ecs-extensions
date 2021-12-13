@@ -110,6 +110,28 @@ namespace DELTation.LeoEcsExtensions.Components
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Del<T>(this EcsPackedEntityWithWorld entity) where T : struct
+        {
+#if DEBUG
+            if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
+#endif
+
+            var pool = world.GetPool<T>();
+            pool.Del(idx);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void DelModify<T>(this EcsPackedEntityWithWorld entity) where T : struct
+        {
+#if DEBUG
+            if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
+#endif
+
+            world.GetPool<T>().Del(idx);
+            world.GetUpdatesPool<T>().GetOrAdd(idx);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAlive(this EcsPackedEntity entity, EcsWorld world)
         {
 #if DEBUG
