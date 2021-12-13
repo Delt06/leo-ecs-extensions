@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 #if LEOECS_EXTENSIONS_LITE
 using DELTation.LeoEcsExtensions.Components;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 #else
 using Leopotam.Ecs;
@@ -50,6 +51,15 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsFilter.Mask IncTransform([NotNull] this EcsFilter.Mask filter)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+            return filter.Inc<UnityObjectData<Transform>>();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsFilter.Mask FilterOnUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
         {
 #if DEBUG
@@ -77,6 +87,16 @@ namespace DELTation.LeoEcsExtensions.Utilities
 #endif
 
             return new EcsReadOnlyPool<T>(pool);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsPool<UnityObjectData<Transform>> GetTransformPool([NotNull] this EcsWorld world)
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+
+            return world.GetPool<UnityObjectData<Transform>>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
