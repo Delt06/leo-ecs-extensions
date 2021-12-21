@@ -33,9 +33,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T GetOrAdd<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             var pool = world.GetPool<T>();
             return ref pool.GetOrAdd(idx);
@@ -44,9 +42,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T Get<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             var pool = world.GetPool<T>();
             return ref pool.Get(idx);
@@ -65,9 +61,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref readonly T Read<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             var pool = world.GetPool<T>();
             return ref pool.Get(idx);
@@ -76,9 +70,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T Modify<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             var pool = world.GetPool<T>();
             world.GetUpdatesPool<T>().GetOrAdd(idx);
@@ -88,9 +80,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T ModifyOrAdd<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             var pool = world.GetPool<T>();
             world.GetUpdatesPool<T>().GetOrAdd(idx);
@@ -101,9 +91,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T Add<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             var pool = world.GetPool<T>();
             return ref pool.Add(idx);
@@ -112,9 +100,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Del<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             var pool = world.GetPool<T>();
             pool.Del(idx);
@@ -123,9 +109,7 @@ namespace DELTation.LeoEcsExtensions.Components
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void DelModify<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
-#if DEBUG
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
-#endif
 
             world.GetPool<T>().Del(idx);
             world.GetUpdatesPool<T>().GetOrAdd(idx);
