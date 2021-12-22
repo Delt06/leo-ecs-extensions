@@ -128,6 +128,13 @@ namespace DELTation.LeoEcsExtensions.Components
         public static bool IsAlive(this EcsPackedEntityWithWorld entity) => entity.IsAliveCompatible();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Destroy(this EcsPackedEntityWithWorld entity)
+        {
+            if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(world));
+            world.DelEntity(idx);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Has<T>(this EcsPackedEntityWithWorld entity) where T : struct => entity.HasCompatible<T>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
