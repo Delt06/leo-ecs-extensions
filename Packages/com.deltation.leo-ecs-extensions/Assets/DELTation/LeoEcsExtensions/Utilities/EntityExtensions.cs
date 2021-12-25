@@ -90,6 +90,25 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsReadOnlyPool<T> GetReadOnlyPool<T>([NotNull] this EcsWorld world) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return world.GetPool<T>().AsReadOnly();
+        }
+
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsReadWritePool<T> GetReadWritePool<T>([NotNull] this EcsWorld world) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return world.GetPool<T>().AsReadWrite();
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsPool<UnityObjectData<Transform>> GetTransformPool([NotNull] this EcsWorld world)
         {
 #if DEBUG
