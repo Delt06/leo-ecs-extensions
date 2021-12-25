@@ -3,6 +3,7 @@ using Cube.Presentation;
 using DELTation.LeoEcsExtensions.Composition;
 using DELTation.LeoEcsExtensions.Composition.Di;
 using Leopotam.EcsLite;
+using Performance;
 
 public class DemoEcsEntryPoint : EcsEntryPoint
 {
@@ -23,6 +24,12 @@ public class DemoEcsEntryPoint : EcsEntryPoint
             .CreateAndAdd<TestComponentSystem>()
             .CreateAndAdd<TestComponentTextSystem>()
             .OneFrameUpdateEvents()
+            ;
+
+        systems
+            .Add(new InitBenchmarkSystem(systems.GetWorld(), 1000))
+            .CreateAndAdd<LiteBenchmarkSystem>()
+            .CreateAndAdd<PackedBenchmarkSystem>()
             ;
     }
 }
