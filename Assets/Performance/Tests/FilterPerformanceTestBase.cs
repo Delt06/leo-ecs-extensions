@@ -1,8 +1,9 @@
 ﻿using Leopotam.EcsLite;
 using NUnit.Framework;
+using Performance.Systems;
 using Unity.PerformanceTesting;
 
-namespace Performance
+namespace Performance.Tests
 {
     public abstract class FilterPerformanceTestBase
     {

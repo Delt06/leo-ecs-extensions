@@ -1,9 +1,10 @@
 ﻿using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
+using Performance.Components;
 using UnityEngine;
 
-namespace Performance
+namespace Performance.Systems
 {
     public class PackedBenchmarkSystem : IEcsRunSystem
     {

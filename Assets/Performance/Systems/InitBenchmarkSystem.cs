@@ -1,8 +1,9 @@
 ﻿using DELTation.LeoEcsExtensions.Components;
 using Leopotam.EcsLite;
+using Performance.Components;
 using UnityEngine;
 
-namespace Performance
+namespace Performance.Systems
 {
     public class InitBenchmarkSystem : IEcsInitSystem
     {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Performance
+namespace Performance.Components
 {
     public struct DirectionComponent
     {

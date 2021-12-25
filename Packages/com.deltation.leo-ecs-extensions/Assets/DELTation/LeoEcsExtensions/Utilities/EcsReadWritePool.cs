@@ -45,6 +45,14 @@ namespace DELTation.LeoEcsExtensions.Utilities
             return ref _pool.Get(entity);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public ref T GetOrAdd(int entity)
+        {
+            if (Has(entity))
+                return ref Get(entity);
+            return ref Add(entity);
+        }
+
         private void EnsureHas(int entity)
         {
             if (!Has(entity))
