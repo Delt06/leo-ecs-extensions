@@ -1,5 +1,4 @@
 #if LEOECS_EXTENSIONS_LITE
-
 using System;
 using System.Collections.Generic;
 using DELTation.DIFramework;
@@ -14,33 +13,30 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         public bool TryResolve(Type type, out object dependency)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
-
-            if (DIFramework.Di.TryResolveGlobally(out IActiveEcsWorld activeEcsWorld))
+            if (!CanBeResolvedSafe(type))
             {
-                var world = activeEcsWorld.World;
-
-                if (IsEcsWorld(type))
-                {
-                    dependency = world;
-                    return true;
-                }
+                dependency = default;
+                return false;
             }
 
+            if (!DIFramework.Di.TryResolveGlobally(out IActiveEcsWorld activeEcsWorld))
+            {
+                dependency = default;
+                return false;
+            }
 
-            dependency = default;
-            return false;
+            dependency = activeEcsWorld.World;
+            return true;
         }
 
         public bool CanBeResolvedSafe(Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
-            return IsEcsWorld(type) &&
+            return typeof(EcsWorld).IsAssignableFrom(type) &&
                    DIFramework.Di.CanBeResolvedGloballySafe<IActiveEcsWorld>();
         }
 
         public void GetAllRegisteredObjects(ICollection<object> objects) { }
-
-        private static bool IsEcsWorld(Type type) => typeof(EcsWorld).IsAssignableFrom(type);
     }
 }
 
