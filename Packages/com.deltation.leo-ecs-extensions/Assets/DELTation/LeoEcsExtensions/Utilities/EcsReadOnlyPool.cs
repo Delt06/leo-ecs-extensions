@@ -1,11 +1,14 @@
-﻿using System;
+﻿#if LEOECS_EXTENSIONS_LITE
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.Utilities
 {
-    public readonly struct EcsReadOnlyPool<T> where T : struct
+    public readonly struct EcsReadOnlyPool<T> : IEnumerable<T> where T : struct
     {
         private readonly EcsPool<T> _pool;
 
@@ -29,5 +32,10 @@ namespace DELTation.LeoEcsExtensions.Utilities
             if (!Has(entity))
                 throw new ArgumentException($"Entity does not have a {typeof(T)} component.");
         }
+
+        IEnumerator<T> IEnumerable<T>.GetEnumerator() => (IEnumerator<T>) _pool.GetRawDenseItems().GetEnumerator();
+
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>) this).GetEnumerator();
     }
 }
+#endif

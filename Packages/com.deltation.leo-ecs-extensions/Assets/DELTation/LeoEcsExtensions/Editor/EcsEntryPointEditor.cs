@@ -149,6 +149,7 @@ namespace DELTation.LeoEcsExtensions.Editor
                 ComponentAccessType.Unstructured => Color.blue,
                 ComponentAccessType.ReadOnly => Color.green,
                 ComponentAccessType.ReadWrite => new Color(1f, 0.5f, 0f),
+                ComponentAccessType.Observable => Color.magenta,
                 _ => throw new ArgumentOutOfRangeException(),
             };
     }
@@ -162,6 +163,7 @@ internal static class AccessAnalysis
             ComponentAccessType.Unstructured => "U",
             ComponentAccessType.ReadOnly => "R",
             ComponentAccessType.ReadWrite => "RW",
+            ComponentAccessType.Observable => "O",
             _ => throw new ArgumentOutOfRangeException(nameof(componentAccessType), componentAccessType, null),
         };
 
@@ -219,6 +221,11 @@ internal static class AccessAnalysis
         {
             var componentType = fieldType.GenericTypeArguments[0];
             results.Add((componentType, ComponentAccessType.ReadWrite));
+        }
+        else if (genericTypeDefinition == typeof(EcsObservablePool<>))
+        {
+            var componentType = fieldType.GenericTypeArguments[0];
+            results.Add((componentType, ComponentAccessType.Observable));
         }
     }
 }

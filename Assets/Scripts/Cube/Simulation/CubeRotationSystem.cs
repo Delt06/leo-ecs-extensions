@@ -9,12 +9,12 @@ namespace Cube.Simulation
     public class CubeRotationSystem : IEcsRunSystem
     {
         private readonly EcsFilter _filter;
-        private readonly EcsReadWritePool<Rotation> _rotations;
+        private readonly EcsObservablePool<Rotation> _rotations;
 
         public CubeRotationSystem(EcsWorld world)
         {
             _filter = world.Filter<Rotation>().Inc<CubeTag>().End();
-            _rotations = world.GetPool<Rotation>().AsReadWrite();
+            _rotations = world.GetPool<Rotation>().AsObservable();
         }
 
         public void Run(EcsSystems systems)

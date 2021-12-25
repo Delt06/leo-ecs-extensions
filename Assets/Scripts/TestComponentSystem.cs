@@ -6,13 +6,13 @@ using UnityEngine;
 public class TestComponentSystem : IEcsRunSystem
 {
     private readonly EcsFilter _filter;
-    private readonly EcsReadWritePool<TestComponent> _pool;
+    private readonly EcsObservablePool<TestComponent> _pool;
 
     [UsedImplicitly]
     public TestComponentSystem(EcsWorld world)
     {
         _filter = world.Filter<TestComponent>().End();
-        _pool = world.GetPool<TestComponent>().AsReadWrite();
+        _pool = world.GetPool<TestComponent>().AsObservable();
     }
 
     public void Run(EcsSystems systems)

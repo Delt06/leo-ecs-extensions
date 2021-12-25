@@ -9,12 +9,12 @@ namespace Cube.Simulation
     public class CubeTranslationSystem : IEcsRunSystem
     {
         private readonly EcsFilter _filter;
-        private readonly EcsReadWritePool<Position> _positions;
+        private readonly EcsObservablePool<Position> _positions;
 
         public CubeTranslationSystem(EcsWorld world)
         {
             _filter = world.Filter<Position>().Inc<CubeTag>().End();
-            _positions = world.GetPool<Position>().AsReadWrite();
+            _positions = world.GetPool<Position>().AsObservable();
         }
 
         public void Run(EcsSystems systems)

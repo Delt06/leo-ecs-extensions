@@ -69,14 +69,14 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsReadWritePool<T> AsReadWrite<T>([NotNull] this EcsPool<T> pool) where T : struct
+        public static EcsObservablePool<T> AsObservable<T>([NotNull] this EcsPool<T> pool) where T : struct
         {
 #if DEBUG
             if (pool == null) throw new ArgumentNullException(nameof(pool));
 #endif
 
             var updatesPool = pool.GetWorld().GetUpdatesPool<T>();
-            return new EcsReadWritePool<T>(pool, updatesPool);
+            return new EcsObservablePool<T>(pool, updatesPool);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -90,6 +90,16 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsReadWritePool<T> AsReadWrite<T>([NotNull] this EcsPool<T> pool) where T : struct
+        {
+#if DEBUG
+            if (pool == null) throw new ArgumentNullException(nameof(pool));
+#endif
+
+            return new EcsReadWritePool<T>(pool);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsReadOnlyPool<T> GetReadOnlyPool<T>([NotNull] this EcsWorld world) where T : struct
         {
 #if DEBUG
@@ -98,6 +108,15 @@ namespace DELTation.LeoEcsExtensions.Utilities
             return world.GetPool<T>().AsReadOnly();
         }
 
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsObservablePool<T> GetObservablePool<T>([NotNull] this EcsWorld world) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            return world.GetPool<T>().AsObservable();
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsReadWritePool<T> GetReadWritePool<T>([NotNull] this EcsWorld world) where T : struct

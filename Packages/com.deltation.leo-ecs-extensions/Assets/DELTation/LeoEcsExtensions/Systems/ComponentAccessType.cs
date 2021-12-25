@@ -5,5 +5,6 @@
         Unstructured,
         ReadOnly,
         ReadWrite,
+        Observable,
     }
 }
