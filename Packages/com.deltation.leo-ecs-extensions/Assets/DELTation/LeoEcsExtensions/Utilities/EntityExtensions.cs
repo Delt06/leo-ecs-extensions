@@ -15,7 +15,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
     public static class EntityExtensions
     {
 #if LEOECS_EXTENSIONS_LITE
-        public static EcsPackedFilter EndPacked([NotNull] this EcsFilter.Mask filter)
+        public static EcsPackedFilter EndPacked([NotNull] this EcsWorld.Mask filter)
         {
 #if DEBUG
             if (filter == null) throw new ArgumentNullException(nameof(filter));
@@ -24,7 +24,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsFilter.Mask IncComponentAndUpdateOf<T>([NotNull] this EcsFilter.Mask filter) where T : struct
+        public static EcsWorld.Mask IncComponentAndUpdateOf<T>([NotNull] this EcsWorld.Mask filter) where T : struct
         {
 #if DEBUG
             if (filter == null) throw new ArgumentNullException(nameof(filter));
@@ -33,7 +33,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsFilter.Mask IncUpdateOf<T>([NotNull] this EcsFilter.Mask filter) where T : struct
+        public static EcsWorld.Mask IncUpdateOf<T>([NotNull] this EcsWorld.Mask filter) where T : struct
         {
 #if DEBUG
             if (filter == null) throw new ArgumentNullException(nameof(filter));
@@ -42,7 +42,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsFilter.Mask FilterAndIncUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
+        public static EcsWorld.Mask FilterAndIncUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
         {
 #if DEBUG
             if (world == null) throw new ArgumentNullException(nameof(world));
@@ -51,7 +51,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsFilter.Mask IncTransform([NotNull] this EcsFilter.Mask filter)
+        public static EcsWorld.Mask IncTransform([NotNull] this EcsWorld.Mask filter)
         {
 #if DEBUG
             if (filter == null) throw new ArgumentNullException(nameof(filter));
@@ -60,7 +60,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsFilter.Mask FilterOnUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
+        public static EcsWorld.Mask FilterOnUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
         {
 #if DEBUG
             if (world == null) throw new ArgumentNullException(nameof(world));

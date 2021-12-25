@@ -32,14 +32,14 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "bc2e10a9edb66bbc20a1d516c932a7a313c18254"
+      "hash": "0b7f9c8b1a05c5b96b8cc10b0c4b5fa78472f58e"
     },
     "com.leopotam.ecslite.unityeditor": {
       "version": "https://github.com/Leopotam/ecslite-unityeditor.git",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f8fb1468e91dd89681ade447b5d8fbec283e8865"
+      "hash": "93d8dcde21f441afe7226eea6635a798aa32aff9"
     },
     "com.unity.collab-proxy": {
       "version": "1.3.9",
