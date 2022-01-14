@@ -185,16 +185,10 @@ internal static class AccessAnalysis
         foreach (var field in fields)
         {
             var fieldType = field.FieldType;
-            if (fieldType.IsConstructedGenericType)
-            {
-                var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
-                CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
-            }
-            else if (fieldType == typeof(EcsPackedFilter))
-            {
-                if (!results.Contains(null))
-                    results.Add(null);
-            }
+            if (!fieldType.IsConstructedGenericType) continue;
+
+            var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
+            CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
         }
 
         var baseType = systemType.BaseType;

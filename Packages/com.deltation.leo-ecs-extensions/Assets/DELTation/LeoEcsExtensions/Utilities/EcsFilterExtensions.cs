@@ -19,15 +19,6 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsEmpty([NotNull] this EcsPackedFilter filter)
-        {
-#if DEBUG
-            if (filter == null) throw new ArgumentNullException(nameof(filter));
-#endif
-            return filter.GetEntitiesCount() == 0;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool Contains([NotNull] this EcsFilter filter, EcsPackedEntityWithWorld packedEntity)
         {
 #if DEBUG
@@ -38,15 +29,6 @@ namespace DELTation.LeoEcsExtensions.Utilities
             if (filter.GetWorld() != entityWorld) return false;
 
             return filter.GetSparseIndex()[entity] > 0;
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Contains([NotNull] this EcsPackedFilter filter, EcsPackedEntityWithWorld packedEntity)
-        {
-#if DEBUG
-            if (filter == null) throw new ArgumentNullException(nameof(filter));
-#endif
-            return filter.GetInternalFilter().Contains(packedEntity);
         }
     }
 }

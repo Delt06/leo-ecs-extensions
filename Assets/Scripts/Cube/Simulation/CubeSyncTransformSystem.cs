@@ -8,34 +8,34 @@ namespace Cube.Simulation
 {
     public class CubeSyncTransformPrototypeSystem : IEcsRunSystem
     {
-        private readonly EcsPackedFilter _positionFilter;
-        private readonly EcsPackedFilter _rotationFilter;
+        private readonly EcsFilter _positionFilter;
+        private readonly EcsFilter _rotationFilter;
 
         public CubeSyncTransformPrototypeSystem(EcsWorld world)
         {
             _positionFilter = world.Filter<CubeTag>()
                 .Inc<UnityObjectData<Transform>>()
                 .IncComponentAndUpdateOf<Position>()
-                .EndPacked();
+                .End();
 
             _rotationFilter = world.Filter<CubeTag>()
                 .Inc<UnityObjectData<Transform>>()
                 .IncComponentAndUpdateOf<Rotation>()
-                .EndPacked();
+                .End();
         }
 
         public void Run(EcsSystems systems)
         {
             foreach (var e in _positionFilter)
             {
-                var transform = e.GetTransform();
-                transform.position = e.Read<Position>().WorldPosition;
+                var transform = _positionFilter.GetTransform(e);
+                transform.position = _positionFilter.Read<Position>(e).WorldPosition;
             }
 
             foreach (var e in _rotationFilter)
             {
-                var transform = e.GetTransform();
-                transform.rotation = e.Read<Rotation>().WorldRotation;
+                var transform = _positionFilter.GetTransform(e);
+                transform.rotation = _positionFilter.Read<Rotation>(e).WorldRotation;
             }
         }
     }
