@@ -3,6 +3,7 @@ using DELTation.LeoEcsExtensions.Views.Components;
 using UnityEditor;
 using UnityEngine;
 #if ODIN_INSPECTOR
+using Sirenix.OdinInspector.Editor;
 #endif
 
 namespace DELTation.LeoEcsExtensions.Editor

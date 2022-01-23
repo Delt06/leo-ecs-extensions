@@ -1,10 +1,11 @@
+using DELTation.LeoEcsExtensions.Compatibility;
+using UnityEngine;
 #if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
 #else
 using DELTation.LeoEcsExtensions.Views.Components.Attributes;
 #endif
 
-using DELTation.LeoEcsExtensions.Compatibility;
-using UnityEngine;
 #if LEOECS_EXTENSIONS_LITE
 using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
 
