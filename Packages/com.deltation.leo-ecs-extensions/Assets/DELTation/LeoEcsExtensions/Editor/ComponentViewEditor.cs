@@ -3,7 +3,6 @@ using DELTation.LeoEcsExtensions.Views.Components;
 using UnityEditor;
 using UnityEngine;
 #if ODIN_INSPECTOR
-using Sirenix.OdinInspector.Editor;
 #endif
 
 namespace DELTation.LeoEcsExtensions.Editor
@@ -19,13 +18,39 @@ namespace DELTation.LeoEcsExtensions.Editor
     {
         private Color _oldBgColor;
 
+#if ODIN_INSPECTOR
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            OnEnableInternal();
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            OnDisableInternal();
+        }
+
+#else
         protected virtual void OnEnable()
+        {
+            OnEnableInternal();
+        }
+
+        protected virtual void OnDisable()
+        {
+            OnDisableInternal();
+        }
+
+#endif
+
+        private void OnEnableInternal()
         {
             Update();
             EditorApplication.update += Update;
         }
 
-        protected virtual void OnDisable()
+        private void OnDisableInternal()
         {
             EditorApplication.update -= Update;
         }
@@ -33,7 +58,7 @@ namespace DELTation.LeoEcsExtensions.Editor
         private void Update()
         {
             var componentView = TargetAsComponentView();
-            componentView.TryUpdateStoredValueFromEntity();
+            componentView.TryUpdateDisplayedValueFromEntity();
         }
 
         private ComponentView TargetAsComponentView() => (ComponentView) target;
@@ -45,7 +70,7 @@ namespace DELTation.LeoEcsExtensions.Editor
             EditorGUI.BeginChangeCheck();
             base.OnInspectorGUI();
             if (EditorGUI.EndChangeCheck())
-                componentView.TryUpdateEntityFromStoredValue();
+                componentView.TryUpdateEntityFromDisplayedValue();
 
             DrawEntity(componentView);
             DrawComponentButtons(componentView);
