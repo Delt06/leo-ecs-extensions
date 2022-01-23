@@ -28,6 +28,16 @@ namespace DELTation.LeoEcsExtensions.Utilities
             if (!packedEntity.Unpack(out var entityWorld, out var entity)) return false;
             if (filter.GetWorld() != entityWorld) return false;
 
+            return filter.Contains(entity);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool Contains([NotNull] this EcsFilter filter, int entity)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+
             return filter.GetSparseIndex()[entity] > 0;
         }
     }
