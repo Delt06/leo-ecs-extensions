@@ -1,11 +1,11 @@
 #if LEOECS_EXTENSIONS_LITE
+using System;
 using DELTation.LeoEcsExtensions.Services;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
-using UnityEngine;
-using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
-#if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
+using UnityEngine;
+#if UNITY_EDITOR
 #endif
 
 #else
@@ -19,7 +19,7 @@ using Leopotam.Ecs.UnityIntegration;
 #endif
 #endif
 
-namespace DELTation.LeoEcsExtensions.Composition
+namespace DELTation.LeoEcsExtensions.Composition.Di
 {
     public abstract class EcsEntryPoint : MonoBehaviour, IActiveEcsWorld
     {
@@ -49,9 +49,10 @@ namespace DELTation.LeoEcsExtensions.Composition
 
         protected void Start()
         {
-            EnsureInitialized();
-
-
+            if (!_initialized)
+                Debug.LogError("ECS Entry Point was not initialized. Make sure it is registered in a DI container.",
+                    this
+                );
             _systems.Init();
             _physicsSystems.Init();
             _lateSystems.Init();
@@ -85,40 +86,34 @@ namespace DELTation.LeoEcsExtensions.Composition
             _world?.Destroy();
         }
 
-        public EcsWorld World
-        {
-            get
-            {
-                EnsureInitialized();
-                return _world;
-            }
-        }
+        public EcsWorld World => _world ??= new EcsWorld();
 
-        private void EnsureInitialized()
+        internal void Initialize(Action<EcsSystems> populateSystems, Action<EcsSystems> populatePhysicsSystems,
+            Action<EcsSystems> populateLateSystems)
         {
-            if (_initialized) return;
+            if (_initialized) throw new InvalidOperationException("Already initialized.");
 
             _initialized = true;
-            _world = new EcsWorld();
+            var world = World;
 
 #if UNITY_EDITOR && !LEOECS_EXTENSIONS_LITE
             EcsWorldObserver.Create(_world);
 #endif
 
-            _systems = new EcsSystems(_world, "Systems (Update)");
-            _physicsSystems = new EcsSystems(_world, "Physics Systems (Fixed Update)");
-            _lateSystems = new EcsSystems(_world, "Late Systems (Late Update)");
+            _systems = new EcsSystems(world, "Systems (Update)");
+            _physicsSystems = new EcsSystems(world, "Physics Systems (Fixed Update)");
+            _lateSystems = new EcsSystems(world, "Late Systems (Late Update)");
 
 #if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
-            _editorSystems = new EcsSystems(_world, "Editor Systems")
+            _editorSystems = new EcsSystems(world, "Editor Systems")
                     .Add(new EcsWorldDebugSystem())
                 ;
             _editorSystems.Init();
 #endif
 
-            PopulateSystems(_systems, _world);
-            PopulatePhysicsSystems(_physicsSystems, _world);
-            PopulateLateSystems(_lateSystems, _world);
+            populateSystems(_systems);
+            populatePhysicsSystems(_physicsSystems);
+            populateLateSystems(_lateSystems);
 
 
 #if !LEOECS_EXTENSIONS_LITE
@@ -135,11 +130,11 @@ namespace DELTation.LeoEcsExtensions.Composition
 #endif
         }
 
-        protected abstract void PopulateSystems([NotNull] EcsSystems systems, [NotNull] EcsWorld world);
+        public abstract void PopulateSystems([NotNull] EcsFeatureBuilder featureBuilder);
 
-        protected virtual void PopulatePhysicsSystems([NotNull] EcsSystems physicsSystems, [NotNull] EcsWorld world) { }
+        public virtual void PopulatePhysicsSystems([NotNull] EcsFeatureBuilder featureBuilder) { }
 
-        protected virtual void PopulateLateSystems([NotNull] EcsSystems lateSystems, [NotNull] EcsWorld world) { }
+        public virtual void PopulateLateSystems([NotNull] EcsFeatureBuilder featureBuilder) { }
 
 #if !LEOECS_EXTENSIONS_LITE
         private void Inject(EcsSystems systems, EcsSystems physicsSystems, EcsSystems lateSystems)

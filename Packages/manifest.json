@@ -1,6 +1,6 @@
 {
     "dependencies": {
-        "com.deltation.di-framework": "https://github.com/Delt06/di-framework.git?path=Packages/com.deltation.di-framework",
+        "com.deltation.di-framework": "https://github.com/Delt06/di-framework.git?path=Packages/com.deltation.di-framework#dev",
         "com.leopotam.ecs": "https://github.com/Leopotam/ecs.git",
         "com.leopotam.ecs-unityintegration": "https://github.com/Leopotam/ecs-unityintegration.git",
         "com.leopotam.ecslite": "https://github.com/Leopotam/ecslite.git",

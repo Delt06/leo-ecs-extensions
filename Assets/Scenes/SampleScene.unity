@@ -562,6 +562,9 @@ MonoBehaviour:
   _component:
     Value: 0
     Text: {fileID: 17454450}
+  _displayedComponent:
+    Value: 0
+    Text: {fileID: 0}
 --- !u!114 &2009558562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -602,6 +605,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 596154ae2f344d76ac02b30e82d81226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _overrideDependencySource: 0
   _dependencySource: 30
   _destroyWhenFinished: 1
 --- !u!1 &2144111137
@@ -615,7 +619,6 @@ GameObject:
   - component: {fileID: 2144111140}
   - component: {fileID: 2144111139}
   - component: {fileID: 2144111138}
-  - component: {fileID: 2144111141}
   m_Layer: 0
   m_Name: '[Dependencies]'
   m_TagString: Untagged
@@ -632,11 +635,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 2144111137}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8911f1965eb14108bdb8b092b45649fe, type: 3}
+  m_Script: {fileID: 11500000, guid: a5879b6e5c78479998ffb0d709a3e57e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dependencies:
-  - {fileID: 669395525}
+  _ecsEntryPoint: {fileID: 669395525}
 --- !u!114 &2144111139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -664,15 +666,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2144111141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2144111137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 126626e14f8f4fa781f09bfe7fd9a6b8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

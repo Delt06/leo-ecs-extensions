@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using DELTation.LeoEcsExtensions.Composition;
+using DELTation.LeoEcsExtensions.Composition.Di;
 using DELTation.LeoEcsExtensions.Systems;
 using DELTation.LeoEcsExtensions.Utilities;
 using JetBrains.Annotations;

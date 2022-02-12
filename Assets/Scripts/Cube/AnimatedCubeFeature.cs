@@ -2,7 +2,6 @@
 using Cube.Presentation;
 using Cube.Simulation;
 using Cube.View;
-using DELTation.LeoEcsExtensions.Composition;
 using DELTation.LeoEcsExtensions.Composition.Di;
 
 namespace Cube

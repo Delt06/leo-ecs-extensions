@@ -1,28 +1,36 @@
 ﻿using Cube;
 using Cube.Presentation;
-using DELTation.LeoEcsExtensions.Composition;
 using DELTation.LeoEcsExtensions.Composition.Di;
-using Leopotam.EcsLite;
 
 public class DemoEcsEntryPoint : EcsEntryPoint
 {
-    protected override void PopulateSystems(EcsSystems systems, EcsWorld world)
+    public override void PopulateSystems(EcsFeatureBuilder featureBuilder)
     {
-        // Construct a feature
-        systems.StartBuildingFeature("Demo Feature")
+        featureBuilder
             .Add(new StartSystem())
             .Add(new FramePrintingSystem())
-            .Build()
             ;
 
-        // Or use a prebuilt one
-        var colorPresenter = new CubeColorPresenter(world);
-        systems.AddFeature(new AnimatedCubeFeature(colorPresenter));
+        // Use prebuilt feature
+        var colorPresenter = new CubeColorPresenter(World);
+        featureBuilder.AddFeature(new AnimatedCubeFeature(colorPresenter));
 
-        systems
+        featureBuilder
             .CreateAndAdd<TestComponentSystem>()
             .CreateAndAdd<TestComponentTextSystem>()
             .OneFrameUpdateEvents()
             ;
+    }
+
+    public override void PopulateLateSystems(EcsFeatureBuilder featureBuilder)
+    {
+        // Just for testing purposes
+        featureBuilder.OneFrame<int>();
+    }
+
+    public override void PopulatePhysicsSystems(EcsFeatureBuilder featureBuilder)
+    {
+        // Just for testing purposes
+        featureBuilder.OneFrame<float>();
     }
 }

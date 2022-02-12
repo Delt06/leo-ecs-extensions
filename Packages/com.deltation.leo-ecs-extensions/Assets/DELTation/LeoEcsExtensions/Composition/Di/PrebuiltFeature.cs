@@ -1,25 +1,16 @@
 using System;
 using System.Linq;
 using JetBrains.Annotations;
-#if LEOECS_EXTENSIONS_LITE
-using Leopotam.EcsLite;
 
-#else
-using Leopotam.Ecs;
-#endif
-
-namespace DELTation.LeoEcsExtensions.Composition
+namespace DELTation.LeoEcsExtensions.Composition.Di
 {
     public abstract class PrebuiltFeature
     {
         private string Name => GetFriendlyNameOf(GetType());
 
-        public void AddTo([NotNull] EcsSystems parentSystems)
+        public void Add(EcsFeatureBuilder featureBuilder)
         {
-            if (parentSystems == null) throw new ArgumentNullException(nameof(parentSystems));
-            var featureBuilder = parentSystems.StartBuildingFeature(Name);
             ConfigureBuilder(featureBuilder);
-            featureBuilder.Build();
         }
 
         private static string GetFriendlyNameOf(Type type)
