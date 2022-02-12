@@ -4,7 +4,6 @@ using DELTation.LeoEcsExtensions.Services;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using Leopotam.EcsLite.UnityEditor;
-using UnityEngine;
 #if UNITY_EDITOR
 #endif
 
@@ -21,7 +20,7 @@ using Leopotam.Ecs.UnityIntegration;
 
 namespace DELTation.LeoEcsExtensions.Composition.Di
 {
-    public abstract class EcsEntryPoint : MonoBehaviour, IActiveEcsWorld
+    public abstract class EcsEntryPoint : IActiveEcsWorld
     {
         private bool _initialized;
         private EcsSystems _lateSystems;
@@ -31,7 +30,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         private EcsSystems _editorSystems;
 #endif
 
-        private EcsWorld _world;
+        protected EcsEntryPoint() => World = new EcsWorld();
 
 #if UNITY_EDITOR
         [CanBeNull]
@@ -47,18 +46,14 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         internal EcsSystems Systems => _systems;
 #endif
 
-        protected void Start()
+        public void Start()
         {
-            if (!_initialized)
-                Debug.LogError("ECS Entry Point was not initialized. Make sure it is registered in a DI container.",
-                    this
-                );
             _systems.Init();
             _physicsSystems.Init();
             _lateSystems.Init();
         }
 
-        protected void Update()
+        public void Update()
         {
 #if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
             _editorSystems.Run();
@@ -66,27 +61,27 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             _systems.Run();
         }
 
-        protected void FixedUpdate()
+        public void FixedUpdate()
         {
             _physicsSystems.Run();
         }
 
-        protected void LateUpdate()
+        public void LateUpdate()
         {
             _lateSystems.Run();
         }
 
-        protected void OnDestroy()
+        public void OnDestroy()
         {
 #if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
             _editorSystems?.Destroy();
 #endif
             _systems?.Destroy();
             _physicsSystems?.Destroy();
-            _world?.Destroy();
+            World?.Destroy();
         }
 
-        public EcsWorld World => _world ??= new EcsWorld();
+        public EcsWorld World { get; }
 
         internal void Initialize(Action<EcsSystems> populateSystems, Action<EcsSystems> populatePhysicsSystems,
             Action<EcsSystems> populateLateSystems)
@@ -94,18 +89,17 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             if (_initialized) throw new InvalidOperationException("Already initialized.");
 
             _initialized = true;
-            var world = World;
 
 #if UNITY_EDITOR && !LEOECS_EXTENSIONS_LITE
             EcsWorldObserver.Create(_world);
 #endif
 
-            _systems = new EcsSystems(world, "Systems (Update)");
-            _physicsSystems = new EcsSystems(world, "Physics Systems (Fixed Update)");
-            _lateSystems = new EcsSystems(world, "Late Systems (Late Update)");
+            _systems = new EcsSystems(World, "Systems (Update)");
+            _physicsSystems = new EcsSystems(World, "Physics Systems (Fixed Update)");
+            _lateSystems = new EcsSystems(World, "Late Systems (Late Update)");
 
 #if UNITY_EDITOR && LEOECS_EXTENSIONS_LITE
-            _editorSystems = new EcsSystems(world, "Editor Systems")
+            _editorSystems = new EcsSystems(World, "Editor Systems")
                     .Add(new EcsWorldDebugSystem())
                 ;
             _editorSystems.Init();

@@ -5,19 +5,40 @@ using DELTation.DIFramework;
 using DELTation.DIFramework.Dependencies;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Composition.Di
 {
     public static class ContainerBuilderExtensions
     {
-        public static ICanRegisterContainerBuilder RegisterEcsEntryPoint(
-            [NotNull] this ICanRegisterContainerBuilder containerBuilder, [NotNull] EcsEntryPoint ecsEntryPoint)
+        public static ICanRegisterContainerBuilder AttachEcsEntryPointViewTo(
+            [NotNull] this ICanRegisterContainerBuilder containerBuilder, [NotNull] GameObject gameObject)
+        {
+            if (containerBuilder == null) throw new ArgumentNullException(nameof(containerBuilder));
+
+            if (gameObject != null)
+                return containerBuilder.RegisterFromMethod((EcsEntryPoint ecsEntryPoint) =>
+                    {
+                        var ecsEntryPointView = gameObject.AddComponent<EcsEntryPointView>();
+                        ecsEntryPointView.Construct(ecsEntryPoint);
+                        return ecsEntryPointView;
+                    }
+                ).AsInternal();
+
+            if (Application.isPlaying)
+                throw new ArgumentNullException(nameof(gameObject));
+
+            return containerBuilder;
+        }
+
+        public static ICanRegisterContainerBuilder RegisterEcsEntryPoint<TEcsEntryPoint>(
+            [NotNull] this ICanRegisterContainerBuilder containerBuilder) where TEcsEntryPoint : EcsEntryPoint, new()
         {
             if (containerBuilder == null)
                 throw new ArgumentNullException(nameof(containerBuilder));
 
-            if (ecsEntryPoint == null) return containerBuilder;
 
+            var ecsEntryPoint = new TEcsEntryPoint();
             containerBuilder.Register(ecsEntryPoint.World);
 
             var secondaryDependencies = new List<IDependency>();

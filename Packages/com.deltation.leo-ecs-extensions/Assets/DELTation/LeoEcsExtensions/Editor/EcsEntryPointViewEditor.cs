@@ -14,8 +14,8 @@ using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Editor
 {
-    [CustomEditor(typeof(EcsEntryPoint), true)]
-    public class EcsEntryPointEditor : UnityEditor.Editor
+    [CustomEditor(typeof(EcsEntryPointView), true)]
+    public class EcsEntryPointViewEditor : UnityEditor.Editor
     {
         private static bool _lateSystemsExpanded;
         private static bool _physicsSystemsExpanded;
@@ -26,7 +26,7 @@ namespace DELTation.LeoEcsExtensions.Editor
         {
             base.OnInspectorGUI();
 
-            var entryPoint = (EcsEntryPoint) target;
+            var entryPoint = (EcsEntryPointView) target;
 
             TryDrawSearchBar(entryPoint);
             TryDrawSystems(entryPoint.Systems, "Systems", ref _systemsExpanded, _searchQuery);
@@ -34,7 +34,7 @@ namespace DELTation.LeoEcsExtensions.Editor
             TryDrawSystems(entryPoint.LateSystems, "Late Systems", ref _lateSystemsExpanded, _searchQuery);
         }
 
-        private static void TryDrawSearchBar(EcsEntryPoint entryPoint)
+        private static void TryDrawSearchBar(EcsEntryPointView entryPoint)
         {
             if (entryPoint.Systems == null) return;
             EditorGUILayout.BeginHorizontal();
