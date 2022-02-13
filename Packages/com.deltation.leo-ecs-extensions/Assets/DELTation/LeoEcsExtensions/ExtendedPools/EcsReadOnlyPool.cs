@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 
-namespace DELTation.LeoEcsExtensions.Pools
+namespace DELTation.LeoEcsExtensions.ExtendedPools
 {
     public readonly struct EcsReadOnlyPool<T> : IEnumerable<T> where T : struct
     {

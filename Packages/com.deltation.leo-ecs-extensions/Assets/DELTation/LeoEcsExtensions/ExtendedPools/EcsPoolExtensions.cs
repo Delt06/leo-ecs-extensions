@@ -3,9 +3,8 @@ using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Components;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
-using UnityEngine;
 
-namespace DELTation.LeoEcsExtensions.Pools
+namespace DELTation.LeoEcsExtensions.ExtendedPools
 {
     public static class EcsPoolExtensions
     {
@@ -68,15 +67,6 @@ namespace DELTation.LeoEcsExtensions.Pools
             return world.GetPool<T>().AsReadWrite();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsPool<UnityObjectData<Transform>> GetTransformPool([NotNull] this EcsWorld world)
-        {
-#if DEBUG
-            if (world == null) throw new ArgumentNullException(nameof(world));
-#endif
-
-            return world.GetPool<UnityObjectData<Transform>>();
-        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsPool<UpdateEvent<T>> GetUpdatesPool<T>([NotNull] this EcsWorld world) where T : struct

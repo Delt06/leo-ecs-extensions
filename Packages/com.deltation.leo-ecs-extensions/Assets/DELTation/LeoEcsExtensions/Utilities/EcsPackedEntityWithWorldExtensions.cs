@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Components;
-using DELTation.LeoEcsExtensions.Pools;
+using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Views;
 using Leopotam.EcsLite;
 using UnityEngine;

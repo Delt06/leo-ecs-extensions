@@ -1,12 +1,24 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using DELTation.LeoEcsExtensions.Components;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Utilities
 {
     public static class EcsPoolExtensions
     {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsPool<UnityObjectData<Transform>> GetTransformPool([NotNull] this EcsWorld world)
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+
+            return world.GetPool<UnityObjectData<Transform>>();
+        }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static ref T GetOrAdd<T>([NotNull] this EcsPool<T> pool, int entity) where T : struct
         {

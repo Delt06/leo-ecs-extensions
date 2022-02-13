@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using DELTation.LeoEcsExtensions.Composition.Di;
-using DELTation.LeoEcsExtensions.Pools;
+using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
