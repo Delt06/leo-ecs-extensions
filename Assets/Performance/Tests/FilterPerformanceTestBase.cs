@@ -17,6 +17,7 @@ namespace Performance.Tests
         [TestCase(100)]
         [TestCase(1000)]
         [TestCase(10000)]
+        [Explicit]
         public void Benchmark(int entities)
         {
             Measure.Method(() =>
