@@ -1,5 +1,5 @@
 ﻿using Cube.Components;
-using DELTation.LeoEcsExtensions.Components;
+using DELTation.LeoEcsExtensions.Utilities;
 using DELTation.LeoEcsExtensions.Views;
 using Leopotam.EcsLite;
 using UnityEngine;

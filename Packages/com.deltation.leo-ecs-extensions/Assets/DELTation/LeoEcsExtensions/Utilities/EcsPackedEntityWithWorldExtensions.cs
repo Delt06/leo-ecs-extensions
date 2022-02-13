@@ -1,32 +1,22 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using DELTation.LeoEcsExtensions.Utilities;
+using DELTation.LeoEcsExtensions.Components;
+using DELTation.LeoEcsExtensions.Pools;
 using DELTation.LeoEcsExtensions.Views;
-using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace DELTation.LeoEcsExtensions.Components
+namespace DELTation.LeoEcsExtensions.Utilities
 {
-    public static class EcsExtensions
+    public static class EcsPackedEntityWithWorldExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsPackedEntityWithWorld NewPackedEntityWithWorld([NotNull] this EcsWorld world)
+        public static void OnUpdated<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
 #if DEBUG
-            if (world == null) throw new ArgumentNullException(nameof(world));
+            if (!entity.IsAlive()) throw new ArgumentNullException(nameof(entity));
 #endif
-            var entity = world.NewEntity();
-            return world.PackEntityWithWorld(entity);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsPackedEntity NewPackedEntity([NotNull] this EcsWorld world)
-        {
-#if DEBUG
-            if (world == null) throw new ArgumentNullException(nameof(world));
-#endif
-            return world.PackEntity(world.NewEntity());
+            entity.GetOrAdd<UpdateEvent<T>>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -115,15 +105,6 @@ namespace DELTation.LeoEcsExtensions.Components
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAlive(this EcsPackedEntity entity, EcsWorld world)
-        {
-#if DEBUG
-            if (world == null) throw new ArgumentNullException(nameof(world));
-#endif
-            return entity.Unpack(world, out _);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsAlive(this EcsPackedEntityWithWorld entity) => entity.Unpack(out _, out _);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -143,12 +124,17 @@ namespace DELTation.LeoEcsExtensions.Components
             return world.GetPool<T>().Has(entityIdx);
         }
 
-        public static ref T AddNewEntity<T>(this EcsPool<T> pool) where T : struct
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Type[] GetComponentTypesCompatible(this EcsPackedEntityWithWorld entity)
         {
+            var isAlive = entity.Unpack(out var world, out var entityIdx);
 #if DEBUG
-            if (pool == null) throw new ArgumentNullException(nameof(pool));
+            if (!isAlive) throw new ArgumentNullException(nameof(entity));
 #endif
-            return ref pool.Add(pool.GetWorld().NewEntity());
+            Type[] componentTypes = null;
+            world.GetComponentTypes(entityIdx, ref componentTypes);
+            return componentTypes;
         }
     }
 }

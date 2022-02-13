@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Components;
+using DELTation.LeoEcsExtensions.Pools;
 using DELTation.LeoEcsExtensions.Views;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;

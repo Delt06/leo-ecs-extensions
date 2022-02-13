@@ -3,7 +3,7 @@ using Sirenix.OdinInspector;
 #else
 using DELTation.LeoEcsExtensions.Views.Components.Attributes;
 #endif
-using DELTation.LeoEcsExtensions.Components;
+using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using UnityEngine;
 

@@ -1,4 +1,4 @@
-using DELTation.LeoEcsExtensions.Utilities;
+using DELTation.LeoEcsExtensions.Pools;
 using Leopotam.EcsLite;
 using Performance.Components;
 using UnityEngine;

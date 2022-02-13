@@ -1,4 +1,4 @@
-﻿using DELTation.LeoEcsExtensions.Components;
+﻿using DELTation.LeoEcsExtensions.Utilities;
 using DELTation.LeoEcsExtensions.Views.Components;
 using UnityEditor;
 using UnityEngine;

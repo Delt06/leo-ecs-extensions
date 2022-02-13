@@ -1,4 +1,4 @@
-﻿using DELTation.LeoEcsExtensions.Components;
+﻿using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.Views.Components

@@ -5,55 +5,10 @@ using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
 
-namespace DELTation.LeoEcsExtensions.Utilities
+namespace DELTation.LeoEcsExtensions.Pools
 {
-    public static class ExtendedPoolsAndFilters
+    public static class EcsPoolExtensions
     {
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsWorld.Mask IncComponentAndUpdateOf<T>([NotNull] this EcsWorld.Mask filter) where T : struct
-        {
-#if DEBUG
-            if (filter == null) throw new ArgumentNullException(nameof(filter));
-#endif
-            return filter.Inc<T>().IncUpdateOf<T>();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsWorld.Mask IncUpdateOf<T>([NotNull] this EcsWorld.Mask filter) where T : struct
-        {
-#if DEBUG
-            if (filter == null) throw new ArgumentNullException(nameof(filter));
-#endif
-            return filter.Inc<UpdateEvent<T>>();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsWorld.Mask FilterAndIncUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
-        {
-#if DEBUG
-            if (world == null) throw new ArgumentNullException(nameof(world));
-#endif
-            return world.Filter<T>().Inc<UpdateEvent<T>>();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsWorld.Mask IncTransform([NotNull] this EcsWorld.Mask filter)
-        {
-#if DEBUG
-            if (filter == null) throw new ArgumentNullException(nameof(filter));
-#endif
-            return filter.Inc<UnityObjectData<Transform>>();
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsWorld.Mask FilterOnUpdateOf<T>([NotNull] this EcsWorld world) where T : struct
-        {
-#if DEBUG
-            if (world == null) throw new ArgumentNullException(nameof(world));
-#endif
-            return world.Filter<UpdateEvent<T>>();
-        }
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsObservablePool<T> AsObservable<T>([NotNull] this EcsPool<T> pool) where T : struct
         {

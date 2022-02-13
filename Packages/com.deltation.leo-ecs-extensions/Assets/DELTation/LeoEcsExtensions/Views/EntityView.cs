@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Services;
+using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using UnityEngine;
 

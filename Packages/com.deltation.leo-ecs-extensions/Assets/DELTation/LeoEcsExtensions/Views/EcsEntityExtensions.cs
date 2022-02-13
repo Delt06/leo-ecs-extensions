@@ -1,5 +1,6 @@
 using System;
 using DELTation.LeoEcsExtensions.Components;
+using DELTation.LeoEcsExtensions.Utilities;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using Object = UnityEngine.Object;
