@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using DELTation.LeoEcsExtensions.Compatibility;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 
@@ -12,9 +11,9 @@ namespace DELTation.LeoEcsExtensions.Components
         public static void OnUpdated<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
 #if DEBUG
-            if (!entity.IsAliveCompatible()) throw new ArgumentNullException(nameof(entity));
+            if (!entity.IsAlive()) throw new ArgumentNullException(nameof(entity));
 #endif
-            entity.GetCompatible<UpdateEvent<T>>();
+            entity.GetOrAdd<UpdateEvent<T>>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -26,6 +25,18 @@ namespace DELTation.LeoEcsExtensions.Components
             if (pool.Has(entity))
                 return ref pool.Get(entity);
             return ref pool.Add(entity);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static Type[] GetComponentTypesCompatible(this EcsPackedEntityWithWorld entity)
+        {
+            var isAlive = entity.Unpack(out var world, out var entityIdx);
+#if DEBUG
+            if (!isAlive) throw new ArgumentNullException(nameof(entity));
+#endif
+            Type[] componentTypes = null;
+            world.GetComponentTypes(entityIdx, ref componentTypes);
+            return componentTypes;
         }
     }
 }

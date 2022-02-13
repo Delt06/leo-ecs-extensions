@@ -1,5 +1,5 @@
 ﻿using System;
-using DELTation.LeoEcsExtensions.Compatibility;
+using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Views;
 using Leopotam.EcsLite;
 using UnityEditor;

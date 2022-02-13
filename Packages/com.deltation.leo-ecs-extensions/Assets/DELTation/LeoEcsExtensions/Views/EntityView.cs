@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using DELTation.LeoEcsExtensions.Compatibility;
+using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.Services;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -62,7 +62,7 @@ namespace DELTation.LeoEcsExtensions.Views
 
         public bool TryGetEntity(out EcsPackedEntityWithWorld entity)
         {
-            if (_entity.IsAliveCompatible())
+            if (_entity.IsAlive())
             {
                 entity = _entity;
                 return true;
@@ -87,7 +87,7 @@ namespace DELTation.LeoEcsExtensions.Views
             }
 
             DestroyEntity();
-            _entity = World.NewPackedEntityCompatible();
+            _entity = World.NewPackedEntityWithWorld();
             _entity.SetUnityObjectData(transform);
             _entity.SetViewBackRef(this);
 
@@ -104,9 +104,9 @@ namespace DELTation.LeoEcsExtensions.Views
 
         public void DestroyEntity()
         {
-            if (!_entity.IsAliveCompatible()) return;
+            if (!_entity.IsAlive()) return;
 
-            _entity.DestroyCompatible();
+            _entity.Destroy();
             _entity = default;
         }
 

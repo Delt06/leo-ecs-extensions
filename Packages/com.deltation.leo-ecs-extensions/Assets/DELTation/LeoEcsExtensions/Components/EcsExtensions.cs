@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Utilities;
 using DELTation.LeoEcsExtensions.Views;
 using JetBrains.Annotations;
@@ -17,7 +16,8 @@ namespace DELTation.LeoEcsExtensions.Components
 #if DEBUG
             if (world == null) throw new ArgumentNullException(nameof(world));
 #endif
-            return world.NewPackedEntityCompatible();
+            var entity = world.NewEntity();
+            return world.PackEntityWithWorld(entity);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -124,7 +124,7 @@ namespace DELTation.LeoEcsExtensions.Components
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool IsAlive(this EcsPackedEntityWithWorld entity) => entity.IsAliveCompatible();
+        public static bool IsAlive(this EcsPackedEntityWithWorld entity) => entity.Unpack(out _, out _);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Destroy(this EcsPackedEntityWithWorld entity)
@@ -134,7 +134,14 @@ namespace DELTation.LeoEcsExtensions.Components
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static bool Has<T>(this EcsPackedEntityWithWorld entity) where T : struct => entity.HasCompatible<T>();
+        public static bool Has<T>(this EcsPackedEntityWithWorld entity) where T : struct
+        {
+            var isAlive = entity.Unpack(out var world, out var entityIdx);
+#if DEBUG
+            if (!isAlive) throw new ArgumentNullException(nameof(entity));
+#endif
+            return world.GetPool<T>().Has(entityIdx);
+        }
 
         public static ref T AddNewEntity<T>(this EcsPool<T> pool) where T : struct
         {

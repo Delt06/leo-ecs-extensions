@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Utilities
 {
-    public static class EntityExtensions
+    public static class ExtendedPoolsAndFilters
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsWorld.Mask IncComponentAndUpdateOf<T>([NotNull] this EcsWorld.Mask filter) where T : struct
