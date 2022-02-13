@@ -1,11 +1,11 @@
 {
   "dependencies": {
     "com.deltation.di-framework": {
-      "version": "https://github.com/Delt06/di-framework.git?path=Packages/com.deltation.di-framework#dev",
+      "version": "https://github.com/Delt06/di-framework.git?path=Packages/com.deltation.di-framework",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "ab973073312beaf60bbb994670478798a1b23195"
+      "hash": "8f3858b7624ad46a6ad6b45161705ee485e15aa7"
     },
     "com.deltation.leo-ecs-extensions": {
       "version": "file:com.deltation.leo-ecs-extensions",
