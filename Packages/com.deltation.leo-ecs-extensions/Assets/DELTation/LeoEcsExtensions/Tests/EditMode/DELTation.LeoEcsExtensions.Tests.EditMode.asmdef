@@ -1,5 +1,5 @@
 {
-    "name": "DELTation.LeoEcsExtensions.",
+    "name": "DELTation.LeoEcsExtensions.Tests.EditMode",
     "rootNamespace": "",
     "references": [
         "GUID:adc879d645c03624e9af334f48b854dd",
