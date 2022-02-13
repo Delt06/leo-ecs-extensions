@@ -1,7 +1,7 @@
 using DELTation.LeoEcsExtensions.Views;
 using UnityEngine;
 
-namespace DELTation.LeoEcsExtensions.Pooling
+namespace DELTation.LeoEcsExtensions.ObjectPooling
 {
     [RequireComponent(typeof(EntityViewPool))]
     public abstract class EntityViewPoolDecorator<TView> : MonoBehaviour, IEntityViewPool, IEntityViewPool<TView>

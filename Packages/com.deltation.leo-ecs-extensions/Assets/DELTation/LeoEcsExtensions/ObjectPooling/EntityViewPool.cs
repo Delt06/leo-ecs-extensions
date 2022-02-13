@@ -4,7 +4,7 @@ using DELTation.LeoEcsExtensions.Utilities;
 using DELTation.LeoEcsExtensions.Views;
 using UnityEngine;
 
-namespace DELTation.LeoEcsExtensions.Pooling
+namespace DELTation.LeoEcsExtensions.ObjectPooling
 {
     public class EntityViewPool : MonoBehaviour, IEntityViewPool
     {

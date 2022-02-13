@@ -2,7 +2,7 @@ using DELTation.LeoEcsExtensions.Views;
 using JetBrains.Annotations;
 using UnityEngine;
 
-namespace DELTation.LeoEcsExtensions.Pooling
+namespace DELTation.LeoEcsExtensions.ObjectPooling
 {
     public interface IEntityViewPool
     {

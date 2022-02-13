@@ -1,4 +1,4 @@
-namespace DELTation.LeoEcsExtensions.Pooling
+namespace DELTation.LeoEcsExtensions.ObjectPooling
 {
     public interface IEntityViewPoolingListener
     {
