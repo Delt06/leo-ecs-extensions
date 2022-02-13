@@ -1,9 +1,4 @@
-#if LEOECS_EXTENSIONS_LITE
-using EcsWorld = Leopotam.EcsLite.EcsWorld;
-
-#else
-using EcsWorld = Leopotam.Ecs.EcsWorld;
-#endif
+using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.Services
 {

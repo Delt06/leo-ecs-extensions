@@ -1,17 +1,9 @@
-#if LEOECS_EXTENSIONS_LITE
 using Leopotam.EcsLite;
-
-#else
-using Leopotam.Ecs;
-#endif
 
 namespace DELTation.LeoEcsExtensions.Components
 {
     public struct UpdateEvent<T> :
         IEcsAutoReset<UpdateEvent<T>>
-#if !LEOECS_EXTENSIONS_LITE
-        , IEcsIgnoreInFilter
-#endif
         where T : struct
     {
 #pragma warning disable 0414

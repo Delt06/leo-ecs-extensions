@@ -1,6 +1,4 @@
-﻿#if LEOECS_EXTENSIONS_LITE
-
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
@@ -42,5 +40,3 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
     }
 }
-
-#endif

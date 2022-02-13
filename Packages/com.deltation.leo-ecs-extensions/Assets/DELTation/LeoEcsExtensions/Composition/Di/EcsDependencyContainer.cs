@@ -1,4 +1,3 @@
-#if LEOECS_EXTENSIONS_LITE
 using System;
 using System.Collections.Generic;
 using DELTation.DIFramework;
@@ -111,5 +110,3 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             };
     }
 }
-
-#endif

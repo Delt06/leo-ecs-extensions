@@ -1,14 +1,9 @@
 ﻿using System;
 using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Views;
+using Leopotam.EcsLite;
 using UnityEditor;
 using UnityEngine;
-#if LEOECS_EXTENSIONS_LITE
-using Entity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
-
-#else
-using Entity = Leopotam.Ecs.EcsEntity;
-#endif
 
 namespace DELTation.LeoEcsExtensions.Editor
 {
@@ -37,14 +32,14 @@ namespace DELTation.LeoEcsExtensions.Editor
             DrawComponentTable(entity);
         }
 
-        private static void DrawEntityLabel(Entity entity)
+        private static void DrawEntityLabel(EcsPackedEntityWithWorld entity)
         {
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.TextField("Entity", entity.ToString());
             EditorGUI.EndDisabledGroup();
         }
 
-        private static void DrawComponentTable(Entity entity)
+        private static void DrawComponentTable(EcsPackedEntityWithWorld entity)
         {
             var componentTypes = entity.GetComponentTypesCompatible();
 

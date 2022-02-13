@@ -2,19 +2,15 @@ using System;
 using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Components;
 using JetBrains.Annotations;
+using Leopotam.EcsLite;
 using Object = UnityEngine.Object;
-#if LEOECS_EXTENSIONS_LITE
-using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
-
-#else
-using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
-#endif
 
 namespace DELTation.LeoEcsExtensions.Views
 {
     public static class EcsEntityExtensions
     {
-        public static void SetViewBackRefTyped<T>(this EcsPackedEntity entity, [NotNull] T view) where T : IEntityView
+        public static void SetViewBackRefTyped<T>(this EcsPackedEntityWithWorld entity, [NotNull] T view)
+            where T : IEntityView
         {
 #if DEBUG
             if (!entity.IsAliveCompatible()) throw new ArgumentNullException(nameof(entity));
@@ -24,7 +20,7 @@ namespace DELTation.LeoEcsExtensions.Views
             entity.GetCompatible<ViewBackRef<T>>().View = view;
         }
 
-        public static void SetViewBackRef(this EcsPackedEntity entity, [NotNull] IEntityView view)
+        public static void SetViewBackRef(this EcsPackedEntityWithWorld entity, [NotNull] IEntityView view)
         {
 #if DEBUG
             if (!entity.IsAliveCompatible()) throw new ArgumentNullException(nameof(entity));
@@ -34,7 +30,8 @@ namespace DELTation.LeoEcsExtensions.Views
             entity.GetCompatible<ViewBackRef>().View = view;
         }
 
-        public static void SetUnityObjectData<T>(this EcsPackedEntity entity, [NotNull] T @object) where T : Object
+        public static void SetUnityObjectData<T>(this EcsPackedEntityWithWorld entity, [NotNull] T @object)
+            where T : Object
         {
 #if DEBUG
             if (!entity.IsAliveCompatible()) throw new ArgumentNullException(nameof(entity));

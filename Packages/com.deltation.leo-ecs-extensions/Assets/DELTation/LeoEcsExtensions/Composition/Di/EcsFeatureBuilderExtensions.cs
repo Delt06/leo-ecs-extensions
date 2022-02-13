@@ -1,11 +1,6 @@
 using System;
 using DELTation.LeoEcsExtensions.Systems;
-#if LEOECS_EXTENSIONS_LITE
 using JetBrains.Annotations;
-
-#else
-using Leopotam.Ecs;
-#endif
 
 namespace DELTation.LeoEcsExtensions.Composition.Di
 {

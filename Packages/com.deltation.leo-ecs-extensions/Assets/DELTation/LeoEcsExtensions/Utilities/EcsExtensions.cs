@@ -1,21 +1,14 @@
 using System;
 using System.Runtime.CompilerServices;
-using JetBrains.Annotations;
-#if LEOECS_EXTENSIONS_LITE
 using DELTation.LeoEcsExtensions.Components;
+using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
-
-#else
-using Leopotam.Ecs;
-#endif
 
 namespace DELTation.LeoEcsExtensions.Utilities
 {
     public static class EntityExtensions
     {
-#if LEOECS_EXTENSIONS_LITE
-
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsWorld.Mask IncComponentAndUpdateOf<T>([NotNull] this EcsWorld.Mask filter) where T : struct
         {
@@ -138,20 +131,5 @@ namespace DELTation.LeoEcsExtensions.Utilities
 #endif
             return world.GetPool<UpdateEvent<T>>();
         }
-
-#else
-        public static bool TryGet<T>(this in EcsEntity entity, out T component) where T : struct
-        {
-            if (entity.IsAlive() && entity.Has<T>())
-            {
-                component = entity.Get<T>();
-                return true;
-            }
-
-            component = default;
-            return false;
-        }
-
-#endif
     }
 }

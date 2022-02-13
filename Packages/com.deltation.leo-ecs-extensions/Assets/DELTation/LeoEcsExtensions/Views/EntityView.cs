@@ -1,19 +1,13 @@
 using System.Collections.Generic;
 using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Services;
-using UnityEngine;
-#if LEOECS_EXTENSIONS_LITE
 using Leopotam.EcsLite;
-using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
-
-#else
-using Leopotam.Ecs;
-using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
-#endif
+using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Views
 {
     [DisallowMultipleComponent]
+    // ReSharper disable once ClassWithVirtualMembersNeverInherited.Global
     public class EntityView : MonoBehaviour, IEntityView
     {
         [SerializeField] private bool _createOnAwake = true;
@@ -21,7 +15,7 @@ namespace DELTation.LeoEcsExtensions.Views
         private readonly List<IEntityInitializer> _initializers = new List<IEntityInitializer>();
         private IActiveEcsWorld _activeWorld;
 
-        private EcsPackedEntity _entity;
+        private EcsPackedEntityWithWorld _entity;
 
         private bool _searchedForInitializers;
 
@@ -57,7 +51,7 @@ namespace DELTation.LeoEcsExtensions.Views
             OnDestroyed();
         }
 
-        public EcsPackedEntity GetOrCreateEntity()
+        public EcsPackedEntityWithWorld GetOrCreateEntity()
         {
             if (TryGetEntity(out var entity))
                 return entity;
@@ -66,7 +60,7 @@ namespace DELTation.LeoEcsExtensions.Views
             return _entity;
         }
 
-        public bool TryGetEntity(out EcsPackedEntity entity)
+        public bool TryGetEntity(out EcsPackedEntityWithWorld entity)
         {
             if (_entity.IsAliveCompatible())
             {
@@ -97,6 +91,7 @@ namespace DELTation.LeoEcsExtensions.Views
             _entity.SetUnityObjectData(transform);
             _entity.SetViewBackRef(this);
 
+            // ReSharper disable once ForCanBeConvertedToForeach
             for (var index = 0; index < Initializers.Count; index++)
             {
                 var initializer = Initializers[index];
@@ -117,9 +112,9 @@ namespace DELTation.LeoEcsExtensions.Views
 
         public EcsWorld World => _activeWorld.World;
 
-        protected virtual void AddComponents(EcsPackedEntity entity) { }
+        protected virtual void AddComponents(EcsPackedEntityWithWorld entity) { }
 
-        protected virtual void OnCreatedEntity(EcsPackedEntity entity) { }
+        protected virtual void OnCreatedEntity(EcsPackedEntityWithWorld entity) { }
 
         protected virtual void OnAwake() { }
 

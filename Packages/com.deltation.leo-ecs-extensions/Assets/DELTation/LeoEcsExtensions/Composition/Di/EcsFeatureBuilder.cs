@@ -6,12 +6,6 @@ using DELTation.LeoEcsExtensions.Systems;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 
-#if LEOECS_EXTENSIONS_LITE
-
-#else
-using Leopotam.Ecs;
-#endif
-
 namespace DELTation.LeoEcsExtensions.Composition.Di
 {
     public sealed class EcsFeatureBuilder

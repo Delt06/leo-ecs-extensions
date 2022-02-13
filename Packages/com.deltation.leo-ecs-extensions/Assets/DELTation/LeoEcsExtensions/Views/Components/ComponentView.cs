@@ -1,23 +1,17 @@
-using DELTation.LeoEcsExtensions.Compatibility;
-using UnityEngine;
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
 #else
 using DELTation.LeoEcsExtensions.Views.Components.Attributes;
 #endif
-
-#if LEOECS_EXTENSIONS_LITE
-using EcsPackedEntity = Leopotam.EcsLite.EcsPackedEntityWithWorld;
-
-#else
-using EcsPackedEntity = Leopotam.Ecs.EcsEntity;
-#endif
+using DELTation.LeoEcsExtensions.Compatibility;
+using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Views.Components
 {
     public abstract class ComponentView : MonoBehaviour
     {
-        public EcsPackedEntity Entity { get; protected set; }
+        public EcsPackedEntityWithWorld Entity { get; protected set; }
 
         internal abstract void TryAddComponent();
         internal abstract void TryDeleteComponent();
@@ -48,7 +42,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 
         public ref T StoredComponentValue => ref _component;
 
-        public void InitializeEntity(EcsPackedEntity entity)
+        public void InitializeEntity(EcsPackedEntityWithWorld entity)
         {
             if (_enabled)
             {
@@ -94,7 +88,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 
         internal sealed override bool EntityHasComponent() => Entity.HasCompatible<T>();
 
-        protected virtual void PreInitializeEntity(EcsPackedEntity entity) { }
-        protected virtual void PostInitializeEntity(EcsPackedEntity entity) { }
+        protected virtual void PreInitializeEntity(EcsPackedEntityWithWorld entity) { }
+        protected virtual void PostInitializeEntity(EcsPackedEntityWithWorld entity) { }
     }
 }

@@ -1,9 +1,4 @@
-﻿#if LEOECS_EXTENSIONS_LITE
-using Leopotam.EcsLite;
-
-#else
-using Leopotam.Ecs;
-#endif
+﻿using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.Systems
 {
@@ -12,16 +7,12 @@ namespace DELTation.LeoEcsExtensions.Systems
     ///     Same as OneFrame system from LeoECS core.
     /// </summary>
     /// <typeparam name="T">OneFrame component type.</typeparam>
-    internal sealed class RemoveOneFrame<T> : IEcsRunSystem
-#if LEOECS_EXTENSIONS_LITE
-        , IEcsInitSystem
-#endif
+    internal sealed class RemoveOneFrame<T> : IEcsRunSystem, IEcsInitSystem
         where T : struct
 
     {
-#if LEOECS_EXTENSIONS_LITE
-        private EcsPool<T> _pool;
         private EcsFilter _filter;
+        private EcsPool<T> _pool;
 
         public void Init(EcsSystems systems)
         {
@@ -37,17 +28,5 @@ namespace DELTation.LeoEcsExtensions.Systems
                 _pool.Del(i);
             }
         }
-
-#else
-        private readonly EcsFilter<T> _oneFrames = null;
-
-        void IEcsRunSystem.Run()
-        {
-            for (var idx = _oneFrames.GetEntitiesCount() - 1; idx >= 0; idx--)
-            {
-                _oneFrames.GetEntity(idx).Del<T>();
-            }
-        }
-#endif
     }
 }

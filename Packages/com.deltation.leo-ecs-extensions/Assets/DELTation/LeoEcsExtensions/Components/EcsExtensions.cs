@@ -1,5 +1,4 @@
-﻿#if LEOECS_EXTENSIONS_LITE
-using System;
+﻿using System;
 using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Compatibility;
 using DELTation.LeoEcsExtensions.Utilities;
@@ -10,7 +9,7 @@ using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Components
 {
-    public static class EcsLiteExtensions
+    public static class EcsExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static EcsPackedEntityWithWorld NewPackedEntityWithWorld([NotNull] this EcsWorld world)
@@ -146,5 +145,3 @@ namespace DELTation.LeoEcsExtensions.Components
         }
     }
 }
-
-#endif

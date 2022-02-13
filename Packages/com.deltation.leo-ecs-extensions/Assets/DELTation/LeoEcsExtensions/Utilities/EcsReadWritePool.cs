@@ -1,5 +1,4 @@
-﻿#if LEOECS_EXTENSIONS_LITE
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -64,4 +63,3 @@ namespace DELTation.LeoEcsExtensions.Utilities
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>) this).GetEnumerator();
     }
 }
-#endif

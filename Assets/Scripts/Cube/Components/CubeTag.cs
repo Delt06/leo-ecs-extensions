@@ -1,6 +1,4 @@
-﻿using Leopotam.Ecs;
-
-namespace Cube.Components
+﻿namespace Cube.Components
 {
-    public struct CubeTag : IEcsIgnoreInFilter { }
+    public struct CubeTag { }
 }
