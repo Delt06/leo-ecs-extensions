@@ -28,9 +28,9 @@ public class TestComponentSystem : IEcsRunSystem
     }
 }
 
-public class TestComponentRunSystem : RunSystemBase
+public class TestComponentRunSystem : EcsRunSystemBase
 {
-    protected override BuiltRunSystem Build(EcsWorld world) =>
+    protected override EcsBuiltRunSystem Build(EcsWorld world) =>
         world.Filter<TestComponent>().MapTo((EcsFilter filter, EcsObservablePool<TestComponent> testComponents) =>
             {
                 foreach (var i in filter)

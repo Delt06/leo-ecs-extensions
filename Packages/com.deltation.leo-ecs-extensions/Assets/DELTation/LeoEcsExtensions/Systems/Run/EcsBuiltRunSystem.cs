@@ -7,7 +7,7 @@ using static DELTation.LeoEcsExtensions.Systems.Run.ReflectionPoolFactory;
 
 namespace DELTation.LeoEcsExtensions.Systems.Run
 {
-    public readonly struct BuiltRunSystem
+    public readonly struct EcsBuiltRunSystem
     {
         private readonly bool _isValid;
         private readonly EcsFilter _filter;
@@ -16,7 +16,7 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
         private readonly object[] _arguments;
 
 
-        public BuiltRunSystem([NotNull] EcsFilter filter, [NotNull] Delegate @delegate)
+        public EcsBuiltRunSystem([NotNull] EcsFilter filter, [NotNull] Delegate @delegate)
         {
             _filter = filter ?? throw new ArgumentNullException(nameof(filter));
             _world = filter.GetWorld();
@@ -40,7 +40,7 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
 
                 var parameterType = parameter.ParameterType;
                 if (parameterType.IsByRef)
-                    throw BuiltRunSystemExceptionFactory.OutParameter(i, nameof(@delegate));
+                    throw BuiltRunSystemExceptionFactory.RefParameter(i, nameof(@delegate));
 
                 _arguments[i] = ResolveArgument(parameterType);
             }
@@ -81,7 +81,7 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
                     return _world;
             }
 
-            throw new ArgumentException($"Parameter type {parameterType} cannot be passed in built run system.");
+            throw BuiltRunSystemExceptionFactory.InvalidParameterType(parameterType);
         }
 
 

@@ -7,7 +7,7 @@ using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.ExtendedPools
 {
-    public readonly struct EcsReadWritePool<T> : IEnumerable<T> where T : struct
+    public readonly struct EcsReadWritePool<T> : IEnumerable<T>, IEquatable<EcsReadWritePool<T>> where T : struct
     {
         private readonly EcsPool<T> _pool;
 
@@ -61,5 +61,11 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => (IEnumerator<T>) _pool.GetRawDenseItems().GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>) this).GetEnumerator();
+
+        public bool Equals(EcsReadWritePool<T> other) => Equals(_pool, other._pool);
+
+        public override bool Equals(object obj) => obj is EcsReadWritePool<T> other && Equals(other);
+
+        public override int GetHashCode() => _pool != null ? _pool.GetHashCode() : 0;
     }
 }

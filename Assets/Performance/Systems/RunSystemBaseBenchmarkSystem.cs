@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Performance.Systems
 {
-    public class RunSystemBaseBenchmarkSystem : RunSystemBase
+    public class RunSystemBaseBenchmarkSystem : EcsRunSystemBase
     {
-        protected override BuiltRunSystem Build(EcsWorld world) =>
+        protected override EcsBuiltRunSystem Build(EcsWorld world) =>
             world.Filter<PositionsComponent>().MapTo(
                 (EcsFilter filter, EcsPool<PositionsComponent> positions, EcsPool<DirectionComponent> directions) =>
                 {

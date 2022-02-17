@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using System;
+using JetBrains.Annotations;
 
 namespace DELTation.LeoEcsExtensions.Systems.Run.Exceptions
 {
@@ -22,6 +23,12 @@ namespace DELTation.LeoEcsExtensions.Systems.Run.Exceptions
         [MustUseReturnValue]
         public static InvalidRunSignatureException RefParameter(int parameterIndex, string paramName) =>
             throw new InvalidRunSignatureException($"Delegate parameter {parameterIndex} is a ref parameter.", paramName
+            );
+
+        [MustUseReturnValue]
+        public static InvalidRunSignatureException InvalidParameterType(Type parameterType) =>
+            throw new InvalidRunSignatureException(
+                $"Parameter type {parameterType} cannot be passed in built run systems."
             );
     }
 }

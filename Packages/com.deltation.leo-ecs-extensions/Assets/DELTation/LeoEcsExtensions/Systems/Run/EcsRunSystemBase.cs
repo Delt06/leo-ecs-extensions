@@ -2,9 +2,9 @@
 
 namespace DELTation.LeoEcsExtensions.Systems.Run
 {
-    public abstract class RunSystemBase : IEcsRunSystem, IEcsPreInitSystem
+    public abstract class EcsRunSystemBase : IEcsRunSystem, IEcsPreInitSystem
     {
-        private BuiltRunSystem _builtRunSystem;
+        private EcsBuiltRunSystem _builtRunSystem;
 
         public void PreInit(EcsSystems systems)
         {
@@ -20,6 +20,6 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
 
         protected virtual void OnAfterPreInit(EcsSystems systems) { }
 
-        protected abstract BuiltRunSystem Build(EcsWorld world);
+        protected abstract EcsBuiltRunSystem Build(EcsWorld world);
     }
 }

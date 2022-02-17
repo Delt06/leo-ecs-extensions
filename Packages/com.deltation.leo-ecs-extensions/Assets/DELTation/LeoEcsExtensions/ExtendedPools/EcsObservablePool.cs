@@ -9,7 +9,7 @@ using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.ExtendedPools
 {
-    public readonly struct EcsObservablePool<T> : IEnumerable<T> where T : struct
+    public readonly struct EcsObservablePool<T> : IEnumerable<T>, IEquatable<EcsObservablePool<T>> where T : struct
     {
         private readonly EcsPool<T> _pool;
         private readonly EcsPool<UpdateEvent<T>> _updatePool;
@@ -72,5 +72,12 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => (IEnumerator<T>) _pool.GetRawDenseItems().GetEnumerator();
 
         IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<T>) this).GetEnumerator();
+
+        public bool Equals(EcsObservablePool<T> other) =>
+            Equals(_pool, other._pool) && Equals(_updatePool, other._updatePool);
+
+        public override bool Equals(object obj) => obj is EcsObservablePool<T> other && Equals(other);
+
+        public override int GetHashCode() => _pool?.GetHashCode() ?? 0 ^ _updatePool?.GetHashCode() ?? 0;
     }
 }
