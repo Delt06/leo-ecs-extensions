@@ -18,6 +18,11 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
         }
 
         [MustUseReturnValue]
+        public static EcsBuiltRunSystem MapTo(this EcsWorld.Mask mask,
+            Action action) =>
+            Map(mask, action);
+
+        [MustUseReturnValue]
         public static EcsBuiltRunSystem MapTo<T1>(this EcsWorld.Mask mask,
             Action<T1> action) =>
             Map(mask, action);

@@ -20,6 +20,19 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
         }
 
         [Test]
+        public void GivenRun_WhenQueryingNothing_ThenRunsWithoutExceptions()
+        {
+            // Arrange
+            var builtRunSystem = new EcsBuiltRunSystem(_filter, new Action(() => { }));
+
+            // Act
+            void Code() => builtRunSystem.Run();
+
+            // Assert
+            Assert.That(Code, Throws.Nothing);
+        }
+
+        [Test]
         public void GivenRun_WhenQueryingEcsFilter_ThenReturnsTheProvidedFilter()
         {
             // Arrange
