@@ -9,7 +9,9 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
 {
     public readonly struct EcsBuiltRunSystem
     {
+#pragma warning disable CS0414
         private readonly bool _isValid;
+#pragma warning restore CS0414
         private readonly EcsFilter _filter;
         private readonly EcsWorld _world;
         private readonly Delegate _delegate;
