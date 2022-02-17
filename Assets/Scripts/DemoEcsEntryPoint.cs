@@ -16,7 +16,7 @@ public class DemoEcsEntryPoint : EcsEntryPoint
         featureBuilder.AddFeature(new AnimatedCubeFeature(colorPresenter));
 
         featureBuilder
-            .CreateAndAdd<TestComponentSystem>()
+            .CreateAndAdd<TestComponentRunSystem>()
             .CreateAndAdd<TestComponentTextSystem>()
             .OneFrameUpdateEvents()
             ;

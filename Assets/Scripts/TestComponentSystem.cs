@@ -1,4 +1,5 @@
 ﻿using DELTation.LeoEcsExtensions.ExtendedPools;
+using DELTation.LeoEcsExtensions.Systems.Run;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -25,4 +26,20 @@ public class TestComponentSystem : IEcsRunSystem
             Debug.Log($"Test component value: {value}");
         }
     }
+}
+
+public class TestComponentRunSystem : RunSystemBase
+{
+    protected override BuiltRunSystem Build(EcsWorld world) =>
+        world.Filter<TestComponent>().MapTo((EcsFilter filter, EcsObservablePool<TestComponent> testComponents) =>
+            {
+                foreach (var i in filter)
+                {
+                    ref var testComponent = ref testComponents.Modify(i);
+                    ref var value = ref testComponent.Value;
+                    value += Time.deltaTime;
+                    Debug.Log($"Test component value: {value}");
+                }
+            }
+        );
 }
