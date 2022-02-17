@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using DELTation.LeoEcsExtensions.Systems.Run;
+using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using Leopotam.EcsLite;
 using NUnit.Framework;
 
@@ -41,7 +42,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
         }
 
         [Test]
-        public void GivenRun_WhenBeforePreInit_ThenThrowsException()
+        public void GivenRun_WhenBeforePreInit_ThenThrowsNothing()
         {
             // Arrange
             var world = new EcsWorld();
@@ -53,15 +54,11 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             void Code() => system.Run(null);
 
             // Assert
-#if DEBUG
-            Assert.That(Code, Throws.InvalidOperationException);
-#else
-            Assert.That(Code, Throws.InstanceOf<NullReferenceException>());
-#endif
+            Assert.That(Code, Throws.Nothing);
         }
 
         [Test]
-        public void GivenRun_WhenAfterPreInit_ThenThrows()
+        public void GivenRun_WhenAfterPreInit_ThenThrowsNothing()
         {
             // Arrange
             var world = new EcsWorld();
@@ -137,7 +134,8 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
                 _queue.Enqueue(this);
             }
 
-            protected override EcsBuiltRunSystem Build(EcsWorld world) => world.Filter<int>().MapTo(() => { });
+            [EcsRun]
+            private void Run(EcsFilter filter, EcsPool<int> ints) { }
         }
 
         private class TimesRunSystem : EcsRunSystemBase
@@ -151,18 +149,22 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
                 OnAfterPreInitCalledTimes++;
             }
 
-            protected override EcsBuiltRunSystem Build(EcsWorld world) => world.Filter<int>().MapTo(
-                () => { RunTimes++; }
-            );
+            [EcsRun]
+            private void Run(EcsFilter filter, EcsPool<int> ints)
+            {
+                RunTimes++;
+            }
         }
 
         private class GetWorldSystem : EcsRunSystemBase
         {
             public EcsWorld World { get; private set; }
 
-            protected override EcsBuiltRunSystem Build(EcsWorld world) => world.Filter<int>().MapTo(
-                (EcsWorld w) => { World = w; }
-            );
+            [EcsRun]
+            private void Run(EcsWorld world)
+            {
+                World = world;
+            }
         }
     }
 }
