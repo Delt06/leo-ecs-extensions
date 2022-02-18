@@ -14,7 +14,7 @@ namespace Runner.Movement
         public PlayerSideMovementSystem(StaticData staticData) => _staticData = staticData;
 
         [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<PlayerData> playerData,
+        private void Run(EcsFilter filter, EcsPool<PlayerData> playerData, EcsPool<SidePosition> sidePositions,
             EcsPool<UnityObjectData<Transform>> transforms)
         {
             foreach (var i in filter)
@@ -23,7 +23,9 @@ namespace Runner.Movement
                 Transform transform = transforms.Get(i);
 
                 var right = Vector3.Cross(Vector3.up, data.Forward);
-                transform.position += right * data.SidePositionNormalized * _staticData.LevelHalfWidth;
+                var sidePosition = sidePositions.Get(i).CurrentPosition;
+                transform.position += right * sidePosition
+                                            * _staticData.LevelHalfWidth;
             }
         }
     }

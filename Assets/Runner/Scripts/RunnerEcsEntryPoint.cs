@@ -10,6 +10,7 @@ namespace Runner
         {
             featureBuilder
                 .CreateAndAdd<PlayerSplineMovementSystem>()
+                .CreateAndAdd<SidePositionSmoothSystem>()
                 .CreateAndAdd<PlayerSideMovementSystem>()
                 ;
 

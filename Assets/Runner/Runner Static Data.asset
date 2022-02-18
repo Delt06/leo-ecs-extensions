@@ -15,3 +15,4 @@ MonoBehaviour:
   _controlsSensitivity: 10
   _levelHalfWidth: 2
   _movementSpeed: 5
+  _sideMovementSmoothTime: 0.05

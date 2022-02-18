@@ -21,7 +21,7 @@ namespace Runner.Input
             _inputSurface = inputSurface;
             _sceneData = sceneData;
             _staticData = staticData;
-            _filter = world.Filter<PlayerData>().End();
+            _filter = world.Filter<SidePosition>().End();
         }
 
         public void OnDestroy()
@@ -45,10 +45,10 @@ namespace Runner.Input
 
             foreach (var i in _filter)
             {
-                ref var playerData = ref _filter.Get<PlayerData>(i);
+                ref var playerData = ref _filter.Get<SidePosition>(i);
                 var sidePositionNormalized = _dragData.SidePositionNormalizedOnStart + deltaSidePosition;
                 sidePositionNormalized = Mathf.Clamp(sidePositionNormalized, -1f, 1f);
-                playerData.SidePositionNormalized = sidePositionNormalized;
+                playerData.TargetPosition = sidePositionNormalized;
             }
         }
 
@@ -58,7 +58,7 @@ namespace Runner.Input
 
             foreach (var i in _filter)
             {
-                _dragData.SidePositionNormalizedOnStart = _filter.Get<PlayerData>(i).SidePositionNormalized;
+                _dragData.SidePositionNormalizedOnStart = _filter.Get<SidePosition>(i).TargetPosition;
                 break;
             }
         }
