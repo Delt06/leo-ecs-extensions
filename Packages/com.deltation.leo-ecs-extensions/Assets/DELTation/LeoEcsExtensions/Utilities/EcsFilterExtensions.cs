@@ -86,5 +86,25 @@ namespace DELTation.LeoEcsExtensions.Utilities
 
             return filter.GetSparseIndex()[entity] > 0;
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int GetSingle([NotNull] this EcsFilter filter)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+
+            if (filter.GetEntitiesCount() >= 2)
+                throw new InvalidOperationException(
+                    $"Filter contains more than 1 entity ({filter.GetEntitiesCount()})."
+                );
+#endif
+
+            foreach (var i in filter)
+            {
+                return i;
+            }
+
+            throw new InvalidOperationException("Filter contains no entities.");
+        }
     }
 }
