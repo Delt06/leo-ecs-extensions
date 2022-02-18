@@ -84,10 +84,13 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
                 break;
             }
 
+            var filterParameter = parameters[filterParameterIndex];
+            ProcessExtraIncludes(filterParameter, world, ref mask);
+
             if (mask == null)
                 throw BuiltRunSystemExceptionFactory.NoIncludes();
 
-            ProcessExcludes(parameters[filterParameterIndex], mask);
+            ProcessExcludes(filterParameter, mask);
 
             for (var parameterIndex = 0; parameterIndex < parameters.Length; parameterIndex++)
             {
@@ -132,6 +135,22 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
             {
                 var type = ecsExcAttribute.Type;
                 mask = ReflectionFilterFactory.Exc(mask, type);
+            }
+        }
+
+        private static void ProcessExtraIncludes(ParameterInfo filterParameter, EcsWorld world, ref EcsWorld.Mask mask)
+        {
+            if (!Attribute.IsDefined(filterParameter, typeof(EcsIncAttribute))) return;
+
+            var ecsIncAttributes = filterParameter.GetCustomAttributes<EcsIncAttribute>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var ecsIncAttribute in ecsIncAttributes)
+            {
+                var type = ecsIncAttribute.Type;
+                mask = mask == null
+                    ? ReflectionFilterFactory.Filter(world, type)
+                    : ReflectionFilterFactory.Inc(mask, type);
             }
         }
 

@@ -98,6 +98,16 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             _queriedFilter = filter;
         }
 
+        private void QueryFilterIncludeNoPools([EcsInc(typeof(int))] EcsFilter filter)
+        {
+            _queriedFilter = filter;
+        }
+
+        private void QueryFilterIncludeAndPools([EcsInc(typeof(int))] EcsFilter filter, EcsPool<float> floats)
+        {
+            _queriedFilter = filter;
+        }
+
         private void QueryFilterUpdateOnSecondPool(EcsFilter filter, EcsPool<float> floats,
             [EcsIncUpdate] EcsPool<int> ints)
         {
@@ -302,6 +312,34 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             // Assert
             Assert.That(_queriedFilter, Is.Not.Null);
             Assume.That(_queriedFilter, Is.SameAs(_world.Filter<byte>().Exc<float>().Exc<int>().End()));
+        }
+
+        [Test]
+        public void GivenRun_WhenHavingOnlyIncAttribute_ThenFilterIncludesOnlyTypeFromInc()
+        {
+            // Arrange
+            var builtRunSystem = CreateCallback(nameof(QueryFilterIncludeNoPools));
+
+            // Act
+            builtRunSystem.Run();
+
+            // Assert
+            Assert.That(_queriedFilter, Is.Not.Null);
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<int>().End()));
+        }
+
+        [Test]
+        public void GivenRun_WhenHavingIncAttributeAndPool_ThenFilterIncludesBoth()
+        {
+            // Arrange
+            var builtRunSystem = CreateCallback(nameof(QueryFilterIncludeAndPools));
+
+            // Act
+            builtRunSystem.Run();
+
+            // Assert
+            Assert.That(_queriedFilter, Is.Not.Null);
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<int>().Inc<float>().End()));
         }
 
         [Test]

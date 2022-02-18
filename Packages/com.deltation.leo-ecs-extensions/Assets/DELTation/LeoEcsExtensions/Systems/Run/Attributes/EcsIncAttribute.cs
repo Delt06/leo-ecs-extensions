@@ -4,9 +4,9 @@ using JetBrains.Annotations;
 namespace DELTation.LeoEcsExtensions.Systems.Run.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter, AllowMultiple = true)]
-    public sealed class EcsExcAttribute : Attribute
+    public sealed class EcsIncAttribute : Attribute
     {
-        public EcsExcAttribute([NotNull] Type type)
+        public EcsIncAttribute([NotNull] Type type)
         {
             if (type == null) throw new ArgumentNullException(nameof(type));
             EcsAttributeUtils.ValidateComponentType(type);
