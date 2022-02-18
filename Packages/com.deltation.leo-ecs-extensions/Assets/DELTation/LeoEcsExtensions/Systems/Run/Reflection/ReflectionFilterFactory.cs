@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using DELTation.LeoEcsExtensions.Components;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 
-namespace DELTation.LeoEcsExtensions.Systems.Run
+namespace DELTation.LeoEcsExtensions.Systems.Run.Reflection
 {
     internal static class ReflectionFilterFactory
     {
@@ -18,6 +19,26 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
             MaskIncMethodsCache = new Dictionary<Type, MethodInfo>(256);
         private static readonly Dictionary<Type, MethodInfo>
             MaskExcMethodsCache = new Dictionary<Type, MethodInfo>(256);
+        private static readonly Dictionary<Type, Type> UpdateEventsCache = new Dictionary<Type, Type>(256);
+
+        private static readonly Type[] TypeArrayOne = new Type[1];
+
+        public static Type GetUpdateEventType([NotNull] Type componentType)
+        {
+            if (componentType == null) throw new ArgumentNullException(nameof(componentType));
+
+            if (UpdateEventsCache.TryGetValue(componentType, out var updateEventType))
+                return updateEventType;
+
+            var genericUpdateEventType = typeof(UpdateEvent<>);
+
+            TypeArrayOne[0] = componentType;
+            updateEventType = genericUpdateEventType.MakeGenericType(TypeArrayOne);
+            TypeArrayOne[0] = null;
+
+            UpdateEventsCache[componentType] = updateEventType;
+            return updateEventType;
+        }
 
         public static EcsWorld.Mask Filter([NotNull] EcsWorld world, [NotNull] Type componentType)
         {

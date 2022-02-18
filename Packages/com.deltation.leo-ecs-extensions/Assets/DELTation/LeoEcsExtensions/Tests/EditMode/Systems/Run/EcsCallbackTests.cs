@@ -3,6 +3,7 @@ using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run;
 using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using DELTation.LeoEcsExtensions.Systems.Run.Exceptions;
+using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using NUnit.Framework;
 
@@ -73,17 +74,34 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             _queriedPool = ints;
         }
 
-        private void QueryFilterNoIncludesExclude(EcsFilter filter, [EcsExc] EcsPool<int> ints)
+        private void QueryFilterNoIncludesExclude([EcsExc(typeof(int))] EcsFilter filter)
+        {
+            _queriedFilter = filter;
+        }
+
+        private void QueryFilterTwoExcludes([EcsExc(typeof(int))] [EcsExc(typeof(float))] EcsFilter filter,
+            EcsPool<byte> pool)
+        {
+            _queriedFilter = filter;
+        }
+
+        private void QueryFilterComplex([EcsExc(typeof(byte))] EcsFilter filter, EcsPool<int> ints,
+            EcsObservablePool<float> floats,
+            [EcsIgnore] EcsReadOnlyPool<short> shorts)
         {
             _queriedFilter = filter;
             _queriedPool = ints;
         }
 
-        private void QueryFilterComplex(EcsFilter filter, EcsPool<int> ints, EcsObservablePool<float> floats,
-            [EcsIgnore] EcsReadOnlyPool<short> shorts, [EcsExc] EcsReadWritePool<byte> bytes)
+        private void QueryFilterUpdateOnFirstPool(EcsFilter filter, [EcsIncUpdate] EcsPool<int> ints)
         {
             _queriedFilter = filter;
-            _queriedPool = ints;
+        }
+
+        private void QueryFilterUpdateOnSecondPool(EcsFilter filter, EcsPool<float> floats,
+            [EcsIncUpdate] EcsPool<int> ints)
+        {
+            _queriedFilter = filter;
         }
 
         private void QueryInvalid(int i) { }
@@ -137,7 +155,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
 
             // Assert
             Assert.That(_queriedFilter, Is.Not.Null);
-            Assume.That(_queriedFilter, Is.EqualTo(_world.Filter<int>().End()));
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<int>().End()));
         }
 
         [Test]
@@ -151,7 +169,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
 
             // Assert
             Assert.That(_queriedFilter, Is.Not.Null);
-            Assume.That(_queriedFilter, Is.EqualTo(_world.Filter<int>().Inc<float>().Exc<byte>().End()));
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<int>().Inc<float>().Exc<byte>().End()));
         }
 
         [Test]
@@ -179,7 +197,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
 
             // Assert
             Assert.That(_queriedPool, Is.Not.Null);
-            Assume.That(_queriedPool, Is.EqualTo(_world.GetPool<int>()));
+            Assume.That(_queriedPool, Is.SameAs(_world.GetPool<int>()));
         }
 
         [Test]
@@ -238,10 +256,52 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             Assume.That(_queriedObservablePool, Is.EqualTo(_world.GetObservablePool<int>()));
 
             Assert.That(_queriedWorld, Is.Not.Null);
-            Assume.That(_queriedWorld, Is.EqualTo(_world));
+            Assume.That(_queriedWorld, Is.SameAs(_world));
 
             Assert.That(_queriedFilter, Is.Not.Null);
-            Assume.That(_queriedFilter, Is.EqualTo(_world.Filter<int>().End()));
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<int>().End()));
+        }
+
+        [Test]
+        public void GivenRun_WhenHavingIncUpdateOnFirstPool_ThenFilterIsConstructedCorrectly()
+        {
+            // Arrange
+            var builtRunSystem = CreateCallback(nameof(QueryFilterUpdateOnFirstPool));
+
+            // Act
+            builtRunSystem.Run();
+
+            // Assert
+            Assert.That(_queriedFilter, Is.Not.Null);
+            Assume.That(_queriedFilter, Is.SameAs(_world.FilterAndIncUpdateOf<int>().End()));
+        }
+
+        [Test]
+        public void GivenRun_WhenHavingIncUpdateOnSecondPool_ThenFilterIsConstructedCorrectly()
+        {
+            // Arrange
+            var builtRunSystem = CreateCallback(nameof(QueryFilterUpdateOnSecondPool));
+
+            // Act
+            builtRunSystem.Run();
+
+            // Assert
+            Assert.That(_queriedFilter, Is.Not.Null);
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<float>().IncComponentAndUpdateOf<int>().End()));
+        }
+
+        [Test]
+        public void GivenRun_WhenHavingTwoExcAttributes_ThenFilterExcludesBoth()
+        {
+            // Arrange
+            var builtRunSystem = CreateCallback(nameof(QueryFilterTwoExcludes));
+
+            // Act
+            builtRunSystem.Run();
+
+            // Assert
+            Assert.That(_queriedFilter, Is.Not.Null);
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<byte>().Exc<float>().Exc<int>().End()));
         }
 
         [Test]

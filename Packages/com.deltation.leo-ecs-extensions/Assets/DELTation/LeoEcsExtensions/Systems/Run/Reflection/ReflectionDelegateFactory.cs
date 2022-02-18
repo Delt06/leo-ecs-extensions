@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace DELTation.LeoEcsExtensions.Systems.Run
+namespace DELTation.LeoEcsExtensions.Systems.Run.Reflection
 {
     internal static class ReflectionDelegateFactory
     {

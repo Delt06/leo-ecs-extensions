@@ -5,7 +5,7 @@ using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.ExtendedPools;
 using Leopotam.EcsLite;
 
-namespace DELTation.LeoEcsExtensions.Systems.Run
+namespace DELTation.LeoEcsExtensions.Systems.Run.Reflection
 {
     internal static class ReflectionPoolFactory
     {

@@ -4,9 +4,10 @@ using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using DELTation.LeoEcsExtensions.Systems.Run.Exceptions;
+using DELTation.LeoEcsExtensions.Systems.Run.Reflection;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
-using static DELTation.LeoEcsExtensions.Systems.Run.ReflectionPoolFactory;
+using static DELTation.LeoEcsExtensions.Systems.Run.Reflection.ReflectionPoolFactory;
 
 namespace DELTation.LeoEcsExtensions.Systems.Run
 {
@@ -55,17 +56,9 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
 
         private static bool TryCreateFilter(EcsWorld world, ParameterInfo[] parameters, out EcsFilter filter)
         {
-            var foundFilterParameter = false;
+            var filterParameterIndex = FindFilterParameter(parameters);
 
-            // ReSharper disable once LoopCanBeConvertedToQuery
-            foreach (var parameter in parameters)
-            {
-                if (parameter.ParameterType != typeof(EcsFilter)) continue;
-                foundFilterParameter = true;
-                break;
-            }
-
-            if (!foundFilterParameter)
+            if (filterParameterIndex == -1)
             {
                 filter = default;
                 return false;
@@ -79,15 +72,22 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
                 var parameter = parameters[parameterIndex];
                 if (!IsPool(parameter.ParameterType, out var poolComponentType)) continue;
                 if (Attribute.IsDefined(parameter, typeof(EcsIgnoreAttribute))) continue;
-                if (Attribute.IsDefined(parameter, typeof(EcsExcAttribute))) continue;
 
                 firstIncludeIndex = parameterIndex;
                 mask = ReflectionFilterFactory.Filter(world, poolComponentType);
+
+                if (Attribute.IsDefined(parameter, typeof(EcsIncUpdate)))
+                    mask = ReflectionFilterFactory.Inc(mask,
+                        ReflectionFilterFactory.GetUpdateEventType(poolComponentType)
+                    );
+
                 break;
             }
 
             if (mask == null)
                 throw BuiltRunSystemExceptionFactory.NoIncludes();
+
+            ProcessExcludes(parameters[filterParameterIndex], mask);
 
             for (var parameterIndex = 0; parameterIndex < parameters.Length; parameterIndex++)
             {
@@ -97,13 +97,42 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
                 if (!IsPool(parameter.ParameterType, out var poolComponentType)) continue;
                 if (Attribute.IsDefined(parameter, typeof(EcsIgnoreAttribute))) continue;
 
-                mask = Attribute.IsDefined(parameter, typeof(EcsExcAttribute))
-                    ? ReflectionFilterFactory.Exc(mask, poolComponentType)
-                    : ReflectionFilterFactory.Inc(mask, poolComponentType);
+                mask = ReflectionFilterFactory.Inc(mask, poolComponentType);
+
+                if (Attribute.IsDefined(parameter, typeof(EcsIncUpdate)))
+                    mask = ReflectionFilterFactory.Inc(mask,
+                        ReflectionFilterFactory.GetUpdateEventType(poolComponentType)
+                    );
             }
 
             filter = mask.End();
             return true;
+        }
+
+        private static int FindFilterParameter(ParameterInfo[] parameters)
+        {
+            for (var index = 0; index < parameters.Length; index++)
+            {
+                var parameter = parameters[index];
+                if (parameter.ParameterType != typeof(EcsFilter)) continue;
+                return index;
+            }
+
+            return -1;
+        }
+
+        private static void ProcessExcludes(ParameterInfo filterParameter, EcsWorld.Mask mask)
+        {
+            if (!Attribute.IsDefined(filterParameter, typeof(EcsExcAttribute))) return;
+
+            var ecsExcAttributes = filterParameter.GetCustomAttributes<EcsExcAttribute>();
+
+            // ReSharper disable once LoopCanBeConvertedToQuery
+            foreach (var ecsExcAttribute in ecsExcAttributes)
+            {
+                var type = ecsExcAttribute.Type;
+                mask = ReflectionFilterFactory.Exc(mask, type);
+            }
         }
 
         private static bool IsPool(Type type, out Type componentType)
