@@ -56,11 +56,8 @@ namespace Runner.Input
         {
             _dragData.PointerPositionOnStart = position;
 
-            foreach (var i in _filter)
-            {
-                _dragData.SidePositionNormalizedOnStart = _filter.Get<SidePosition>(i).TargetPosition;
-                break;
-            }
+            var i = _filter.GetSingle();
+            _dragData.SidePositionNormalizedOnStart = _filter.Get<SidePosition>(i).TargetPosition;
         }
 
         private struct DragData
