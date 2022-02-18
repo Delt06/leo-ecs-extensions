@@ -3,6 +3,7 @@
     "com.deltation.di-framework": "https://github.com/Delt06/di-framework.git?path=Packages/com.deltation.di-framework",
     "com.leopotam.ecslite": "https://github.com/Leopotam/ecslite.git",
     "com.leopotam.ecslite.unityeditor": "https://github.com/Leopotam/ecslite-unityeditor.git",
+    "com.unity.cinemachine": "2.6.11",
     "com.unity.collab-proxy": "1.3.9",
     "com.unity.ide.rider": "2.0.7",
     "com.unity.ide.visualstudio": "2.0.7",
