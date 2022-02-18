@@ -86,7 +86,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
                 _displayedComponent = attachedComponent;
         }
 
-        internal sealed override bool EntityHasComponent() => Entity.Has<T>();
+        internal sealed override bool EntityHasComponent() => Entity.IsAlive() && Entity.Has<T>();
 
         protected virtual void PreInitializeEntity(EcsPackedEntityWithWorld entity) { }
         protected virtual void PostInitializeEntity(EcsPackedEntityWithWorld entity) { }
