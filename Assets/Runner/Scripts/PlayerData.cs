@@ -11,5 +11,6 @@ namespace Runner.Scripts
         public float Speed;
 
         public float SidePositionNormalized; // [-1; 1]
+        public Vector3 Forward;
     }
 }

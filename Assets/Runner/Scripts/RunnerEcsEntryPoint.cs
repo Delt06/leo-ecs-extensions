@@ -7,8 +7,8 @@ namespace Runner.Scripts
         public override void PopulateSystems(EcsFeatureBuilder featureBuilder)
         {
             featureBuilder
-                .CreateAndAdd<PlayerSidePositionSystem>()
-                .CreateAndAdd<PlayerMovementSystem>()
+                .CreateAndAdd<PlayerSplineMovementSystem>()
+                .CreateAndAdd<PlayerSideMovementSystem>()
                 ;
         }
     }

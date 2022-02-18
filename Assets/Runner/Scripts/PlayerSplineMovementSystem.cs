@@ -6,16 +6,11 @@ using UnityEngine;
 
 namespace Runner.Scripts
 {
-    public class PlayerMovementSystem : EcsRunSystemBase
+    public class PlayerSplineMovementSystem : EcsRunSystemBase
     {
         private readonly Spline _spline;
-        private readonly StaticData _staticData;
 
-        public PlayerMovementSystem(Spline spline, StaticData staticData)
-        {
-            _spline = spline;
-            _staticData = staticData;
-        }
+        public PlayerSplineMovementSystem(Spline spline) => _spline = spline;
 
         [EcsRun]
         private void Run(EcsFilter filter, EcsPool<PlayerData> playerData,
@@ -27,14 +22,11 @@ namespace Runner.Scripts
                 ref var data = ref playerData.Get(i);
 
                 var deltaDistance = data.Speed * Time.deltaTime;
-                Vector3 position;
-                (position, data.T) = _spline.SamplePoint(data.T, deltaDistance);
+                (transform.position, data.T) = _spline.SamplePoint(data.T, deltaDistance);
 
                 var forward = _spline.SampleDerivative(data.T).normalized;
-                var right = Vector3.Cross(Vector3.up, forward);
-                position += right * data.SidePositionNormalized * _staticData.LevelHalfWidth;
                 transform.forward = forward;
-                transform.position = position;
+                data.Forward = forward;
             }
         }
     }
