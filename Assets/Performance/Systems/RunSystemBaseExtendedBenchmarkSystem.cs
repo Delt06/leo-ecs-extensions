@@ -11,7 +11,7 @@ namespace Performance.Systems
     {
         [EcsRun]
         private void Run(EcsFilter filter, EcsReadWritePool<PositionsComponent> positions,
-            [EcsFilterIgnore] EcsReadWritePool<DirectionComponent> directions)
+            [EcsIgnore] EcsReadWritePool<DirectionComponent> directions)
         {
             foreach (var i in filter)
             {

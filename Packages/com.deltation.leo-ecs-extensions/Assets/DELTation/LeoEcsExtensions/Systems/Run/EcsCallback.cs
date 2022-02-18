@@ -78,8 +78,8 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
             {
                 var parameter = parameters[parameterIndex];
                 if (!IsPool(parameter.ParameterType, out var poolComponentType)) continue;
-                if (Attribute.IsDefined(parameter, typeof(EcsFilterIgnoreAttribute))) continue;
-                if (Attribute.IsDefined(parameter, typeof(EcsFilterExcludeAttribute))) continue;
+                if (Attribute.IsDefined(parameter, typeof(EcsIgnoreAttribute))) continue;
+                if (Attribute.IsDefined(parameter, typeof(EcsExcAttribute))) continue;
 
                 firstIncludeIndex = parameterIndex;
                 mask = ReflectionFilterFactory.Filter(world, poolComponentType);
@@ -95,9 +95,9 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
 
                 var parameter = parameters[parameterIndex];
                 if (!IsPool(parameter.ParameterType, out var poolComponentType)) continue;
-                if (Attribute.IsDefined(parameter, typeof(EcsFilterIgnoreAttribute))) continue;
+                if (Attribute.IsDefined(parameter, typeof(EcsIgnoreAttribute))) continue;
 
-                mask = Attribute.IsDefined(parameter, typeof(EcsFilterExcludeAttribute))
+                mask = Attribute.IsDefined(parameter, typeof(EcsExcAttribute))
                     ? ReflectionFilterFactory.Exc(mask, poolComponentType)
                     : ReflectionFilterFactory.Inc(mask, poolComponentType);
             }

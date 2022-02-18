@@ -3,5 +3,5 @@
 namespace DELTation.LeoEcsExtensions.Systems.Run.Attributes
 {
     [AttributeUsage(AttributeTargets.Parameter)]
-    public sealed class EcsFilterExcludeAttribute : Attribute { }
+    public sealed class EcsIgnoreAttribute : Attribute { }
 }

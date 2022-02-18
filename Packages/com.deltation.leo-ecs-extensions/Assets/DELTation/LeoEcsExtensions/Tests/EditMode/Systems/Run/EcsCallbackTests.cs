@@ -67,20 +67,20 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             _queriedFilter = filter;
         }
 
-        private void QueryFilterNoIncludesIgnore(EcsFilter filter, [EcsFilterIgnore] EcsPool<int> ints)
+        private void QueryFilterNoIncludesIgnore(EcsFilter filter, [EcsIgnore] EcsPool<int> ints)
         {
             _queriedFilter = filter;
             _queriedPool = ints;
         }
 
-        private void QueryFilterNoIncludesExclude(EcsFilter filter, [EcsFilterExclude] EcsPool<int> ints)
+        private void QueryFilterNoIncludesExclude(EcsFilter filter, [EcsExc] EcsPool<int> ints)
         {
             _queriedFilter = filter;
             _queriedPool = ints;
         }
 
         private void QueryFilterComplex(EcsFilter filter, EcsPool<int> ints, EcsObservablePool<float> floats,
-            [EcsFilterIgnore] EcsReadOnlyPool<short> shorts, [EcsFilterExclude] EcsReadWritePool<byte> bytes)
+            [EcsIgnore] EcsReadOnlyPool<short> shorts, [EcsExc] EcsReadWritePool<byte> bytes)
         {
             _queriedFilter = filter;
             _queriedPool = ints;
