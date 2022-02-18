@@ -8,25 +8,25 @@ using UnityEngine;
 
 namespace Runner.Movement
 {
-    public class PlayerSplineMovementSystem : EcsRunSystemBase
+    public class SplineMovementSystem : EcsRunSystemBase
     {
         private readonly Spline _spline;
         private readonly StaticData _staticData;
 
-        public PlayerSplineMovementSystem(Spline spline, StaticData staticData)
+        public SplineMovementSystem(Spline spline, StaticData staticData)
         {
             _spline = spline;
             _staticData = staticData;
         }
 
         [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<PlayerData> playerData,
+        private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
             EcsPool<UnityObjectData<Transform>> transforms)
         {
             foreach (var i in filter)
             {
                 var transform = transforms.Get(i).Object;
-                ref var data = ref playerData.Get(i);
+                ref var data = ref movementData.Get(i);
 
                 var deltaDistance = _staticData.MovementSpeed * Time.deltaTime;
                 (transform.position, data.T) = _spline.SamplePoint(data.T, deltaDistance);

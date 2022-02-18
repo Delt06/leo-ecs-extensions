@@ -7,19 +7,20 @@ using UnityEngine;
 
 namespace Runner.Movement
 {
-    public class PlayerSideMovementSystem : EcsRunSystemBase
+    public class SplineSideMovementSystem : EcsRunSystemBase
     {
         private readonly StaticData _staticData;
 
-        public PlayerSideMovementSystem(StaticData staticData) => _staticData = staticData;
+        public SplineSideMovementSystem(StaticData staticData) => _staticData = staticData;
 
         [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<PlayerData> playerData, EcsPool<SidePosition> sidePositions,
+        private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
+            EcsPool<SidePosition> sidePositions,
             EcsPool<UnityObjectData<Transform>> transforms)
         {
             foreach (var i in filter)
             {
-                var data = playerData.Get(i);
+                var data = movementData.Get(i);
                 Transform transform = transforms.Get(i);
 
                 var right = Vector3.Cross(Vector3.up, data.Forward);

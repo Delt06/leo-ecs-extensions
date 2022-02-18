@@ -9,9 +9,9 @@ namespace Runner
         public override void PopulateSystems(EcsFeatureBuilder featureBuilder)
         {
             featureBuilder
-                .CreateAndAdd<PlayerSplineMovementSystem>()
+                .CreateAndAdd<SplineMovementSystem>()
                 .CreateAndAdd<SidePositionSmoothSystem>()
-                .CreateAndAdd<PlayerSideMovementSystem>()
+                .CreateAndAdd<SplineSideMovementSystem>()
                 ;
 
             featureBuilder

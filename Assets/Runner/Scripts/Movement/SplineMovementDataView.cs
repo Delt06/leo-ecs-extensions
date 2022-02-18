@@ -2,5 +2,5 @@
 
 namespace Runner.Movement
 {
-    public class PlayerDataView : ComponentView<PlayerData> { }
+    public class SplineMovementDataView : ComponentView<SplineMovementData> { }
 }
