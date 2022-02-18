@@ -2,9 +2,10 @@
 using DELTation.LeoEcsExtensions.Systems.Run;
 using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using Leopotam.EcsLite;
+using Runner._Shared;
 using UnityEngine;
 
-namespace Runner.Scripts
+namespace Runner.Movement
 {
     public class PlayerSideMovementSystem : EcsRunSystemBase
     {

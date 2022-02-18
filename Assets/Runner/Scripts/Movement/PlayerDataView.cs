@@ -1,6 +1,6 @@
 ﻿using DELTation.LeoEcsExtensions.Views.Components;
 
-namespace Runner.Scripts
+namespace Runner.Movement
 {
     public class PlayerDataView : ComponentView<PlayerData> { }
 }

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Runner.Scripts
+namespace Runner.Input
 {
     public class InputSurface : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
     {

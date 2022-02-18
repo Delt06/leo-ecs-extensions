@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Runner.Scripts
+namespace Runner.Movement
 {
     [Serializable]
     public struct PlayerData

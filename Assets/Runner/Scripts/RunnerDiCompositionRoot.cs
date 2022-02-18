@@ -1,9 +1,12 @@
 ﻿using DELTation.DIFramework;
 using DELTation.DIFramework.Containers;
 using DELTation.LeoEcsExtensions.Composition.Di;
+using Runner._Shared;
+using Runner._Shared.Utils;
+using Runner.Input;
 using UnityEngine;
 
-namespace Runner.Scripts
+namespace Runner
 {
     public class RunnerDiCompositionRoot : DependencyContainerBase
     {

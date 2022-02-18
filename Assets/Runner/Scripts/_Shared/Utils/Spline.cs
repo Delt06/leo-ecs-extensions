@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using UnityEngine;
 
-namespace Runner.Scripts
+namespace Runner._Shared.Utils
 {
     public class Spline : MonoBehaviour
     {

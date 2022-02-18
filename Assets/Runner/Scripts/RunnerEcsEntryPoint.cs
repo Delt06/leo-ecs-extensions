@@ -1,6 +1,7 @@
 ﻿using DELTation.LeoEcsExtensions.Composition.Di;
+using Runner.Movement;
 
-namespace Runner.Scripts
+namespace Runner
 {
     public class RunnerEcsEntryPoint : EcsEntryPoint
     {

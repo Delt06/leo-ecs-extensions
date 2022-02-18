@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Runner.Scripts
+namespace Runner._Shared.Utils
 {
     public static class Bezier
     {

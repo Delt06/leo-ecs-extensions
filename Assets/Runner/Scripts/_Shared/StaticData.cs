@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Runner.Scripts
+namespace Runner._Shared
 {
     [CreateAssetMenu(menuName = "Runner/Static Data")]
     public class StaticData : ScriptableObject

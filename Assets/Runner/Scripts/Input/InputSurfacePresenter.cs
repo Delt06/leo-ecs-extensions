@@ -1,9 +1,11 @@
 ﻿using DELTation.DIFramework.Lifecycle;
 using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
+using Runner._Shared;
+using Runner.Movement;
 using UnityEngine;
 
-namespace Runner.Scripts
+namespace Runner.Input
 {
     public class InputSurfacePresenter : IStartable, IDestroyable
     {
