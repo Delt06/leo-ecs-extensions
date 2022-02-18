@@ -3,6 +3,7 @@ using DELTation.DIFramework.Containers;
 using DELTation.LeoEcsExtensions.Composition.Di;
 using Runner._Shared;
 using Runner._Shared.Utils;
+using Runner.Collection;
 using Runner.Input;
 using UnityEngine;
 
@@ -28,6 +29,10 @@ namespace Runner
             builder
                 .Register(_inputSurface).AsInternal()
                 .Register<InputSurfacePresenter>()
+                ;
+
+            builder
+                .Register<CoinsService>()
                 ;
         }
     }

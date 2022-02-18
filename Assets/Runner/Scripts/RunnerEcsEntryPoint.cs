@@ -1,4 +1,5 @@
 ﻿using DELTation.LeoEcsExtensions.Composition.Di;
+using Runner.Collection;
 using Runner.Movement;
 
 namespace Runner
@@ -10,6 +11,11 @@ namespace Runner
             featureBuilder
                 .CreateAndAdd<PlayerSplineMovementSystem>()
                 .CreateAndAdd<PlayerSideMovementSystem>()
+                ;
+
+            featureBuilder
+                .CreateAndAdd<CoinCollectionSystem>()
+                .OneFrame<CollectCoinCommand>()
                 ;
         }
     }
