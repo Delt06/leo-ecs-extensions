@@ -7,6 +7,10 @@ namespace Runner._Shared.Utils
     {
         private Vector3[] _splinePoints;
 
+        private float MaxT => CurvesCount;
+
+        private int CurvesCount => (_splinePoints.Length - 1) / 2;
+
         private void Awake()
         {
             Initialize();
@@ -52,6 +56,12 @@ namespace Runner._Shared.Utils
             for (var i = 0; i < maxSteps; i++)
             {
                 t += tStep;
+                if (t >= MaxT)
+                {
+                    t = MaxT;
+                    previousPoint = SamplePoint(t);
+                    break;
+                }
 
                 var point = SamplePoint(t);
                 var distance = Vector3.Distance(previousPoint, point);
@@ -79,14 +89,14 @@ namespace Runner._Shared.Utils
 
         private (float relativeT, Vector3 startPoint, Vector3 middlePoint, Vector3 endPoint) Sample(float t)
         {
-            var beziersCount = (_splinePoints.Length - 1) / 2;
-            var bezierIndex = Mathf.FloorToInt(t);
-            bezierIndex = Mathf.Clamp(bezierIndex, 0, beziersCount - 1);
+            var curvesCount = CurvesCount;
+            var curveIndex = Mathf.FloorToInt(t);
+            curveIndex = Mathf.Clamp(curveIndex, 0, curvesCount - 1);
 
-            var relativeT = t - bezierIndex;
-            var startPoint = _splinePoints[bezierIndex * 2];
-            var middlePoint = _splinePoints[bezierIndex * 2 + 1];
-            var endPoint = _splinePoints[bezierIndex * 2 + 2];
+            var relativeT = t - curveIndex;
+            var startPoint = _splinePoints[curveIndex * 2];
+            var middlePoint = _splinePoints[curveIndex * 2 + 1];
+            var endPoint = _splinePoints[curveIndex * 2 + 2];
             return (relativeT, startPoint, middlePoint, endPoint);
         }
     }
