@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Components;
 using JetBrains.Annotations;
@@ -92,11 +93,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         {
 #if DEBUG
             if (filter == null) throw new ArgumentNullException(nameof(filter));
-
-            if (filter.GetEntitiesCount() >= 2)
-                throw new InvalidOperationException(
-                    $"Filter contains more than 1 entity ({filter.GetEntitiesCount()})."
-                );
+            ValidateSingletonFilter(filter);
 #endif
 
             foreach (var i in filter)
@@ -105,6 +102,33 @@ namespace DELTation.LeoEcsExtensions.Utilities
             }
 
             throw new InvalidOperationException("Filter contains no entities.");
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool TryGetSingle([NotNull] this EcsFilter filter, out int entity)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+            ValidateSingletonFilter(filter);
+#endif
+
+            foreach (var i in filter)
+            {
+                entity = i;
+                return true;
+            }
+
+            entity = default;
+            return false;
+        }
+
+        [Conditional("DEBUG")]
+        private static void ValidateSingletonFilter(EcsFilter filter)
+        {
+            if (filter.GetEntitiesCount() >= 2)
+                throw new InvalidOperationException(
+                    $"Filter contains more than 1 entity ({filter.GetEntitiesCount()})."
+                );
         }
     }
 }
