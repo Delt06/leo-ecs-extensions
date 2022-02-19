@@ -11,6 +11,7 @@ namespace Runner
         {
             featureBuilder
                 .CreateAndAdd<LevelSpawnSystem>()
+                .CreateAndAdd<PlayerSpawnSystem>()
                 ;
 
             featureBuilder

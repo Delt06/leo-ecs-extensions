@@ -1,4 +1,5 @@
-﻿using Runner.Levels;
+﻿using DELTation.LeoEcsExtensions.Views;
+using Runner.Levels;
 using UnityEngine;
 
 namespace Runner._Shared
@@ -7,6 +8,7 @@ namespace Runner._Shared
     public class StaticData : ScriptableObject
     {
         [SerializeField] private Level _levelPrefab;
+        [SerializeField] private EntityView _playerPrefab;
         [SerializeField] private float _controlsSensitivity = 1f;
         [SerializeField] [Min(0f)] private float _levelHalfWidth = 1.5f;
         [SerializeField] [Min(0f)] private float _movementSpeed = 1f;
@@ -21,5 +23,7 @@ namespace Runner._Shared
         public float MovementSpeed => _movementSpeed;
 
         public float SideMovementSmoothTime => _sideMovementSmoothTime;
+
+        public EntityView PlayerPrefab => _playerPrefab;
     }
 }
