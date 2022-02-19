@@ -6,6 +6,8 @@
 
 /CodeCoverage/*
 
+*.csproj.DotSettings
+
 # Idea
 .idea/
 *.iml
