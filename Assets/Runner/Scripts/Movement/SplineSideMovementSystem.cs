@@ -1,4 +1,4 @@
-﻿using DELTation.LeoEcsExtensions.Components;
+﻿using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run;
 using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using Leopotam.EcsLite;
@@ -16,12 +16,12 @@ namespace Runner.Movement
         [EcsRun]
         private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
             EcsPool<SidePosition> sidePositions,
-            EcsPool<UnityRef<Transform>> transforms)
+            EcsTransformPool transforms)
         {
             foreach (var i in filter)
             {
                 var data = movementData.Get(i);
-                Transform transform = transforms.Get(i);
+                var transform = transforms.Read(i);
 
                 var right = Vector3.Cross(Vector3.up, data.Forward);
                 var sidePosition = sidePositions.Get(i).CurrentPosition;

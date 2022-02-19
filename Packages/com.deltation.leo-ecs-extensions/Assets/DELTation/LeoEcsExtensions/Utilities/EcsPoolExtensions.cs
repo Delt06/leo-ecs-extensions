@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Components;
+using DELTation.LeoEcsExtensions.ExtendedPools;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -10,13 +11,13 @@ namespace DELTation.LeoEcsExtensions.Utilities
     public static class EcsPoolExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsPool<UnityRef<Transform>> GetTransformPool([NotNull] this EcsWorld world)
+        public static EcsTransformPool GetTransformPool([NotNull] this EcsWorld world)
         {
 #if DEBUG
             if (world == null) throw new ArgumentNullException(nameof(world));
 #endif
 
-            return world.GetPool<UnityRef<Transform>>();
+            return new EcsTransformPool(world.GetPool<UnityRef<Transform>>());
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

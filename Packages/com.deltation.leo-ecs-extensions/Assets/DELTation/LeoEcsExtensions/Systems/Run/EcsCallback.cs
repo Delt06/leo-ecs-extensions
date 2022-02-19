@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using DELTation.LeoEcsExtensions.Systems.Run.Exceptions;
 using DELTation.LeoEcsExtensions.Systems.Run.Reflection;
@@ -154,55 +153,15 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
             }
         }
 
-        private static bool IsPool(Type type, out Type componentType)
-        {
-            componentType = default;
-            if (!type.IsConstructedGenericType) return false;
-
-            var genericType = type.GetGenericTypeDefinition();
-            if (genericType != typeof(EcsPool<>) &&
-                genericType != typeof(EcsReadOnlyPool<>) &&
-                genericType != typeof(EcsReadWritePool<>) &&
-                genericType != typeof(EcsObservablePool<>))
-                return false;
-
-            var genericArguments = type.GetGenericArguments();
-            componentType = genericArguments[0];
-            return true;
-        }
-
         private static object ResolveArgument(EcsWorld world, EcsFilter filter, Type parameterType)
         {
-            if (parameterType.IsConstructedGenericType)
-            {
-                var genericType = parameterType.GetGenericTypeDefinition();
-                var genericArguments = parameterType.GetGenericArguments();
+            if (TryCreatePool(world, parameterType, out var pool))
+                return pool;
 
-                if (TryCreatePool(world, genericType, genericArguments, out var pool))
-                    return pool;
-
-                if (TryCreateReadOnlyPool(world, parameterType, genericType, genericArguments,
-                        out var readOnlyPool
-                    ))
-                    return readOnlyPool;
-
-                if (TryCreateReadWritePool(world, parameterType, genericType, genericArguments,
-                        out var readWritePool
-                    ))
-                    return readWritePool;
-
-                if (TryCreateObservablePool(world, parameterType, genericType, genericArguments,
-                        out var observablePool
-                    ))
-                    return observablePool;
-            }
-            else
-            {
-                if (parameterType == typeof(EcsFilter))
-                    return filter;
-                if (parameterType == typeof(EcsWorld))
-                    return world;
-            }
+            if (parameterType == typeof(EcsFilter))
+                return filter;
+            if (parameterType == typeof(EcsWorld))
+                return world;
 
             throw BuiltRunSystemExceptionFactory.InvalidParameterType(parameterType);
         }

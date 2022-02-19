@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.ExtendedPools;
 using Leopotam.EcsLite;
 
@@ -15,7 +14,39 @@ namespace DELTation.LeoEcsExtensions.Systems.Run.Reflection
             GetPoolMethodsCache = new Dictionary<Type, MethodInfo>(256);
 
         private static readonly object[] ArgumentsArrayOne = new object[1];
-        private static readonly object[] ArgumentsArrayTwo = new object[2];
+
+        public static bool IsPool(Type type, out Type componentType)
+        {
+            if (Attribute.IsDefined(type, typeof(EcsPoolAttribute)))
+            {
+                var ecsPoolAttribute = type.GetCustomAttribute<EcsPoolAttribute>();
+                componentType = GetPoolComponentType(type, ecsPoolAttribute);
+                return true;
+            }
+
+            componentType = default;
+            if (!type.IsConstructedGenericType) return false;
+
+            var genericType = type.GetGenericTypeDefinition();
+            if (genericType != typeof(EcsPool<>)) return false;
+
+            var genericArguments = type.GetGenericArguments();
+            componentType = genericArguments[0];
+            return true;
+        }
+
+        private static Type GetPoolComponentType(Type poolType, EcsPoolAttribute ecsPoolAttribute)
+        {
+            var methodName = ecsPoolAttribute.GetComponentTypeMethodName;
+            var method = poolType.GetMethod(methodName,
+                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public
+            );
+            if (method == null)
+                throw new ArgumentException($"Type {poolType} does not have a static method named {methodName}.",
+                    nameof(poolType)
+                );
+            return (Type) method.Invoke(null, Array.Empty<object>());
+        }
 
         private static MethodInfo GetGenericGetPoolMethod(Type componentType)
         {
@@ -28,11 +59,18 @@ namespace DELTation.LeoEcsExtensions.Systems.Run.Reflection
             return pool;
         }
 
-        public static bool TryCreatePool(EcsWorld world, Type genericType, Type[] genericArguments, out object pool)
+        public static bool TryCreatePool(EcsWorld world, Type poolType, out object pool)
         {
-            if (genericType == typeof(EcsPool<>))
+            if (Attribute.IsDefined(poolType, typeof(EcsPoolAttribute)))
             {
-                pool = GetPool(genericArguments[0], world);
+                var ecsPoolAttribute = poolType.GetCustomAttribute<EcsPoolAttribute>();
+                pool = CreatePoolInstance(world, poolType, ecsPoolAttribute);
+                return true;
+            }
+
+            if (poolType.IsConstructedGenericType && poolType.GetGenericTypeDefinition() == typeof(EcsPool<>))
+            {
+                pool = GetPool(poolType.GetGenericArguments()[0], world);
                 return true;
             }
 
@@ -40,72 +78,31 @@ namespace DELTation.LeoEcsExtensions.Systems.Run.Reflection
             return false;
         }
 
-        public static bool TryCreateReadOnlyPool(EcsWorld world, Type parameterType, Type genericType,
-            Type[] genericArguments,
-            out object pool)
+        private static object CreatePoolInstance(EcsWorld world, Type poolType, EcsPoolAttribute ecsPoolAttribute)
         {
-            if (genericType == typeof(EcsReadOnlyPool<>))
-            {
-                var innerPool = GetPool(genericArguments[0], world);
-                pool = CreateInstanceViaNonPublicConstructor(parameterType, innerPool);
-                return true;
-            }
+            var methodName = ecsPoolAttribute.CreateInstanceMethodName;
+            var method = poolType.GetMethod(methodName,
+                BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public
+            );
+            if (method == null)
+                throw new ArgumentException($"Type {poolType} does not have a static method named {methodName}.",
+                    nameof(poolType)
+                );
 
-            pool = default;
-            return false;
+            if (method.ReturnType == typeof(void))
+                throw new ArgumentException($"Create instance method of {poolType} returns void.", nameof(poolType));
+
+            var parameters = method.GetParameters();
+            if (parameters.Length != 1 || parameters[0].ParameterType != typeof(EcsWorld))
+                throw new ArgumentException($"Create instance method of {poolType} must have one parameter (EcsWorld).",
+                    nameof(poolType)
+                );
+
+            ArgumentsArrayOne[0] = world;
+            var pool = method.Invoke(null, ArgumentsArrayOne);
+            ArgumentsArrayOne[0] = null;
+            return pool;
         }
-
-        public static bool TryCreateReadWritePool(EcsWorld world, Type parameterType, Type genericType,
-            Type[] genericArguments,
-            out object pool)
-        {
-            if (genericType == typeof(EcsReadWritePool<>))
-            {
-                var innerPool = GetPool(genericArguments[0], world);
-                pool = CreateInstanceViaNonPublicConstructor(parameterType, innerPool);
-                return true;
-            }
-
-            pool = default;
-            return false;
-        }
-
-        public static bool TryCreateObservablePool(EcsWorld world, Type parameterType, Type genericType,
-            Type[] genericArguments,
-            out object pool)
-        {
-            if (genericType == typeof(EcsObservablePool<>))
-            {
-                var componentType = genericArguments[0];
-                var innerPool = GetPool(componentType, world);
-
-                var updateEventGenericType = typeof(UpdateEvent<>);
-                var updateEventType = updateEventGenericType.MakeGenericType(componentType);
-                var updateEventPool = GetPool(updateEventType, world);
-
-                pool = CreateInstanceViaNonPublicConstructor(parameterType, innerPool, updateEventPool);
-                return true;
-            }
-
-            pool = default;
-            return false;
-        }
-
-        private static object CreateInstanceViaNonPublicConstructor(Type type, object argument)
-        {
-            ArgumentsArrayOne[0] = argument;
-            return CreateInstanceViaNonPublicConstructor(type, ArgumentsArrayOne);
-        }
-
-        private static object CreateInstanceViaNonPublicConstructor(Type type, object argument1, object argument2)
-        {
-            ArgumentsArrayTwo[0] = argument1;
-            ArgumentsArrayTwo[1] = argument2;
-            return CreateInstanceViaNonPublicConstructor(type, ArgumentsArrayTwo);
-        }
-
-        private static object CreateInstanceViaNonPublicConstructor(Type type, object[] arguments) =>
-            Activator.CreateInstance(type, BindingFlags.NonPublic | BindingFlags.Instance, null, arguments, null);
 
         private static object GetPool(Type componentType, EcsWorld world)
         {

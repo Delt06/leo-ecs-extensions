@@ -1,4 +1,4 @@
-﻿using DELTation.LeoEcsExtensions.Components;
+﻿using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run;
 using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using Leopotam.EcsLite;
@@ -20,13 +20,13 @@ namespace Runner.Movement
 
         [EcsRun]
         private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
-            EcsPool<UnityRef<Transform>> transforms)
+            EcsTransformPool transforms)
         {
             var spline = _runtimeData.Level.Spline;
 
             foreach (var i in filter)
             {
-                var transform = transforms.Get(i).Object;
+                var transform = transforms.Read(i);
                 ref var data = ref movementData.Get(i);
 
                 var deltaDistance = _staticData.MovementSpeed * Time.deltaTime;

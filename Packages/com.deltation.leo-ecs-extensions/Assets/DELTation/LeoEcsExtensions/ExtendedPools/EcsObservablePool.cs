@@ -9,10 +9,20 @@ using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.ExtendedPools
 {
+    [EcsPoolAttribute(nameof(CreateInstance), nameof(GetComponentType))]
     public readonly struct EcsObservablePool<T> : IEnumerable<T>, IEquatable<EcsObservablePool<T>> where T : struct
     {
         private readonly EcsPool<T> _pool;
         private readonly EcsPool<UpdateEvent<T>> _updatePool;
+
+        private static EcsObservablePool<T> CreateInstance(EcsWorld world)
+        {
+            var pool = world.GetPool<T>();
+            var updateEventPool = world.GetPool<UpdateEvent<T>>();
+            return new EcsObservablePool<T>(pool, updateEventPool);
+        }
+
+        private static Type GetComponentType() => typeof(T);
 
         internal EcsObservablePool([NotNull] EcsPool<T> pool, [NotNull] EcsPool<UpdateEvent<T>> updatePool)
         {

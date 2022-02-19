@@ -7,9 +7,18 @@ using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.ExtendedPools
 {
+    [EcsPoolAttribute(nameof(CreateInstance), nameof(GetComponentType))]
     public readonly struct EcsReadOnlyPool<T> : IEnumerable<T>, IEquatable<EcsReadOnlyPool<T>> where T : struct
     {
         private readonly EcsPool<T> _pool;
+
+        private static EcsReadOnlyPool<T> CreateInstance(EcsWorld world)
+        {
+            var pool = world.GetPool<T>();
+            return new EcsReadOnlyPool<T>(pool);
+        }
+
+        private static Type GetComponentType() => typeof(T);
 
         internal EcsReadOnlyPool([NotNull] EcsPool<T> pool) =>
             _pool = pool ?? throw new ArgumentNullException(nameof(pool));
