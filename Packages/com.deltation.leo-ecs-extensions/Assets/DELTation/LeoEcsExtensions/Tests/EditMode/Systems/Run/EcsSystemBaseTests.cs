@@ -14,7 +14,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             // Arrange
             var world = new EcsWorld();
             var ecsSystems = new EcsSystems(world);
-            var system = new TimesRunSystem();
+            var system = new TimesSystem();
             ecsSystems.Add(system);
 
             // Act
@@ -30,7 +30,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             // Arrange
             var world = new EcsWorld();
             var ecsSystems = new EcsSystems(world);
-            var system = new TimesRunSystem();
+            var system = new TimesSystem();
             ecsSystems.Add(system);
 
             // Act
@@ -47,7 +47,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             // Arrange
             var world = new EcsWorld();
             var ecsSystems = new EcsSystems(world);
-            var system = new TimesRunSystem();
+            var system = new TimesSystem();
             ecsSystems.Add(system);
 
             // Act
@@ -63,7 +63,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             // Arrange
             var world = new EcsWorld();
             var ecsSystems = new EcsSystems(world);
-            var system = new TimesRunSystem();
+            var system = new TimesSystem();
             ecsSystems.Add(system);
             ecsSystems.Init();
 
@@ -81,7 +81,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             var world = new EcsWorld();
             var ecsSystems = new EcsSystems(world);
             var queue = new Queue<object>();
-            var runSystem = new PreInitOrderRunSystem(queue);
+            var runSystem = new PreInitOrderSystem(queue);
             var initSystem = new InitSystem(queue);
             ecsSystems.Add(initSystem);
             ecsSystems.Add(runSystem);
@@ -122,11 +122,11 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             }
         }
 
-        private class PreInitOrderRunSystem : EcsRunSystemBase
+        private class PreInitOrderSystem : EcsSystemBase
         {
             private readonly Queue<object> _queue;
 
-            public PreInitOrderRunSystem(Queue<object> queue) => _queue = queue;
+            public PreInitOrderSystem(Queue<object> queue) => _queue = queue;
 
             protected override void OnAfterPreInit(EcsSystems systems)
             {
@@ -138,7 +138,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             private void Run(EcsFilter filter, EcsPool<int> ints) { }
         }
 
-        private class TimesRunSystem : EcsRunSystemBase
+        private class TimesSystem : EcsSystemBase
         {
             public int OnAfterPreInitCalledTimes { get; private set; }
             public int RunTimes { get; private set; }
@@ -156,7 +156,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             }
         }
 
-        private class GetWorldSystem : EcsRunSystemBase
+        private class GetWorldSystem : EcsSystemBase
         {
             public EcsWorld World { get; private set; }
 

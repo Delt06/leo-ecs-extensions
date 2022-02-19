@@ -1,17 +1,17 @@
-﻿using DELTation.LeoEcsExtensions.Systems.Run;
+﻿using DELTation.LeoEcsExtensions.ExtendedPools;
+using DELTation.LeoEcsExtensions.Systems.Run;
 using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
-using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using Performance.Components;
 using UnityEngine;
 
 namespace Performance.Systems
 {
-    public class RunSystemBaseBenchmarkSystem : EcsRunSystemBase
+    public class SystemBaseExtendedBenchmarkSystem : EcsSystemBase
     {
         [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<PositionsComponent> positions,
-            [EcsIgnore] EcsPool<DirectionComponent> directions)
+        private void Run(EcsFilter filter, EcsReadWritePool<PositionsComponent> positions,
+            [EcsIgnore] EcsReadWritePool<DirectionComponent> directions)
         {
             foreach (var i in filter)
             {

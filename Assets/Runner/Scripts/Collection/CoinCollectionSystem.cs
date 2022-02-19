@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Runner.Collection
 {
-    public class CoinCollectionSystem : EcsRunSystemBase
+    public class CoinCollectionSystem : EcsSystemBase
     {
         private readonly ICoinsService _coinsService;
 

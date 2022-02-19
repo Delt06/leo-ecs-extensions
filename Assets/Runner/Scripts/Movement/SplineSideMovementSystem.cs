@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Runner.Movement
 {
-    public class SplineSideMovementSystem : EcsRunSystemBase
+    public class SplineSideMovementSystem : EcsSystemBase
     {
         private readonly StaticData _staticData;
 

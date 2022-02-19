@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Runner.Movement
 {
-    public class SidePositionSmoothSystem : EcsRunSystemBase
+    public class SidePositionSmoothSystem : EcsSystemBase
     {
         private readonly StaticData _staticData;
 

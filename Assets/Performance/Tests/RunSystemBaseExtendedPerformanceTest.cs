@@ -7,6 +7,6 @@ namespace Performance.Tests
     [UsedImplicitly]
     public class RunSystemBaseExtendedPerformanceTest : FilterPerformanceTestBase
     {
-        protected override IEcsSystem CreateSystem(EcsWorld world) => new RunSystemBaseExtendedBenchmarkSystem();
+        protected override IEcsSystem CreateSystem(EcsWorld world) => new SystemBaseExtendedBenchmarkSystem();
     }
 }

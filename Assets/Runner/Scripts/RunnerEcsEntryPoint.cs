@@ -1,5 +1,6 @@
 ﻿using DELTation.LeoEcsExtensions.Composition.Di;
 using Runner.Collection;
+using Runner.Levels;
 using Runner.Movement;
 
 namespace Runner
@@ -8,6 +9,10 @@ namespace Runner
     {
         public override void PopulateSystems(EcsFeatureBuilder featureBuilder)
         {
+            featureBuilder
+                .CreateAndAdd<LevelSpawnSystem>()
+                ;
+
             featureBuilder
                 .CreateAndAdd<SplineMovementSystem>()
                 .CreateAndAdd<SidePositionSmoothSystem>()

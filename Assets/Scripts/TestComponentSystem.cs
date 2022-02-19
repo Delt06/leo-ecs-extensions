@@ -29,7 +29,7 @@ public class TestComponentSystem : IEcsRunSystem
     }
 }
 
-public class TestComponentRunSystem : EcsRunSystemBase
+public class TestComponentRunSystem : EcsSystemBase
 {
     [EcsRun]
     private void Run(EcsFilter filter, EcsObservablePool<TestComponent> testComponents)

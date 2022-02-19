@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3131dc3dd7444c7ace7adddab75cf91, type: 3}
   m_Name: Runner Static Data
   m_EditorClassIdentifier: 
+  _levelPrefab: {fileID: 2556758924988685090, guid: add38bc0f216deb49af8702bd92579e1, type: 3}
   _controlsSensitivity: 10
   _levelHalfWidth: 2
   _movementSpeed: 5
