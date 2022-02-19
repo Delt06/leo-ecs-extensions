@@ -5,6 +5,7 @@ using DELTation.DIFramework.Dependencies;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace DELTation.LeoEcsExtensions.Composition.Di
 {
@@ -51,6 +52,10 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             PopulateSystems(secondaryDependencies, ecsEntryPoint.PopulateLateSystems,
                 out var lateSystemsStartIndex, out var lateSystemsEndIndexExclusive
             );
+
+            // this one always gets resolved
+            // it is added only to display a dependency on EcsWorld
+            secondaryDependencies.Add(new TypeDependency(typeof(DummyEcsWorldDependency)));
 
             var compositeDependency = new CompositeDependency(new ObjectDependency(ecsEntryPoint),
                 secondaryDependencies,
@@ -108,5 +113,11 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
                     systems.Add((IEcsSystem) secondaryObjects[i]);
                 }
             };
+
+        [Preserve]
+        private class DummyEcsWorldDependency
+        {
+            public DummyEcsWorldDependency(EcsWorld world) { }
+        }
     }
 }
