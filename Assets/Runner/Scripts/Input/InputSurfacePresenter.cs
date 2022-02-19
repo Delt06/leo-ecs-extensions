@@ -58,6 +58,7 @@ namespace Runner.Input
 
             var i = _filter.GetSingle();
             _dragData.SidePositionNormalizedOnStart = _filter.Get<SidePosition>(i).TargetPosition;
+            _filter.GetOrAdd<CanMoveTag>(i);
         }
 
         private struct DragData

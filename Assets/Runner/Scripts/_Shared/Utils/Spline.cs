@@ -7,7 +7,7 @@ namespace Runner._Shared.Utils
     {
         private Vector3[] _splinePoints;
 
-        private float MaxT => CurvesCount;
+        public float MaxT => CurvesCount;
 
         private int CurvesCount => (_splinePoints.Length - 1) / 2;
 

@@ -14,7 +14,8 @@ namespace Runner.Movement
         public SplineSideMovementSystem(StaticData staticData) => _staticData = staticData;
 
         [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
+        private void Run([EcsInc(typeof(CanMoveTag))] EcsFilter filter,
+            EcsPool<SplineMovementData> movementData,
             EcsPool<SidePosition> sidePositions,
             EcsTransformPool transforms)
         {

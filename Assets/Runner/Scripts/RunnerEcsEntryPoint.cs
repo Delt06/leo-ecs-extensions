@@ -15,6 +15,7 @@ namespace Runner
                 ;
 
             featureBuilder
+                .CreateAndAdd<SplineMovementFinishSystem>()
                 .CreateAndAdd<SplineMovementSystem>()
                 .CreateAndAdd<SidePositionSmoothSystem>()
                 .CreateAndAdd<SplineSideMovementSystem>()

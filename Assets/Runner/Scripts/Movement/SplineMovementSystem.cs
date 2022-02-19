@@ -19,7 +19,7 @@ namespace Runner.Movement
         }
 
         [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
+        private void Run([EcsInc(typeof(CanMoveTag))] EcsFilter filter, EcsPool<SplineMovementData> movementData,
             EcsTransformPool transforms)
         {
             var spline = _runtimeData.Level.Spline;
