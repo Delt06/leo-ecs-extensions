@@ -35,6 +35,13 @@ namespace DELTation.LeoEcsExtensions.Systems.Run.Reflection
             return true;
         }
 
+        public static bool IsPoolIgnoredByDefault(Type type)
+        {
+            if (!Attribute.IsDefined(type, typeof(EcsPoolAttribute))) return false;
+            var ecsPoolAttribute = type.GetCustomAttribute<EcsPoolAttribute>();
+            return ecsPoolAttribute.IgnoredByDefault;
+        }
+
         private static Type GetPoolComponentType(Type poolType, EcsPoolAttribute ecsPoolAttribute)
         {
             var methodName = ecsPoolAttribute.GetComponentTypeMethodName;

@@ -16,6 +16,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
         private EcsPool<int> _queriedPool;
         private EcsReadOnlyPool<int> _queriedReadOnlyPool;
         private EcsReadWritePool<int> _queriedReadWritePool;
+        private EcsSingletonPool<float> _queriedSingletonPool;
         private EcsWorld _queriedWorld;
         private EcsWorld _world;
 
@@ -112,6 +113,12 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             [EcsIncUpdate] EcsPool<int> ints)
         {
             _queriedFilter = filter;
+        }
+
+        private void QueryFilterAndSingleton(EcsFilter filter, EcsPool<int> ints, EcsSingletonPool<float> floats)
+        {
+            _queriedFilter = filter;
+            _queriedSingletonPool = floats;
         }
 
         private void QueryInvalid(int i) { }
@@ -340,6 +347,23 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             // Assert
             Assert.That(_queriedFilter, Is.Not.Null);
             Assume.That(_queriedFilter, Is.SameAs(_world.Filter<int>().Inc<float>().End()));
+        }
+
+        [Test]
+        public void GivenRun_WhenHavingFilterAndSingletonPool_ThenSingletonPoolIsIgnored()
+        {
+            // Arrange
+            var builtRunSystem = CreateCallback(nameof(QueryFilterAndSingleton));
+
+            // Act
+            builtRunSystem.Run();
+
+            // Assert
+            Assert.That(_queriedFilter, Is.Not.Null);
+            Assume.That(_queriedFilter, Is.SameAs(_world.Filter<int>().End()));
+
+            Assert.That(_queriedSingletonPool, Is.Not.EqualTo(default(EcsSingletonPool<float>)));
+            Assert.That(_queriedSingletonPool, Is.EqualTo(_world.GetSingletonPool<float>()));
         }
 
         [Test]

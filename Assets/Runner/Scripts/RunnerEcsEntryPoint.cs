@@ -1,5 +1,6 @@
 ﻿using DELTation.LeoEcsExtensions.Composition.Di;
 using Runner.Collection;
+using Runner.Input;
 using Runner.Levels;
 using Runner.Movement;
 
@@ -12,6 +13,14 @@ namespace Runner
             featureBuilder
                 .CreateAndAdd<LevelSpawnSystem>()
                 .CreateAndAdd<PlayerSpawnSystem>()
+                ;
+
+            featureBuilder
+                .CreateAndAdd<ActiveDragDataInitSystem>()
+                .CreateAndAdd<PointerDownHandlingSystem>()
+                .OneFrame<PointerDownEvent>()
+                .CreateAndAdd<PointerDragHandlingSystem>()
+                .OneFrame<PointerDragEvent>()
                 ;
 
             featureBuilder

@@ -76,5 +76,19 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
 #endif
             return world.GetPool<UpdateEvent<T>>();
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static EcsSingletonPool<T> GetSingletonPool<T>([NotNull] this EcsWorld world,
+            [CanBeNull] Action<EcsWorld.Mask> configureFilter = null) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            var mask = world.Filter<T>();
+            configureFilter?.Invoke(mask);
+            var filter = mask.End();
+            var pool = world.GetPool<T>();
+            return new EcsSingletonPool<T>(filter, pool);
+        }
     }
 }

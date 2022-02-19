@@ -16,5 +16,7 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
 
         public string CreateInstanceMethodName { get; }
         public string GetComponentTypeMethodName { get; }
+
+        public bool IgnoredByDefault { get; set; }
     }
 }
