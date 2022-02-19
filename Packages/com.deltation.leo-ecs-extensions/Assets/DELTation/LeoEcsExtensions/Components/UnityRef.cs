@@ -4,10 +4,10 @@ using Object = UnityEngine.Object;
 namespace DELTation.LeoEcsExtensions.Components
 {
     [Serializable]
-    public struct UnityObjectData<T> where T : Object
+    public struct UnityRef<T> where T : Object
     {
         public T Object;
 
-        public static implicit operator T(UnityObjectData<T> data) => data.Object;
+        public static implicit operator T(UnityRef<T> data) => data.Object;
     }
 }

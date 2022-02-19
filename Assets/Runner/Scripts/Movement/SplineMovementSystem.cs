@@ -20,7 +20,7 @@ namespace Runner.Movement
 
         [EcsRun]
         private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
-            EcsPool<UnityObjectData<Transform>> transforms)
+            EcsPool<UnityRef<Transform>> transforms)
         {
             var spline = _runtimeData.Level.Spline;
 

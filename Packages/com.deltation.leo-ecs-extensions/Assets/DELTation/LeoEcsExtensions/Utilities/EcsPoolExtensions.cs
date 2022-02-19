@@ -10,13 +10,13 @@ namespace DELTation.LeoEcsExtensions.Utilities
     public static class EcsPoolExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static EcsPool<UnityObjectData<Transform>> GetTransformPool([NotNull] this EcsWorld world)
+        public static EcsPool<UnityRef<Transform>> GetTransformPool([NotNull] this EcsWorld world)
         {
 #if DEBUG
             if (world == null) throw new ArgumentNullException(nameof(world));
 #endif
 
-            return world.GetPool<UnityObjectData<Transform>>();
+            return world.GetPool<UnityRef<Transform>>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

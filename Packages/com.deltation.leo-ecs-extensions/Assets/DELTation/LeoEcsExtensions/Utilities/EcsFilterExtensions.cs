@@ -52,7 +52,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
 #if DEBUG
             if (filter == null) throw new ArgumentNullException(nameof(filter));
 #endif
-            return filter.Inc<UnityObjectData<Transform>>();
+            return filter.Inc<UnityRef<Transform>>();
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

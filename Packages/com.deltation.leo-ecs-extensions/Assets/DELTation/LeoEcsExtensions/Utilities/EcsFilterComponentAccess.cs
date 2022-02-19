@@ -133,7 +133,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
             if (filter == null) throw new ArgumentNullException(nameof(filter));
 #endif
 
-            return filter.Get<UnityObjectData<Transform>>(entity);
+            return filter.Get<UnityRef<Transform>>(entity);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]

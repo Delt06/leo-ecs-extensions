@@ -39,7 +39,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static Transform GetTransform(this EcsPackedEntityWithWorld entity) =>
-            entity.Get<UnityObjectData<Transform>>();
+            entity.Get<UnityRef<Transform>>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static IEntityView GetView(this EcsPackedEntityWithWorld entity) => entity.Get<ViewBackRef>().View;

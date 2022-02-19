@@ -38,7 +38,7 @@ namespace DELTation.LeoEcsExtensions.Views
             if (@object == null) throw new ArgumentNullException(nameof(@object));
 #endif
 
-            entity.GetOrAdd<UnityObjectData<T>>().Object = @object;
+            entity.GetOrAdd<UnityRef<T>>().Object = @object;
         }
     }
 }

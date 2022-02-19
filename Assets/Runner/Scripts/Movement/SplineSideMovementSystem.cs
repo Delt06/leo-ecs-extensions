@@ -16,7 +16,7 @@ namespace Runner.Movement
         [EcsRun]
         private void Run(EcsFilter filter, EcsPool<SplineMovementData> movementData,
             EcsPool<SidePosition> sidePositions,
-            EcsPool<UnityObjectData<Transform>> transforms)
+            EcsPool<UnityRef<Transform>> transforms)
         {
             foreach (var i in filter)
             {

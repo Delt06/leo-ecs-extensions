@@ -15,12 +15,12 @@ namespace Cube.Simulation
         public CubeSyncTransformPrototypeSystem(EcsWorld world)
         {
             _positionFilter = world.Filter<CubeTag>()
-                .Inc<UnityObjectData<Transform>>()
+                .Inc<UnityRef<Transform>>()
                 .IncComponentAndUpdateOf<Position>()
                 .End();
 
             _rotationFilter = world.Filter<CubeTag>()
-                .Inc<UnityObjectData<Transform>>()
+                .Inc<UnityRef<Transform>>()
                 .IncComponentAndUpdateOf<Rotation>()
                 .End();
         }
@@ -47,21 +47,21 @@ namespace Cube.Simulation
         private readonly EcsReadOnlyPool<Position> _positions;
         private readonly EcsFilter _rotationFilter;
         private readonly EcsReadOnlyPool<Rotation> _rotations;
-        private readonly EcsReadOnlyPool<UnityObjectData<Transform>> _transforms;
+        private readonly EcsReadOnlyPool<UnityRef<Transform>> _transforms;
 
         public CubeSyncTransformSystem(EcsWorld world)
         {
             _positionFilter = world.Filter<CubeTag>()
-                .Inc<UnityObjectData<Transform>>()
+                .Inc<UnityRef<Transform>>()
                 .IncComponentAndUpdateOf<Position>()
                 .End();
             _rotationFilter = world.Filter<CubeTag>()
-                .Inc<UnityObjectData<Transform>>()
+                .Inc<UnityRef<Transform>>()
                 .IncComponentAndUpdateOf<Rotation>()
                 .End();
             _positions = world.GetPool<Position>().AsReadOnly();
             _rotations = world.GetPool<Rotation>().AsReadOnly();
-            _transforms = world.GetPool<UnityObjectData<Transform>>().AsReadOnly();
+            _transforms = world.GetPool<UnityRef<Transform>>().AsReadOnly();
         }
 
         public void Run(EcsSystems systems)
