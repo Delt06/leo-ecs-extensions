@@ -13,7 +13,7 @@ namespace Runner.Input
         private void Run(EcsFilter filter, EcsPool<PointerDownEvent> pointerDownEvents,
             EcsSingletonPool<SidePosition> sidePositions,
             EcsSingletonPool<ActiveDragData> dragData,
-            [EcsIgnore] EcsPool<CanMoveTag> canMoveTags)
+            [EcsIgnoreInc] EcsPool<CanMoveTag> canMoveTags)
         {
             foreach (var i in filter)
             {

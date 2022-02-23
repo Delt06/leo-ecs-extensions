@@ -70,7 +70,7 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
             {
                 var parameter = parameters[parameterIndex];
                 if (!IsPool(parameter.ParameterType, out var poolComponentType)) continue;
-                if (IsIgnored(parameter)) continue;
+                if (IsIncIgnored(parameter)) continue;
 
                 firstIncludeIndex = parameterIndex;
                 mask = ReflectionFilterFactory.Filter(world, poolComponentType);
@@ -90,6 +90,7 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
                 throw BuiltRunSystemExceptionFactory.NoIncludes();
 
             ProcessExcludes(filterParameter, mask);
+            ProcessExcludedPools(parameters, mask);
 
             for (var parameterIndex = 0; parameterIndex < parameters.Length; parameterIndex++)
             {
@@ -97,7 +98,7 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
 
                 var parameter = parameters[parameterIndex];
                 if (!IsPool(parameter.ParameterType, out var poolComponentType)) continue;
-                if (IsIgnored(parameter)) continue;
+                if (IsIncIgnored(parameter)) continue;
 
                 mask = ReflectionFilterFactory.Inc(mask, poolComponentType);
 
@@ -111,8 +112,10 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
             return true;
         }
 
-        private static bool IsIgnored(ParameterInfo parameter) =>
-            Attribute.IsDefined(parameter, typeof(EcsIgnoreAttribute)) ||
+
+        private static bool IsIncIgnored(ParameterInfo parameter) =>
+            Attribute.IsDefined(parameter, typeof(EcsIgnoreIncAttribute)) ||
+            Attribute.IsDefined(parameter, typeof(EcsExcPoolAttribute)) ||
             IsPoolIgnoredByDefault(parameter.ParameterType);
 
         private static int FindFilterParameter(ParameterInfo[] parameters)
@@ -138,6 +141,20 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
             {
                 var type = ecsExcAttribute.Type;
                 mask = ReflectionFilterFactory.Exc(mask, type);
+            }
+        }
+
+        private static void ProcessExcludedPools(ParameterInfo[] parameters, EcsWorld.Mask mask)
+        {
+            foreach (var parameter in parameters)
+            {
+                var parameterType = parameter.ParameterType;
+                if (!IsPool(parameterType, out var componentType)) continue;
+
+                var ecsExcPoolAttribute = parameter.GetCustomAttribute<EcsExcPoolAttribute>();
+                if (ecsExcPoolAttribute == null) continue;
+
+                ReflectionFilterFactory.Exc(mask, componentType);
             }
         }
 

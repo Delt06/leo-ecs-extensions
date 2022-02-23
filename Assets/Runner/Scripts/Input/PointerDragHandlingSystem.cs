@@ -23,7 +23,7 @@ namespace Runner.Input
         private void Run(EcsFilter filter, EcsPool<PointerDragEvent> pointerDragEvents,
             EcsSingletonPool<SidePosition> sidePositions,
             EcsSingletonPool<ActiveDragData> dragData,
-            [EcsIgnore] EcsPool<CanMoveTag> canMoveTags)
+            [EcsIgnoreInc] EcsPool<CanMoveTag> canMoveTags)
         {
             var camera = _sceneData.Camera;
 

@@ -69,7 +69,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
             _queriedFilter = filter;
         }
 
-        private void QueryFilterNoIncludesIgnore(EcsFilter filter, [EcsIgnore] EcsPool<int> ints)
+        private void QueryFilterNoIncludesIgnore(EcsFilter filter, [EcsIgnoreInc] EcsPool<int> ints)
         {
             _queriedFilter = filter;
             _queriedPool = ints;
@@ -88,7 +88,7 @@ namespace DELTation.LeoEcsExtensions.Tests.EditMode.Systems.Run
 
         private void QueryFilterComplex([EcsExc(typeof(byte))] EcsFilter filter, EcsPool<int> ints,
             EcsObservablePool<float> floats,
-            [EcsIgnore] EcsReadOnlyPool<short> shorts)
+            [EcsIgnoreInc] EcsReadOnlyPool<short> shorts)
         {
             _queriedFilter = filter;
             _queriedPool = ints;
