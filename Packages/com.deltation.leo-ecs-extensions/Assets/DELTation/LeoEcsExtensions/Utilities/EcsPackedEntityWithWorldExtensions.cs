@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using DELTation.LeoEcsExtensions.Components;
 using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Views;
+using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
 
@@ -29,6 +30,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static ref T Get<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
@@ -38,16 +40,20 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static Transform GetTransform(this EcsPackedEntityWithWorld entity) =>
             entity.Get<UnityRef<Transform>>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static IEntityView GetView(this EcsPackedEntityWithWorld entity) => entity.Get<ViewBackRef>().View;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static TView GetView<TView>(this EcsPackedEntityWithWorld entity) => entity.Get<ViewBackRef<TView>>();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static ref readonly T Read<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
             if (!entity.Unpack(out var world, out var idx)) throw new ArgumentNullException(nameof(entity));
@@ -105,6 +111,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static bool IsAlive(this EcsPackedEntityWithWorld entity) => entity.Unpack(out _, out _);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -115,6 +122,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static bool Has<T>(this EcsPackedEntityWithWorld entity) where T : struct
         {
             var isAlive = entity.Unpack(out var world, out var entityIdx);
@@ -126,6 +134,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
 
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static Type[] GetComponentTypesCompatible(this EcsPackedEntityWithWorld entity)
         {
             var isAlive = entity.Unpack(out var world, out var entityIdx);

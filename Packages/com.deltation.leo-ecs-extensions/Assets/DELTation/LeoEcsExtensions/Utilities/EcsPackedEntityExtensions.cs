@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.Utilities
@@ -7,6 +8,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
     public static class EcsPackedEntityExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static bool IsAlive(this EcsPackedEntity entity, EcsWorld world)
         {
 #if DEBUG

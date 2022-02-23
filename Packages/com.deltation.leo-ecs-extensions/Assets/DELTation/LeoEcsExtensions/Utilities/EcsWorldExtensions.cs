@@ -8,6 +8,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
     public static class EcsWorldExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static EcsPackedEntity NewPackedEntity([NotNull] this EcsWorld world)
         {
 #if DEBUG
@@ -17,6 +18,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static EcsPackedEntityWithWorld NewPackedEntityWithWorld([NotNull] this EcsWorld world)
         {
 #if DEBUG

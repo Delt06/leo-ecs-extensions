@@ -24,9 +24,11 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
             _pool = pool ?? throw new ArgumentNullException(nameof(pool));
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public bool Has(int entity) => _pool.Has(entity);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public ref readonly T Read(int entity)
         {
 #if DEBUG
@@ -45,6 +47,7 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         public ref T Add(int entity) => ref _pool.Add(entity);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public ref T Get(int entity)
         {
 #if DEBUG

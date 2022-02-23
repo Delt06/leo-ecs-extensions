@@ -23,6 +23,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static ref T Get<T>([NotNull] this EcsFilter filter, int entity) where T : struct
         {
 #if DEBUG
@@ -34,6 +35,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static ref readonly T Read<T>([NotNull] this EcsFilter filter, int entity) where T : struct
         {
 #if DEBUG
@@ -116,6 +118,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static bool Has<T>([NotNull] this EcsFilter filter, int entity) where T : struct
         {
 #if DEBUG
@@ -127,6 +130,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static Transform GetTransform([NotNull] this EcsFilter filter, int entity)
         {
 #if DEBUG
@@ -137,6 +141,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static IEntityView GetView([NotNull] this EcsFilter filter, int entity)
         {
 #if DEBUG
@@ -147,6 +152,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static TView GetView<TView>([NotNull] this EcsFilter filter, int entity)
         {
 #if DEBUG

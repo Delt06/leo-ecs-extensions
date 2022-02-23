@@ -11,6 +11,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
     public static class EcsPoolExtensions
     {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static EcsTransformPool GetTransformPool([NotNull] this EcsWorld world)
         {
 #if DEBUG

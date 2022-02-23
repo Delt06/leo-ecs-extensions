@@ -57,6 +57,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static bool IsEmpty([NotNull] this EcsFilter filter)
         {
 #if DEBUG
@@ -66,6 +67,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static bool Contains([NotNull] this EcsFilter filter, EcsPackedEntityWithWorld packedEntity)
         {
 #if DEBUG
@@ -79,6 +81,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static bool Contains([NotNull] this EcsFilter filter, int entity)
         {
 #if DEBUG
@@ -89,6 +92,7 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public static int GetSingle([NotNull] this EcsFilter filter)
         {
 #if DEBUG

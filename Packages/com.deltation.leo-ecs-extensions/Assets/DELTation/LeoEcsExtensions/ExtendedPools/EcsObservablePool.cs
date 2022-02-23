@@ -31,6 +31,7 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public bool Has(int entity) => _pool.Has(entity);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -71,6 +72,7 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public ref readonly T Read(int entity)
         {
 #if DEBUG

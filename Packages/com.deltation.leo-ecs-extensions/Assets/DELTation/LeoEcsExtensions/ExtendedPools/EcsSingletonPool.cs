@@ -30,9 +30,11 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public bool IsEmpty() => _filter.IsEmpty();
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public ref T Get()
         {
             var i = _filter.GetSingle();
@@ -40,6 +42,7 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public int GetEntity() => _filter.GetSingle();
 
         IEnumerator<T> IEnumerable<T>.GetEnumerator() => (IEnumerator<T>) _pool.GetRawDenseItems().GetEnumerator();

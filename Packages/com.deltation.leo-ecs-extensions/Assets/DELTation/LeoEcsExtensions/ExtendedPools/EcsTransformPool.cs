@@ -15,9 +15,11 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
         private readonly EcsPool<TransformData> _pool;
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public bool Has(int entity) => _pool.Has(entity);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
         public Transform Read(int entity)
         {
 #if DEBUG
