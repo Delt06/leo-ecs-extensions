@@ -10,7 +10,7 @@ using TransformData = DELTation.LeoEcsExtensions.Components.UnityRef<UnityEngine
 namespace DELTation.LeoEcsExtensions.ExtendedPools
 {
     [EcsPool(nameof(CreateInstance), nameof(GetComponentType))]
-    public readonly struct EcsTransformPool : IEnumerable<TransformData>, IEquatable<EcsTransformPool>
+    public readonly struct EcsTransformPool : IEnumerable<Transform>, IEquatable<EcsTransformPool>
     {
         private readonly EcsPool<TransformData> _pool;
 
@@ -45,10 +45,15 @@ namespace DELTation.LeoEcsExtensions.ExtendedPools
 
         private static Type GetComponentType() => typeof(TransformData);
 
-        IEnumerator<TransformData> IEnumerable<TransformData>.GetEnumerator() =>
-            (IEnumerator<TransformData>) _pool.GetRawDenseItems().GetEnumerator();
+        IEnumerator<Transform> IEnumerable<Transform>.GetEnumerator()
+        {
+            foreach (var item in _pool.GetRawDenseItems())
+            {
+                yield return item;
+            }
+        }
 
-        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<TransformData>) this).GetEnumerator();
+        IEnumerator IEnumerable.GetEnumerator() => ((IEnumerable<Transform>) this).GetEnumerator();
 
         public bool Equals(EcsTransformPool other) => Equals(_pool, other._pool);
 
