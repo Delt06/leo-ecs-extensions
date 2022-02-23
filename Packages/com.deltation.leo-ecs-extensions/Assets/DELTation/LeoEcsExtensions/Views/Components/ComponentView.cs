@@ -27,6 +27,9 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         [SerializeField]
 #if ODIN_INSPECTOR
         [HideIf(nameof(EntityHasComponent))]
+        [InlineProperty]
+        [HideLabel]
+        [Header("Component")]
 #else
         [HideIfEntityHasComponent]
 #endif
