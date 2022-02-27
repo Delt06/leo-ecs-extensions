@@ -5,7 +5,7 @@ using Performance.Systems;
 namespace Performance.Tests
 {
     [UsedImplicitly]
-    public class RunSystemBasePerformanceTest : FilterPerformanceTestBase
+    public class SystemBasePerformanceTest : FilterPerformanceTestBase
     {
         protected override IEcsSystem CreateSystem(EcsWorld world) => new SystemBaseBenchmarkSystem();
     }
