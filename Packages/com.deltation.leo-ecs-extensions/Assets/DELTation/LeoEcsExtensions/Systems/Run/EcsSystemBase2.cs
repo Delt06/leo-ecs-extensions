@@ -11,7 +11,7 @@ namespace DELTation.LeoEcsExtensions.Systems.Run
 {
     public abstract class EcsSystemBase2 : IEcsPreInitSystem
     {
-        protected EcsWorld World
+        public EcsWorld World
         {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             get;
