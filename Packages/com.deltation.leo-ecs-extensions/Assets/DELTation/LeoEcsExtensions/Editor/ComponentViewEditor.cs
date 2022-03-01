@@ -58,15 +58,19 @@ namespace DELTation.LeoEcsExtensions.Editor
 
         private void Update()
         {
-            var componentView = TargetAsComponentView();
-            componentView.TryUpdateDisplayedValueFromEntity();
+            if (TryGetTargetAsComponentView(out var componentView))
+                componentView.TryUpdateDisplayedValueFromEntity();
         }
 
-        private ComponentView TargetAsComponentView() => (ComponentView) target;
+        private bool TryGetTargetAsComponentView(out ComponentView componentView)
+        {
+            componentView = target as ComponentView;
+            return componentView != null;
+        }
 
         public override void OnInspectorGUI()
         {
-            var componentView = TargetAsComponentView();
+            if (!TryGetTargetAsComponentView(out var componentView)) return;
 
             EditorGUI.BeginChangeCheck();
             base.OnInspectorGUI();
