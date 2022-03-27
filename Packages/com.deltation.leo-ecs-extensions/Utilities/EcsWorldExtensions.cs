@@ -27,5 +27,17 @@ namespace DELTation.LeoEcsExtensions.Utilities
             var entity = world.NewEntity();
             return world.PackEntityWithWorld(entity);
         }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static ref T NewEntityWith<T>([NotNull] this EcsWorld world) where T : struct
+        {
+#if DEBUG
+            if (world == null) throw new ArgumentNullException(nameof(world));
+#endif
+            var entity = world.NewEntity();
+            var pool = world.GetPool<T>();
+            return ref pool.Add(entity);
+        }
     }
 }
