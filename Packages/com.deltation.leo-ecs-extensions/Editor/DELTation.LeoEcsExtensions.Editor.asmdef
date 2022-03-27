@@ -1,6 +1,6 @@
 {
   "name": "DELTation.LeoEcsExtensions.Editor",
-  "rootNamespace": "",
+  "rootNamespace": "DELTation.LeoEcsExtensions",
   "references": [
     "GUID:adc879d645c03624e9af334f48b854dd",
     "GUID:e59bf9fc7d5a44b18a819a92edd46163",

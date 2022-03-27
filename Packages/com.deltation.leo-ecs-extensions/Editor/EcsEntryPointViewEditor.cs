@@ -151,73 +151,73 @@ namespace DELTation.LeoEcsExtensions.Editor
                 _ => throw new ArgumentOutOfRangeException(),
             };
     }
-}
 
-internal static class AccessAnalysis
-{
-    public static string ToShortString(this ComponentAccessType componentAccessType) =>
-        componentAccessType switch
-        {
-            ComponentAccessType.Unstructured => "U",
-            ComponentAccessType.ReadOnly => "R",
-            ComponentAccessType.ReadWrite => "RW",
-            ComponentAccessType.Observable => "O",
-            _ => throw new ArgumentOutOfRangeException(nameof(componentAccessType), componentAccessType, null),
-        };
-
-    public static (Type type, ComponentAccessType accessType)?[] Analyze([NotNull] Type systemType)
+    internal static class AccessAnalysis
     {
-        if (systemType == null) throw new ArgumentNullException(nameof(systemType));
+        public static string ToShortString(this ComponentAccessType componentAccessType) =>
+            componentAccessType switch
+            {
+                ComponentAccessType.Unstructured => "U",
+                ComponentAccessType.ReadOnly => "R",
+                ComponentAccessType.ReadWrite => "RW",
+                ComponentAccessType.Observable => "O",
+                _ => throw new ArgumentOutOfRangeException(nameof(componentAccessType), componentAccessType, null),
+            };
 
-        var results = new List<(Type type, ComponentAccessType accessType)?>();
-
-        var systemComponentAccessAttributes = systemType.GetCustomAttributes<SystemComponentAccessAttribute>();
-
-        foreach (var attribute in systemComponentAccessAttributes)
+        public static (Type type, ComponentAccessType accessType)?[] Analyze([NotNull] Type systemType)
         {
-            results.Add((attribute.Type, attribute.AccessType));
+            if (systemType == null) throw new ArgumentNullException(nameof(systemType));
+
+            var results = new List<(Type type, ComponentAccessType accessType)?>();
+
+            var systemComponentAccessAttributes = systemType.GetCustomAttributes<SystemComponentAccessAttribute>();
+
+            foreach (var attribute in systemComponentAccessAttributes)
+            {
+                results.Add((attribute.Type, attribute.AccessType));
+            }
+
+            var fields = systemType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
+
+            foreach (var field in fields)
+            {
+                var fieldType = field.FieldType;
+                if (!fieldType.IsConstructedGenericType) continue;
+
+                var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
+                CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
+            }
+
+            var baseType = systemType.BaseType;
+            if (baseType != null && baseType != typeof(object))
+                return results.Concat(Analyze(baseType)).ToArray();
+
+            return results.ToArray();
         }
 
-        var fields = systemType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-
-        foreach (var field in fields)
+        private static void CheckGenericTypeAndAdd(Type genericTypeDefinition, Type fieldType,
+            List<(Type type, ComponentAccessType accessType)?> results)
         {
-            var fieldType = field.FieldType;
-            if (!fieldType.IsConstructedGenericType) continue;
-
-            var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
-            CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
-        }
-
-        var baseType = systemType.BaseType;
-        if (baseType != null && baseType != typeof(object))
-            return results.Concat(Analyze(baseType)).ToArray();
-
-        return results.ToArray();
-    }
-
-    private static void CheckGenericTypeAndAdd(Type genericTypeDefinition, Type fieldType,
-        List<(Type type, ComponentAccessType accessType)?> results)
-    {
-        if (genericTypeDefinition == typeof(EcsPool<>))
-        {
-            var componentType = fieldType.GenericTypeArguments[0];
-            results.Add((componentType, ComponentAccessType.Unstructured));
-        }
-        else if (genericTypeDefinition == typeof(EcsReadOnlyPool<>))
-        {
-            var componentType = fieldType.GenericTypeArguments[0];
-            results.Add((componentType, ComponentAccessType.ReadOnly));
-        }
-        else if (genericTypeDefinition == typeof(EcsReadWritePool<>))
-        {
-            var componentType = fieldType.GenericTypeArguments[0];
-            results.Add((componentType, ComponentAccessType.ReadWrite));
-        }
-        else if (genericTypeDefinition == typeof(EcsObservablePool<>))
-        {
-            var componentType = fieldType.GenericTypeArguments[0];
-            results.Add((componentType, ComponentAccessType.Observable));
+            if (genericTypeDefinition == typeof(EcsPool<>))
+            {
+                var componentType = fieldType.GenericTypeArguments[0];
+                results.Add((componentType, ComponentAccessType.Unstructured));
+            }
+            else if (genericTypeDefinition == typeof(EcsReadOnlyPool<>))
+            {
+                var componentType = fieldType.GenericTypeArguments[0];
+                results.Add((componentType, ComponentAccessType.ReadOnly));
+            }
+            else if (genericTypeDefinition == typeof(EcsReadWritePool<>))
+            {
+                var componentType = fieldType.GenericTypeArguments[0];
+                results.Add((componentType, ComponentAccessType.ReadWrite));
+            }
+            else if (genericTypeDefinition == typeof(EcsObservablePool<>))
+            {
+                var componentType = fieldType.GenericTypeArguments[0];
+                results.Add((componentType, ComponentAccessType.Observable));
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 using Leopotam.EcsLite;
 using NUnit.Framework;
 
-namespace DELTation.LeoEcsExtensions.Tests.EditMode.Pools
+namespace DELTation.LeoEcsExtensions.Tests.EditMode.ExtendedPools
 {
     public class EcsReadOnlyPoolTests
     {
