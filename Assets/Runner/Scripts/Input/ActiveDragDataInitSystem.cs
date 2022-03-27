@@ -1,16 +1,14 @@
 ﻿using DELTation.LeoEcsExtensions.Systems.Run;
-using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
+using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 
 namespace Runner.Input
 {
-    public class ActiveDragDataInitSystem : EcsSystemBase
+    public class ActiveDragDataInitSystem : EcsSystemBase, IEcsInitSystem
     {
-        [EcsInit]
-        private void Init(EcsPool<ActiveDragData> activeDragData, EcsWorld world)
+        public void Init(EcsSystems systems)
         {
-            var entity = world.NewEntity();
-            activeDragData.Add(entity);
+            World.NewEntityWith<ActiveDragData>();
         }
     }
 }

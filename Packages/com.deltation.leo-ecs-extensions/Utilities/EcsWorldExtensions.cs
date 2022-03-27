@@ -29,7 +29,6 @@ namespace DELTation.LeoEcsExtensions.Utilities
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        [MustUseReturnValue]
         public static ref T NewEntityWith<T>([NotNull] this EcsWorld world) where T : struct
         {
 #if DEBUG

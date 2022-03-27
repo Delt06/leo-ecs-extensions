@@ -1,6 +1,5 @@
 ﻿using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run;
-using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -29,14 +28,14 @@ public class TestComponentSystem : IEcsRunSystem
     }
 }
 
-public class TestComponentRunSystem : EcsSystemBase
+public class TestComponentRunSystem : EcsSystemBase, IEcsRunSystem
 {
-    [EcsRun]
-    private void Run(EcsFilter filter, EcsObservablePool<TestComponent> testComponents)
+    public void Run(EcsSystems systems)
     {
+        var filter = Filter<TestComponent>().End();
         foreach (var i in filter)
         {
-            ref var testComponent = ref testComponents.Modify(i);
+            ref var testComponent = ref Modify<TestComponent>(i);
             ref var value = ref testComponent.Value;
             value += Time.deltaTime;
             Debug.Log($"Test component value: {value}");

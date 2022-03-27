@@ -1,11 +1,11 @@
 ﻿using DELTation.LeoEcsExtensions.Systems.Run;
-using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
+using Leopotam.EcsLite;
 using Runner._Shared;
 using UnityEngine;
 
 namespace Runner.Levels
 {
-    public class LevelSpawnSystem : EcsSystemBase
+    public class LevelSpawnSystem : EcsSystemBase, IEcsInitSystem
     {
         private readonly RuntimeData _runtimeData;
         private readonly SceneData _sceneData;
@@ -18,8 +18,7 @@ namespace Runner.Levels
             _runtimeData = runtimeData;
         }
 
-        [EcsInit]
-        private void Init()
+        public void Init(EcsSystems systems)
         {
             var levelPrefab = _staticData.LevelPrefab;
             var levelSpawnPoint = _sceneData.LevelSpawnPoint;

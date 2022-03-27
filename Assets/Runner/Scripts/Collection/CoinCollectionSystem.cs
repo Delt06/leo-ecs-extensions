@@ -1,22 +1,21 @@
 ﻿using DELTation.LeoEcsExtensions.Systems.Run;
-using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Runner.Collection
 {
-    public class CoinCollectionSystem : EcsSystemBase
+    public class CoinCollectionSystem : EcsSystemBase, IEcsRunSystem
     {
         private readonly ICoinsService _coinsService;
 
         public CoinCollectionSystem(ICoinsService coinsService) => _coinsService = coinsService;
 
-        [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<CollectCoinCommand> commands)
+        public void Run(EcsSystems systems)
         {
+            var filter = Filter<CollectCoinCommand>().End();
             foreach (var i in filter)
             {
-                var collectCoinCommand = commands.Get(i);
+                var collectCoinCommand = Get<CollectCoinCommand>(i);
                 var coinGameObject = collectCoinCommand.CoinGameObject;
                 if (coinGameObject == null) continue;
 

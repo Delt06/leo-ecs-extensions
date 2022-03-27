@@ -1,29 +1,27 @@
 ﻿using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run;
-using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
-using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using Runner.Movement;
 
 namespace Runner.Input
 {
-    public class PointerDownHandlingSystem : EcsSystemBase
+    public class PointerDownHandlingSystem : EcsSystemBase, IEcsRunSystem
     {
-        [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<PointerDownEvent> pointerDownEvents,
-            EcsSingletonPool<SidePosition> sidePositions,
-            EcsSingletonPool<ActiveDragData> dragData,
-            [EcsIgnoreInc] EcsPool<CanMoveTag> canMoveTags)
+        public void Run(EcsSystems systems)
         {
+            var filter = Filter<PointerDownEvent>().End();
+            var sidePositions = World.GetSingletonPool<SidePosition>();
+            var dragData = World.GetSingletonPool<ActiveDragData>();
+
             foreach (var i in filter)
             {
-                var pointerDownEvent = pointerDownEvents.Get(i);
+                var pointerDownEvent = Get<PointerDownEvent>(i);
                 ref var activeDragData = ref dragData.Get();
                 activeDragData.PointerPositionOnStart = pointerDownEvent.Position;
                 ref var sidePosition = ref sidePositions.Get();
                 activeDragData.SidePositionNormalizedOnStart = sidePosition.TargetPosition;
 
-                canMoveTags.GetOrAdd(sidePositions.GetEntity());
+                GetOrAdd<CanMoveTag>(sidePositions.GetEntity());
             }
         }
     }

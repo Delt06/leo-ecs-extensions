@@ -1,6 +1,5 @@
 ﻿using DELTation.LeoEcsExtensions.ExtendedPools;
 using DELTation.LeoEcsExtensions.Systems.Run;
-using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
 using Leopotam.EcsLite;
 using Runner._Shared;
 using Runner.Movement;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 namespace Runner.Input
 {
-    public class PointerDragHandlingSystem : EcsSystemBase
+    public class PointerDragHandlingSystem : EcsSystemBase, IEcsRunSystem
     {
         private readonly SceneData _sceneData;
         private readonly StaticData _staticData;
@@ -19,17 +18,16 @@ namespace Runner.Input
             _staticData = staticData;
         }
 
-        [EcsRun]
-        private void Run(EcsFilter filter, EcsPool<PointerDragEvent> pointerDragEvents,
-            EcsSingletonPool<SidePosition> sidePositions,
-            EcsSingletonPool<ActiveDragData> dragData,
-            [EcsIgnoreInc] EcsPool<CanMoveTag> canMoveTags)
+        public void Run(EcsSystems systems)
         {
             var camera = _sceneData.Camera;
+            var filter = Filter<PointerDragEvent>().End();
+            var dragData = World.GetSingletonPool<ActiveDragData>();
+            var sidePositions = World.GetSingletonPool<SidePosition>();
 
             foreach (var i in filter)
             {
-                ref var pointerDragEvent = ref pointerDragEvents.Get(i);
+                ref var pointerDragEvent = ref Get<PointerDragEvent>(i);
                 ref var activeDragData = ref dragData.Get();
                 var position = pointerDragEvent.Position;
 

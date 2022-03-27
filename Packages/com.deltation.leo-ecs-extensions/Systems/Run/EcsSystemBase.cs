@@ -1,56 +1,104 @@
-﻿using System;
-using System.Reflection;
-using DELTation.LeoEcsExtensions.Systems.Run.Attributes;
+﻿using System.Runtime.CompilerServices;
+using DELTation.LeoEcsExtensions.Components;
+using DELTation.LeoEcsExtensions.ExtendedPools;
+using DELTation.LeoEcsExtensions.Utilities;
+using DELTation.LeoEcsExtensions.Views;
+using JetBrains.Annotations;
 using Leopotam.EcsLite;
+using UnityEngine;
 
 namespace DELTation.LeoEcsExtensions.Systems.Run
 {
-    public abstract class EcsSystemBase : IEcsRunSystem, IEcsPreInitSystem, IEcsInitSystem
+    public abstract class EcsSystemBase : IEcsPreInitSystem
     {
-        private EcsCallback? _builtInitSystem;
-        private EcsCallback? _builtRunSystem;
-
-        public void Init(EcsSystems systems)
+        public EcsWorld World
         {
-            _builtInitSystem?.Run();
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get;
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            private set;
         }
 
         public void PreInit(EcsSystems systems)
         {
-            TryInitializeBuiltSystem(systems, typeof(EcsInitAttribute), ref _builtInitSystem);
-            TryInitializeBuiltSystem(systems, typeof(EcsRunAttribute), ref _builtRunSystem);
-
-            OnAfterPreInit(systems);
+            World = systems.GetWorld();
         }
 
-        public void Run(EcsSystems systems)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected EcsWorld.Mask Filter<T>() where T : struct => World.Filter<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected EcsWorld.Mask FilterOnUpdateOf<T>() where T : struct => World.FilterOnUpdateOf<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected EcsWorld.Mask FilterAndIncUpdateOf<T>() where T : struct => World.FilterAndIncUpdateOf<T>();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected ref T Get<T>(int entity) where T : struct =>
+            ref World.GetPool<T>().Get(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected ref T GetOrAdd<T>(int entity) where T : struct =>
+            ref World.GetPool<T>().GetOrAdd(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected ref readonly T Read<T>(int entity) where T : struct =>
+            ref World.GetPool<T>().Get(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected ref T Modify<T>(int entity) where T : struct
         {
-            _builtRunSystem?.Run();
+            World.GetUpdatesPool<T>().GetOrAdd(entity);
+            return ref World.GetPool<T>().Get(entity);
         }
 
-        private void TryInitializeBuiltSystem(EcsSystems systems, Type attributeType, ref EcsCallback? builtSystem)
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected ref T ModifyOrAdd<T>(int entity) where T : struct
         {
-            if (!TryFindMethod(attributeType, out var method)) return;
-            var world = systems.GetWorld();
-            builtSystem = new EcsCallback(world, method, this);
+            World.GetUpdatesPool<T>().GetOrAdd(entity);
+            return ref World.GetPool<T>().GetOrAdd(entity);
         }
 
-        private bool TryFindMethod(Type attribute, out MethodInfo runMethod)
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected ref T Add<T>(int entity) where T : struct => ref World.GetPool<T>().Add(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void Del<T>(int entity) where T : struct =>
+            World.GetPool<T>().Del(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void DelModify<T>(int entity) where T : struct
         {
-            var type = GetType();
-            var methods = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-            foreach (var method in methods)
-            {
-                if (!Attribute.IsDefined(method, attribute)) continue;
-                runMethod = method;
-                return true;
-            }
-
-            runMethod = default;
-            return false;
+            World.GetPool<T>().Del(entity);
+            World.GetUpdatesPool<T>().GetOrAdd(entity);
         }
 
-        protected virtual void OnAfterPreInit(EcsSystems systems) { }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        protected void Destroy(int entity) =>
+            World.DelEntity(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected bool Has<T>(int entity) where T : struct =>
+            World.GetPool<T>().Has(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected Transform GetTransform(int entity) => Get<UnityRef<Transform>>(entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected IEntityView GetView(int entity) => Get<ViewBackRef>(entity).View;
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        protected TView GetView<TView>(int entity) =>
+            Get<ViewBackRef<TView>>(entity);
     }
 }
