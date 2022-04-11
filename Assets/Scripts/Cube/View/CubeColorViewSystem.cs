@@ -1,5 +1,5 @@
 ﻿using Cube.Presentation;
-using Leopotam.Ecs;
+using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Cube.View
@@ -11,12 +11,12 @@ namespace Cube.View
 
         public CubeColorViewSystem(CubeColorPresenter cubeColorPresenter) => _cubeColorPresenter = cubeColorPresenter;
 
-        public void Init()
+        public void Init(EcsSystems systems)
         {
             _camera = Camera.main;
         }
 
-        public void Run()
+        public void Run(EcsSystems systems)
         {
             if (!Input.GetMouseButtonDown(0)) return;
 

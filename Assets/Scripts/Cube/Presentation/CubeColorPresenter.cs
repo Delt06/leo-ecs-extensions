@@ -1,18 +1,24 @@
 ﻿using Cube.Components;
-using Leopotam.Ecs;
+using DELTation.LeoEcsExtensions.Utilities;
+using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Cube.Presentation
 {
     public class CubeColorPresenter
     {
+        private readonly EcsPool<CubeColorChangeCommand> _pool;
         private readonly EcsWorld _world;
 
-        public CubeColorPresenter(EcsWorld world) => _world = world;
+        public CubeColorPresenter(EcsWorld world)
+        {
+            _world = world;
+            _pool = _world.GetPool<CubeColorChangeCommand>();
+        }
 
         public void OnClicked(GameObject cube)
         {
-            _world.NewEntity().Get<CubeColorChangeCommand>().Cube = cube;
+            _pool.GetOrAdd(_world.NewEntity()).Cube = cube;
         }
     }
 }

@@ -1,24 +1,29 @@
 ﻿using Cube.Components;
-using DELTation.LeoEcsExtensions.Components;
-using DELTation.LeoEcsExtensions.Utilities;
-using Leopotam.Ecs;
+using DELTation.LeoEcsExtensions.ExtendedPools;
+using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Cube.Simulation
 {
     public class CubeRotationSystem : IEcsRunSystem
     {
-        private readonly EcsFilter<Rotation, CubeTag> _cubesFilter = default;
+        private readonly EcsFilter _filter;
+        private readonly EcsObservablePool<Rotation> _rotations;
 
-        public void Run()
+        public CubeRotationSystem(EcsWorld world)
         {
-            foreach (var i in _cubesFilter)
+            _filter = world.Filter<Rotation>().Inc<CubeTag>().End();
+            _rotations = world.GetPool<Rotation>().AsObservable();
+        }
+
+        public void Run(EcsSystems systems)
+        {
+            foreach (var i in _filter)
             {
-                ref var rotation = ref _cubesFilter.Get1(i);
+                ref var rotation = ref _rotations.Modify(i);
                 const float rotationSpeed = 90f;
-                var newWorldRotation = Quaternion.AngleAxis(Time.deltaTime * rotationSpeed, Vector3.up) *
-                                       rotation.WorldRotation;
-                _cubesFilter.GetEntity(i).UpdateRotation(ref rotation, newWorldRotation);
+                rotation.WorldRotation = Quaternion.AngleAxis(Time.deltaTime * rotationSpeed, Vector3.up) *
+                                         rotation.WorldRotation;
             }
         }
     }

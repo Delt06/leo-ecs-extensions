@@ -1,18 +1,16 @@
 {
-  "name": "com.deltation.leo-ecs-extensions",
-  "version": "0.3.0",
-  "displayName": "LeoECS Extensions",
-  "description": "A toolset for advanced LeoECS integration into Unity.",
-  "unity": "2020.3",
-
-  "keywords": [
-    "ECS",
-    "LeoECS"
-  ],
-
-  "author": {
-    "name": "Vladislav Kantaev",
-    "email": "vvkantaev@yandex.ru",
-    "url": "https://delt06.github.io/page/"
-  }
+    "name": "com.deltation.leo-ecs-extensions",
+    "version": "0.3.0",
+    "displayName": "LeoECS Extensions",
+    "description": "A toolset for advanced LeoECS integration into Unity.",
+    "unity": "2020.3",
+    "keywords": [
+        "ECS",
+        "LeoECS"
+    ],
+    "author": {
+        "name": "Vladislav Kantaev",
+        "email": "vvkantaev@yandex.ru",
+        "url": "https://delt06.github.io/page/"
+    }
 }

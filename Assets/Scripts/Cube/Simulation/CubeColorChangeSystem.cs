@@ -1,19 +1,27 @@
 ﻿using Cube.Components;
-using Leopotam.Ecs;
+using DELTation.LeoEcsExtensions.ExtendedPools;
+using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Cube.Simulation
 {
-    public class CubeColorChangeSystem : IEcsRunSystem
+    public class CubeColorChangeSystem : IEcsRunSystem, IEcsInitSystem
     {
-        private readonly EcsFilter<CubeColorChangeCommand> _filter = default;
+        private EcsReadOnlyPool<CubeColorChangeCommand> _commands;
+        private EcsFilter _filter;
 
+        public void Init(EcsSystems systems)
+        {
+            var world = systems.GetWorld();
+            _filter = world.Filter<CubeColorChangeCommand>().End();
+            _commands = world.GetPool<CubeColorChangeCommand>().AsReadOnly();
+        }
 
-        public void Run()
+        public void Run(EcsSystems systems)
         {
             foreach (var i in _filter)
             {
-                var renderer = _filter.Get1(i).Cube.GetComponent<Renderer>();
+                var renderer = _commands.Read(i).Cube.GetComponent<Renderer>();
                 renderer.material.color = new Color(Random.value, Random.value, Random.value);
             }
         }

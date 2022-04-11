@@ -2,8 +2,7 @@
 using Cube.Presentation;
 using Cube.Simulation;
 using Cube.View;
-using DELTation.LeoEcsExtensions.Composition;
-using DELTation.LeoEcsExtensions.Systems;
+using DELTation.LeoEcsExtensions.Composition.Di;
 
 namespace Cube
 {
@@ -23,16 +22,18 @@ namespace Cube
             // simulation
             featureBuilder
                 .Add(new CubeSpawnSystem())
-                .Add(new ReadFromTransformsSystem())
-                .Add(new CubeTranslationSystem())
-                .Add(new CubeRotationSystem())
-                .Add(new WriteToTransformsSystem())
+                .CreateAndAdd<CubeTranslationSystem>()
+                .CreateAndAdd<CubeRotationSystem>()
                 .Add(new CubeColorChangeSystem())
+                .CreateAndAdd<CubeSyncTransformSystem>()
                 ;
 
             // cleanup temporary components
             featureBuilder
                 .OneFrame<CubeColorChangeCommand>()
+                ;
+
+            featureBuilder.CreateAndAdd<CubePositionChangeDebugSystem>()
                 ;
         }
     }
