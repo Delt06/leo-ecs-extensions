@@ -1,24 +1,27 @@
 ﻿using Cube.Components;
+using DELTation.LeoEcsExtensions.Utilities;
 using DELTation.LeoEcsExtensions.Views;
-using Leopotam.Ecs;
+using Leopotam.EcsLite;
 using UnityEngine;
 
 namespace Cube.Simulation
 {
     public class CubeSpawnSystem : IEcsInitSystem
     {
-        private readonly EcsWorld _world = default;
-
-        public void Init()
+        public void Init(EcsSystems systems)
         {
+            var world = systems.GetWorld();
             var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             cube.name = "Cube";
 
-            var cubeEntity = _world.NewEntity();
+            var cubeEntity = world.NewPackedEntityWithWorld();
             cubeEntity.SetUnityObjectData(cube.transform);
-            cubeEntity.SetTransformComponentsFromTransform(cube.transform);
 
-            cubeEntity.Get<CubeTag>();
+            cubeEntity.Add<CubeTag>();
+            cubeEntity.Add<Position>();
+            cubeEntity.OnUpdated<Position>();
+            cubeEntity.Add<Rotation>();
+            cubeEntity.OnUpdated<Rotation>();
         }
     }
 }

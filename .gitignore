@@ -4,6 +4,11 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
+Packages/ecslite*
+/CodeCoverage/*
+
+*.csproj.DotSettings
+
 # Idea
 .idea/
 *.iml

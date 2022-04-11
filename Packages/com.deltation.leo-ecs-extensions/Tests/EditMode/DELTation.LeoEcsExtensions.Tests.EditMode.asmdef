@@ -1,0 +1,21 @@
+{
+    "name": "DELTation.LeoEcsExtensions.Tests.EditMode",
+    "rootNamespace": "DELTation.LeoEcsExtensions",
+    "references": [
+        "GUID:adc879d645c03624e9af334f48b854dd",
+        "GUID:e59bf9fc7d5a44b18a819a92edd46163"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

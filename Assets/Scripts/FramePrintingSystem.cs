@@ -1,9 +1,9 @@
-﻿using Leopotam.Ecs;
+﻿using Leopotam.EcsLite;
 using UnityEngine;
 
 public class FramePrintingSystem : IEcsRunSystem
 {
-    public void Run()
+    public void Run(EcsSystems systems)
     {
         Debug.Log($"Frame: {Time.frameCount}");
     }
