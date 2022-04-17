@@ -2,7 +2,7 @@ using Leopotam.EcsLite;
 
 namespace DELTation.LeoEcsExtensions.Services
 {
-    public interface IActiveEcsWorld
+    public interface IMainEcsWorld
     {
         EcsWorld World { get; }
     }

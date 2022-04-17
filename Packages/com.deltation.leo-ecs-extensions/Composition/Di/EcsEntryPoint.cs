@@ -1,5 +1,4 @@
 using System;
-using DELTation.LeoEcsExtensions.Services;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 #if UNITY_EDITOR
@@ -8,7 +7,7 @@ using Leopotam.EcsLite.UnityEditor;
 
 namespace DELTation.LeoEcsExtensions.Composition.Di
 {
-    public abstract class EcsEntryPoint : IActiveEcsWorld
+    public abstract class EcsEntryPoint
     {
 #if UNITY_EDITOR
         private EcsSystems _editorSystems;
