@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DELTation.DIFramework;
 using DELTation.DIFramework.Dependencies;
+using DELTation.LeoEcsExtensions.Services;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -39,7 +40,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 
 
             var ecsEntryPoint = new TEcsEntryPoint();
-            containerBuilder.Register(ecsEntryPoint.World);
+            containerBuilder.RegisterFromMethod(() => new MainEcsWorld(ecsEntryPoint.World));
 
             var secondaryDependencies = new List<IDependency>();
 

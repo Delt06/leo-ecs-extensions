@@ -13,15 +13,15 @@ namespace DELTation.LeoEcsExtensions.Views
         [SerializeField] private bool _createOnAwake = true;
 
         private readonly List<IEntityInitializer> _initializers = new List<IEntityInitializer>();
-        private IActiveEcsWorld _activeWorld;
 
         private EcsPackedEntityWithWorld _entity;
+        private IMainEcsWorld _mainWorld;
 
         private bool _searchedForInitializers;
 
-        public void Construct(IActiveEcsWorld activeWorld)
+        public void Construct(IMainEcsWorld mainWorld)
         {
-            _activeWorld = activeWorld;
+            _mainWorld = mainWorld;
         }
 
         private List<IEntityInitializer> Initializers
@@ -110,7 +110,7 @@ namespace DELTation.LeoEcsExtensions.Views
             _entity = default;
         }
 
-        public EcsWorld World => _activeWorld.World;
+        public EcsWorld World => _mainWorld.World;
 
         protected virtual void AddComponents(EcsPackedEntityWithWorld entity) { }
 
