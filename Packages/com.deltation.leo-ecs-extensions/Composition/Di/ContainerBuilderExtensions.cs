@@ -40,6 +40,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 
 
             var ecsEntryPoint = new TEcsEntryPoint();
+            containerBuilder.Register(ecsEntryPoint.World);
             containerBuilder.RegisterFromMethod(() => new MainEcsWorld(ecsEntryPoint.World));
 
             var secondaryDependencies = new List<IDependency>();
