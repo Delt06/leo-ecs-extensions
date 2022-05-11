@@ -119,6 +119,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         [Preserve]
         private class DummyEcsWorldDependency
         {
+            [Preserve]
             public DummyEcsWorldDependency(EcsWorld world) { }
         }
     }
