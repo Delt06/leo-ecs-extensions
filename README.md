@@ -1,8 +1,8 @@
 # LeoECS (Lite) Extensions
 
 ## Dependencies
-- [LeoEcs Lite](https://github.com/Leopotam/ecslite)
-- [LeoEcs Lite Unity Integration](https://github.com/Leopotam/ecslite-unityeditor)
+- LeoEcs Lite: [official](https://github.com/Leopotam/ecslite) or [community version](https://github.com/LeoECSCommunity/ecslite)
+- LeoEcs Lite Unity Integration: [official](https://github.com/Leopotam/ecslite-unityeditor) or [community version]([https://github.com/LeoECSCommunity/ecslite](https://github.com/LeoECSCommunity/ecslite-unityeditor))
 - [DI Framework](https://github.com/Delt06/di-framework)
 - Custom NUnit (built into Unity)
 
