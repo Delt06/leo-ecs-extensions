@@ -23,3 +23,4 @@ Add the following line to `Packages/manifest.json`:
 If want to use the package in an assembly definition, make sure to include references to the following assemblies:
 - `Leopotam.EcsLite`
 - `DELTation.LeoEcsExtensions`
+- `DELTation.LeoEcsExtensions.Composition.Di` (only if you use `EcsEntryPoint`)
