@@ -17,3 +17,9 @@ Add the following line to `Packages/manifest.json`:
 ```
 "com.deltation.leo-ecs-extensions": "https://github.com/Delt06/leo-ecs-extensions.git?path=Packages/com.deltation.leo-ecs-extensions",
 ```
+
+### Assembly Definitions
+
+If want to use the package in an assembly definition, make sure to include references to the following assemblies:
+- `Leopotam.EcsLite`
+- `DELTation.LeoEcsExtensions`
