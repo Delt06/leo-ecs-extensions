@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 
 namespace DELTation.LeoEcsExtensions.Systems
 {
+    [AttributeUsage(AttributeTargets.Class)]
     public class SystemComponentAccessAttribute : Attribute
     {
         public readonly ComponentAccessType AccessType;
