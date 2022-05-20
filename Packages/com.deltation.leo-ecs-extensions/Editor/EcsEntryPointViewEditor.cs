@@ -177,15 +177,18 @@ namespace DELTation.LeoEcsExtensions.Editor
                 results.Add((attribute.Type, attribute.AccessType));
             }
 
-            var fields = systemType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
-
-            foreach (var field in fields)
+            if (systemType.GetCustomAttribute<IgnoreInferredSystemComponentAccessAttribute>() == null)
             {
-                var fieldType = field.FieldType;
-                if (!fieldType.IsConstructedGenericType) continue;
+                var fields = systemType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic);
 
-                var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
-                CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
+                foreach (var field in fields)
+                {
+                    var fieldType = field.FieldType;
+                    if (!fieldType.IsConstructedGenericType) continue;
+
+                    var genericTypeDefinition = fieldType.GetGenericTypeDefinition();
+                    CheckGenericTypeAndAdd(genericTypeDefinition, fieldType, results);
+                }
             }
 
             var baseType = systemType.BaseType;
