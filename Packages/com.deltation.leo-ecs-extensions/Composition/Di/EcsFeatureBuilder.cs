@@ -30,6 +30,12 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             return this;
         }
 
+        public EcsFeatureBuilder OneFrameEntity<T>() where T : struct
+        {
+            SystemsAsDependencies.Add(new ObjectDependency(new RemoveOneFrameEntity<T>()));
+            return this;
+        }
+
         public EcsFeatureBuilder CreateAndAdd<[MeansImplicitUse] TSystem>()
             where TSystem : class, IEcsSystem
         {
