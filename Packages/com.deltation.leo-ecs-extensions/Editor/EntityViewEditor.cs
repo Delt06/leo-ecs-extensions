@@ -1,7 +1,10 @@
 ﻿using System;
+using DELTation.DIFramework;
+using DELTation.LeoEcsExtensions.Composition.Di;
 using DELTation.LeoEcsExtensions.Utilities;
 using DELTation.LeoEcsExtensions.Views;
 using Leopotam.EcsLite;
+using Leopotam.EcsLite.UnityEditor;
 using UnityEditor;
 using UnityEngine;
 
@@ -35,8 +38,31 @@ namespace DELTation.LeoEcsExtensions.Editor
         private static void DrawEntityLabel(EcsPackedEntityWithWorld entity)
         {
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField("Entity", entity.ToString());
+
+            const string label = "Entity";
+            if (TryGetDebugEntityView(entity, out var entityDebugView))
+                EditorGUILayout.ObjectField(label, entityDebugView, entityDebugView.GetType(), true);
+            else
+                EditorGUILayout.TextField(label, entity.ToString());
+
             EditorGUI.EndDisabledGroup();
+        }
+
+        private static bool TryGetDebugEntityView(EcsPackedEntityWithWorld entity,
+            out EcsEntityDebugView entityDebugView)
+        {
+            entityDebugView = default;
+            if (!entity.Unpack(out var world, out var idx)) return false;
+
+            if (!Di.TryResolveGlobally(out EcsEntryPoint ecsEntryPoint))
+                return false;
+            if (ecsEntryPoint.World != world)
+                return false;
+            if (ecsEntryPoint.DebugSystem == null)
+                return false;
+
+            entityDebugView = ecsEntryPoint.DebugSystem.GetEntityView(idx);
+            return entityDebugView != null;
         }
 
         private static void DrawComponentTable(EcsPackedEntityWithWorld entity)
