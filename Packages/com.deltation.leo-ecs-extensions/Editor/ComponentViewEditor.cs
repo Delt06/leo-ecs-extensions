@@ -85,10 +85,6 @@ namespace DELTation.LeoEcsExtensions.Editor
         {
             if (!componentView.Entity.IsAlive()) return;
 
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.TextField("Entity", componentView.Entity.ToString());
-            EditorGUI.EndDisabledGroup();
-
             var labelStyle = new GUIStyle(GUI.skin.label)
             {
                 richText = true,

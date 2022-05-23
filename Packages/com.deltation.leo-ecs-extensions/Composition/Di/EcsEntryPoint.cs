@@ -9,13 +9,11 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 {
     public abstract class EcsEntryPoint
     {
-#if UNITY_EDITOR
-        private EcsSystems _editorSystems;
-#endif
         private bool _initialized;
         private EcsSystems _lateSystems;
         private EcsSystems _physicsSystems;
         private EcsSystems _systems;
+
 
         protected EcsEntryPoint() => World = new EcsWorld();
 
@@ -68,8 +66,9 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             _lateSystems = new EcsSystems(World, "Late Systems (Late Update)");
 
 #if UNITY_EDITOR
+            DebugSystem = new EcsWorldDebugSystem();
             _editorSystems = new EcsSystems(World, "Editor Systems")
-                    .Add(new EcsWorldDebugSystem())
+                    .Add(DebugSystem)
                 ;
             _editorSystems.Init();
 #endif
@@ -84,6 +83,11 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         public virtual void PopulatePhysicsSystems([NotNull] EcsFeatureBuilder featureBuilder) { }
 
         public virtual void PopulateLateSystems([NotNull] EcsFeatureBuilder featureBuilder) { }
+#if UNITY_EDITOR
+        private EcsSystems _editorSystems;
+        [CanBeNull]
+        public EcsWorldDebugSystem DebugSystem { get; private set; }
+#endif
 
 #if UNITY_EDITOR
         [CanBeNull]
