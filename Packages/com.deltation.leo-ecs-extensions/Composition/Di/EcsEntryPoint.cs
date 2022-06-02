@@ -1,6 +1,9 @@
 using System;
 using JetBrains.Annotations;
 using Leopotam.EcsLite;
+#if LEOECS_DI
+using Leopotam.EcsLite.Di;
+#endif
 #if UNITY_EDITOR
 using Leopotam.EcsLite.UnityEditor;
 #endif
@@ -21,9 +24,17 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
 
         public void Start()
         {
-            _systems.Init();
-            _physicsSystems.Init();
-            _lateSystems.Init();
+            InitAndInject(_systems);
+            InitAndInject(_physicsSystems);
+            InitAndInject(_lateSystems);
+        }
+
+        private static void InitAndInject(EcsSystems systems)
+        {
+#if LEOECS_DI
+            systems.Inject();
+#endif
+            systems.Init();
         }
 
         public void Update()
