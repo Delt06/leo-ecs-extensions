@@ -3,6 +3,7 @@
 ## Dependencies
 - LeoEcs Lite: [official](https://github.com/Leopotam/ecslite) or [community version](https://github.com/LeoECSCommunity/ecslite)
 - LeoEcs Lite Unity Integration: [official](https://github.com/Leopotam/ecslite-unityeditor) or [community version](https://github.com/LeoECSCommunity/ecslite-unityeditor)
+- LeoEcs Lite DI (*Optional*): [official](https://github.com/Leopotam/ecslite-di) or [community version](https://github.com/LeoECSCommunity/ecslite-di)
 - [DI Framework](https://github.com/Delt06/di-framework)
 
 ## Installation

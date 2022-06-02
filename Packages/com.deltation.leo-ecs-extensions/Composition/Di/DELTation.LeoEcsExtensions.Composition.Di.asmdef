@@ -1,19 +1,32 @@
 {
-  "name": "DELTation.LeoEcsExtensions.Composition.Di",
-  "rootNamespace": "DELTation.LeoEcsExtensions",
-  "references": [
-    "GUID:1b60fcce313931d4f9eefc7f1c079778",
-    "GUID:e59bf9fc7d5a44b18a819a92edd46163",
-    "GUID:adc879d645c03624e9af334f48b854dd",
-    "GUID:ed1e04079e933a647a3cac1090197ef9",
-    "GUID:a22362b82293644e1bbe51356c008d63"
-  ],
-  "includePlatforms": [],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "precompiledReferences": [],
-  "autoReferenced": true,
-  "defineConstraints": [],
-  "noEngineReferences": false
+    "name": "DELTation.LeoEcsExtensions.Composition.Di",
+    "rootNamespace": "DELTation.LeoEcsExtensions",
+    "references": [
+        "GUID:1b60fcce313931d4f9eefc7f1c079778",
+        "GUID:e59bf9fc7d5a44b18a819a92edd46163",
+        "GUID:adc879d645c03624e9af334f48b854dd",
+        "GUID:ed1e04079e933a647a3cac1090197ef9",
+        "GUID:a22362b82293644e1bbe51356c008d63",
+        "GUID:f5f01a091e0d746659b4380253d52f4e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.leoecscommunity.ecslite.di",
+            "expression": "",
+            "define": "LEOECS_DI"
+        },
+        {
+            "name": "com.leopotam.ecslite.di",
+            "expression": "",
+            "define": "LEOECS_DI"
+        }
+    ],
+    "noEngineReferences": false
 }
