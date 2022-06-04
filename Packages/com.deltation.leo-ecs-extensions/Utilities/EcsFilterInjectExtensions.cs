@@ -1,10 +1,10 @@
 ﻿#if LEOECS_DI
 using System.Runtime.CompilerServices;
+using DELTation.LeoEcsExtensions.Utilities;
 using JetBrains.Annotations;
-using Leopotam.EcsLite;
-using Leopotam.EcsLite.Di;
 
-namespace DELTation.LeoEcsExtensions.Utilities
+// ReSharper disable once CheckNamespace
+namespace Leopotam.EcsLite.Di
 {
     public static class EcsFilterInjectExtensions
     {
