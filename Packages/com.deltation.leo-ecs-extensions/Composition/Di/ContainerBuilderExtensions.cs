@@ -84,9 +84,9 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         private static void AddToSecondaryDependencies(EcsFeatureBuilder featureBuilder,
             ICollection<IDependency> secondaryDependencies)
         {
-            foreach (var systemAsDependency in featureBuilder.SystemsAsDependencies)
+            foreach (var dependency in featureBuilder.Dependencies)
             {
-                secondaryDependencies.Add(systemAsDependency);
+                secondaryDependencies.Add(dependency);
             }
         }
 
@@ -112,7 +112,16 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             {
                 for (var i = startIndex; i < endIndexExclusive; i++)
                 {
-                    systems.Add((IEcsSystem) secondaryObjects[i]);
+                    var secondaryObject = secondaryObjects[i];
+                    switch (secondaryObject)
+                    {
+                        case IEcsSystem system:
+                            systems.Add(system);
+                            break;
+                        case ISystemBuilder systemBuilder:
+                            systemBuilder.Populate(systems);
+                            break;
+                    }
                 }
             };
 

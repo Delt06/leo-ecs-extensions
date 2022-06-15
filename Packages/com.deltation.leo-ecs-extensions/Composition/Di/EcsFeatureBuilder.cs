@@ -12,7 +12,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
     {
         // ReSharper disable once NotAccessedField.Local
         [CanBeNull] private readonly string _name;
-        internal readonly List<IDependency> SystemsAsDependencies =
+        internal readonly List<IDependency> Dependencies =
             new List<IDependency>();
 
         internal EcsFeatureBuilder([CanBeNull] string name = null) => _name = name;
@@ -20,26 +20,33 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         public EcsFeatureBuilder Add([NotNull] IEcsSystem system)
         {
             if (system == null) throw new ArgumentNullException(nameof(system));
-            SystemsAsDependencies.Add(new ObjectDependency(system));
+            Dependencies.Add(new ObjectDependency(system));
             return this;
         }
 
         public EcsFeatureBuilder OneFrame<T>() where T : struct
         {
-            SystemsAsDependencies.Add(new ObjectDependency(new RemoveOneFrame<T>()));
+            Dependencies.Add(new ObjectDependency(new RemoveOneFrame<T>()));
             return this;
         }
 
         public EcsFeatureBuilder OneFrameEntity<T>() where T : struct
         {
-            SystemsAsDependencies.Add(new ObjectDependency(new RemoveOneFrameEntity<T>()));
+            Dependencies.Add(new ObjectDependency(new RemoveOneFrameEntity<T>()));
             return this;
         }
 
         public EcsFeatureBuilder CreateAndAdd<[MeansImplicitUse] TSystem>()
             where TSystem : class, IEcsSystem
         {
-            SystemsAsDependencies.Add(new TypeDependency(typeof(TSystem)));
+            Dependencies.Add(new TypeDependency(typeof(TSystem)));
+            return this;
+        }
+
+        public EcsFeatureBuilder InjectBuilder<[MeansImplicitUse] TBuilder>()
+            where TBuilder : class, ISystemBuilder
+        {
+            Dependencies.Add(new TypeDependency(typeof(TBuilder)));
             return this;
         }
 
@@ -47,7 +54,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             where TR : class
         {
             if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
-            SystemsAsDependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
+            Dependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
             return this;
         }
 
@@ -55,7 +62,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             where TR : class where T1 : class
         {
             if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
-            SystemsAsDependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
+            Dependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
             return this;
         }
 
@@ -63,7 +70,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             [NotNull] FactoryMethod<TR, T1, T2> factoryMethod) where TR : class where T1 : class where T2 : class
         {
             if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
-            SystemsAsDependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
+            Dependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
             return this;
         }
 
@@ -74,7 +81,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             where T3 : class
         {
             if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
-            SystemsAsDependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
+            Dependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
             return this;
         }
 
@@ -83,7 +90,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             where TR : class where T1 : class where T2 : class where T3 : class where T4 : class
         {
             if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
-            SystemsAsDependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
+            Dependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
             return this;
         }
 
@@ -97,7 +104,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             where T5 : class
         {
             if (factoryMethod == null) throw new ArgumentNullException(nameof(factoryMethod));
-            SystemsAsDependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
+            Dependencies.Add(new FactoryMethodDelegateDependency(factoryMethod));
             return this;
         }
     }
