@@ -39,5 +39,16 @@ namespace DELTation.LeoEcsExtensions.Utilities
 #endif
             return ref pool.Add(pool.GetWorld().NewEntity());
         }
+        
+        public static ref T Modify<T>([NotNull] this EcsPool<T> pool, int entity) where T : struct
+        {
+#if DEBUG
+            if (pool == null) throw new ArgumentNullException(nameof(pool));
+#endif
+
+            ref var component = ref pool.Get(entity);
+            pool.GetWorld().GetUpdatesPool<T>().GetOrAdd(entity);
+            return ref component;
+        }
     }
 }
