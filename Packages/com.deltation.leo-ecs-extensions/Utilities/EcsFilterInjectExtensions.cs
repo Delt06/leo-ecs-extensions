@@ -73,6 +73,18 @@ namespace Leopotam.EcsLite.Di
             where TInc : struct, IEcsInclude
             where TExc : struct, IEcsExclude =>
             filter.Value.Contains(packedEntity, out entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static int GetEntitiesCount<TInc>(this EcsFilterInject<TInc> filter) where TInc : struct, IEcsInclude =>
+            filter.Value.GetEntitiesCount();
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static int GetEntitiesCount<TInc, TExc>(this EcsFilterInject<TInc, TExc> filter)
+            where TInc : struct, IEcsInclude
+            where TExc : struct, IEcsExclude =>
+            filter.Value.GetEntitiesCount();
     }
 }
 
