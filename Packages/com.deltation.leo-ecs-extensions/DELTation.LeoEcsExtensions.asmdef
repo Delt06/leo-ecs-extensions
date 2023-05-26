@@ -13,7 +13,6 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "noEngineReferences": false,
     "versionDefines": [
         {
             "name": "com.leoecscommunity.ecslite.di",
@@ -24,6 +23,27 @@
             "name": "com.leopotam.ecslite.di",
             "expression": "",
             "define": "LEOECS_DI"
+        },
+        {
+            "name": "com.unity.modules.ai",
+            "expression": "",
+            "define": "UNITY_MODULES_AI"
+        },
+        {
+            "name": "com.unity.modules.physics",
+            "expression": "",
+            "define": "UNITY_MODULES_PHYSICS"
+        },
+        {
+            "name": "com.unity.modules.physics2d",
+            "expression": "",
+            "define": "UNITY_MODULES_PHYSICS_2D"
+        },
+        {
+            "name": "com.unity.modules.animation",
+            "expression": "",
+            "define": "UNITY_MODULES_ANIMATION"
         }
-    ]
+    ],
+    "noEngineReferences": false
 }
