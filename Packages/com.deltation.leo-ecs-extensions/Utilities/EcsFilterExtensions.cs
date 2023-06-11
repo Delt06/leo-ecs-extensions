@@ -94,6 +94,33 @@ namespace DELTation.LeoEcsExtensions.Utilities
 
             return filter.Contains(entity);
         }
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static bool Contains([NotNull] this EcsFilter filter, EcsPackedEntity packedEntity)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+
+            if (!packedEntity.Unpack(filter.GetWorld(), out var entity)) return false;
+
+            return filter.Contains(entity);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static bool Contains([NotNull] this EcsFilter filter, EcsPackedEntity packedEntity,
+            out int entity)
+        {
+#if DEBUG
+            if (filter == null) throw new ArgumentNullException(nameof(filter));
+#endif
+
+            if (!packedEntity.Unpack(filter.GetWorld(), out entity)) return false;
+
+            return filter.Contains(entity);
+        }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [MustUseReturnValue]
