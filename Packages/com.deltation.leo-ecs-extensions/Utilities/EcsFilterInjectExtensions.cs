@@ -73,6 +73,35 @@ namespace Leopotam.EcsLite.Di
             where TInc : struct, IEcsInclude
             where TExc : struct, IEcsExclude =>
             filter.Value.Contains(packedEntity, out entity);
+        
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static bool Contains<TInc>(this EcsFilterInject<TInc> filter, EcsPackedEntity packedEntity)
+            where TInc : struct, IEcsInclude =>
+            filter.Value.Contains(packedEntity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static bool Contains<TInc, TExc>(this EcsFilterInject<TInc, TExc> filter,
+            EcsPackedEntity packedEntity)
+            where TInc : struct, IEcsInclude
+            where TExc : struct, IEcsExclude =>
+            filter.Value.Contains(packedEntity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static bool Contains<TInc>(this EcsFilterInject<TInc> filter, EcsPackedEntity packedEntity,
+            out int entity)
+            where TInc : struct, IEcsInclude =>
+            filter.Value.Contains(packedEntity, out entity);
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MustUseReturnValue]
+        public static bool Contains<TInc, TExc>(this EcsFilterInject<TInc, TExc> filter,
+            EcsPackedEntity packedEntity, out int entity)
+            where TInc : struct, IEcsInclude
+            where TExc : struct, IEcsExclude =>
+            filter.Value.Contains(packedEntity, out entity);
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         [MustUseReturnValue]
