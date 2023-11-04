@@ -1,8 +1,7 @@
 #if ODIN_INSPECTOR
 using Sirenix.OdinInspector;
-#else
-using DELTation.LeoEcsExtensions.Views.Components.Attributes;
 #endif
+using DELTation.LeoEcsExtensions.Views.Components.Attributes;
 using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using UnityEngine;
@@ -36,11 +35,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         private T _component;
 
         [SerializeField]
-#if ODIN_INSPECTOR
-        [ShowIf(nameof(EntityHasComponent))]
-#else
         [ShowIfEntityHasComponent]
-#endif
         private T _displayedComponent;
 
         public ref T StoredComponentValue => ref _component;
@@ -85,8 +80,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
             if (!EntityHasComponent()) return;
 
             ref var attachedComponent = ref Entity.GetOrAdd<T>();
-            if (!DisplayedComponentEquals(attachedComponent))
-                _displayedComponent = attachedComponent;
+            _displayedComponent = attachedComponent;
         }
 
         internal sealed override bool EntityHasComponent() => Entity.IsAlive() && Entity.Has<T>();
