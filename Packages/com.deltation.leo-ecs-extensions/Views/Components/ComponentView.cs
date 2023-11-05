@@ -1,10 +1,9 @@
-#if ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
-using DELTation.LeoEcsExtensions.Views.Components.Attributes;
 using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using UnityEngine;
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#endif
 
 namespace DELTation.LeoEcsExtensions.Views.Components
 {
@@ -28,15 +27,38 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         [HideIf(nameof(EntityHasComponent))]
         [InlineProperty]
         [HideLabel]
-        [Header("Component")]
+        [Title("Component")]
 #else
         [HideIfEntityHasComponent]
 #endif
         private T _component;
 
+#if !ODIN_INSPECTOR
         [SerializeField]
         [ShowIfEntityHasComponent]
+#endif
         private T _displayedComponent;
+
+#if ODIN_INSPECTOR
+        [ShowInInspector]
+        [ShowIf(nameof(EntityHasComponent))]
+        [InlineProperty]
+        [HideLabel]
+        [Title("Displayed Component")]
+        private T DisplayedComponent
+        {
+            get
+            {
+                TryUpdateDisplayedValueFromEntity();
+                return _displayedComponent;
+            }
+            set
+            {
+                _displayedComponent = value;
+                TryUpdateEntityFromDisplayedValue();
+            }
+        }
+#endif
 
         public ref T StoredComponentValue => ref _component;
 
@@ -54,11 +76,16 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 
         internal override void TryUpdateEntityFromDisplayedValue()
         {
-            if (!EntityHasComponent()) return;
+            if (!EntityHasComponent())
+            {
+                return;
+            }
 
             ref var attachedComponent = ref Entity.GetOrAdd<T>();
             if (!DisplayedComponentEquals(attachedComponent))
+            {
                 Entity.GetOrAdd<T>() = _displayedComponent;
+            }
         }
 
         private bool DisplayedComponentEquals(in T other) => Equals(_displayedComponent, other);
@@ -66,18 +93,25 @@ namespace DELTation.LeoEcsExtensions.Views.Components
         internal sealed override void TryAddComponent()
         {
             if (Entity.IsAlive() && !Entity.Has<T>())
+            {
                 Entity.GetOrAdd<T>() = _component;
+            }
         }
 
         internal sealed override void TryDeleteComponent()
         {
             if (Entity.Has<T>())
+            {
                 Entity.Del<T>();
+            }
         }
 
         internal sealed override void TryUpdateDisplayedValueFromEntity()
         {
-            if (!EntityHasComponent()) return;
+            if (!EntityHasComponent())
+            {
+                return;
+            }
 
             ref var attachedComponent = ref Entity.GetOrAdd<T>();
             _displayedComponent = attachedComponent;
