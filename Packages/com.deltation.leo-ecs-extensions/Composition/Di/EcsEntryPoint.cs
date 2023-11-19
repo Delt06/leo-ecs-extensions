@@ -40,7 +40,10 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         public void Update()
         {
 #if UNITY_EDITOR
-            _editorSystems.Run();
+            if (_debugSystemsEnabled)
+            {
+                _editorSystems.Run();
+            }
 #endif
             _systems.Run();
         }
@@ -89,6 +92,13 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
             populateLateSystems(_lateSystems);
         }
 
+        public void ToggleDebugSystems(bool enable)
+        {
+#if UNITY_EDITOR
+            _debugSystemsEnabled = enable;
+#endif
+        }
+
         public abstract void PopulateSystems([NotNull] EcsFeatureBuilder featureBuilder);
 
         public virtual void PopulatePhysicsSystems([NotNull] EcsFeatureBuilder featureBuilder) { }
@@ -96,6 +106,7 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         public virtual void PopulateLateSystems([NotNull] EcsFeatureBuilder featureBuilder) { }
 #if UNITY_EDITOR
         private EcsSystems _editorSystems;
+        protected bool _debugSystemsEnabled = true;
         [CanBeNull]
         public EcsWorldDebugSystem DebugSystem { get; private set; }
 #endif

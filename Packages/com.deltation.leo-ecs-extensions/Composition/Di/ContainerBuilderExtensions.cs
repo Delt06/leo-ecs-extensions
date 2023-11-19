@@ -33,13 +33,14 @@ namespace DELTation.LeoEcsExtensions.Composition.Di
         }
 
         public static ICanRegisterContainerBuilder RegisterEcsEntryPoint<TEcsEntryPoint>(
-            [NotNull] this ICanRegisterContainerBuilder containerBuilder) where TEcsEntryPoint : EcsEntryPoint, new()
+            [NotNull] this ICanRegisterContainerBuilder containerBuilder, bool enableDebugSystems = true) where TEcsEntryPoint : EcsEntryPoint, new()
         {
             if (containerBuilder == null)
                 throw new ArgumentNullException(nameof(containerBuilder));
 
 
             var ecsEntryPoint = new TEcsEntryPoint();
+            ecsEntryPoint.ToggleDebugSystems(enableDebugSystems);
             containerBuilder.Register(ecsEntryPoint.World);
             containerBuilder.RegisterFromMethod(() => new MainEcsWorld(ecsEntryPoint.World));
 
