@@ -61,6 +61,7 @@ namespace DELTation.LeoEcsExtensions.Views.Components
 #endif
 
         public ref T StoredComponentValue => ref _component;
+        public ref T DisplayedComponentValue => ref _displayedComponent;
 
         public void InitializeEntity(EcsPackedEntityWithWorld entity)
         {
