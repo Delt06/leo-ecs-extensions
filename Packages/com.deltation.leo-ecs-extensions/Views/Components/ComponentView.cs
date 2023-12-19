@@ -1,9 +1,11 @@
+#if ODIN_INSPECTOR
+using Sirenix.OdinInspector;
+#else
+using DELTation.LeoEcsExtensions.Views.Components.Attributes;
+#endif
 using DELTation.LeoEcsExtensions.Utilities;
 using Leopotam.EcsLite;
 using UnityEngine;
-#if ODIN_INSPECTOR
-using Sirenix.OdinInspector;
-#endif
 
 namespace DELTation.LeoEcsExtensions.Views.Components
 {
